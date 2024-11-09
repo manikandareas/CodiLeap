@@ -4,6 +4,7 @@ import android.app.Application
 import android.content.pm.ApplicationInfo
 import coil.ImageLoader
 import com.manikandareas.codileap.di.navigationModule
+import com.manikandareas.codileap.di.viewModelModule
 import com.manikandareas.stories.di.networkModule
 import org.koin.android.ext.koin.androidContext
 import org.koin.android.ext.koin.androidLogger
@@ -27,6 +28,7 @@ class StoriesApplication : Application() {
                 listOf(
                     networkModule,
                     navigationModule,
+                    viewModelModule
                 )
             )
         }

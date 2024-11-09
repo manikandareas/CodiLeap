@@ -7,6 +7,6 @@ import org.koin.dsl.module
 
 val navigationModule= module{
     single<Navigator> {
-        DefaultNavigator(startDestination = Destination.HomeGraph)
+        DefaultNavigator(startDestination = Destination.IntroGraph)
     }
 }
