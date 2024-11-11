@@ -1,4 +1,4 @@
-package com.manikandareas.stories.di
+package com.manikandareas.codileap.di
 
 import com.manikandareas.codileap.core.data.networking.HttpClientFactory
 import io.ktor.client.engine.cio.CIO
