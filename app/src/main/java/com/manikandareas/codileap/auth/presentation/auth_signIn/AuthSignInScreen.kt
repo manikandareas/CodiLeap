@@ -80,7 +80,7 @@ fun AuthSignInScreen(modifier: Modifier = Modifier, onAction: (AuthSignInAction)
                 }
 
                 Button(
-                    onClick = {},
+                    onClick = {onAction(AuthSignInAction.OnSignInClicked)},
                     modifier = Modifier
                         .fillMaxWidth()
                         .height(48.dp),

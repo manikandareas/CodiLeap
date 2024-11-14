@@ -2,16 +2,15 @@
 
 package com.manikandareas.codileap.core.navigation
 
-import androidx.compose.animation.AnimatedContentTransitionScope
 import androidx.compose.animation.ExperimentalSharedTransitionApi
 import androidx.compose.animation.SharedTransitionLayout
-import androidx.compose.animation.core.tween
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.navigation
+import com.manikandareas.codileap.analytics.presentation.AnalyticsScreen
 import com.manikandareas.codileap.auth.presentation.AuthScreen
 import com.manikandareas.codileap.auth.presentation.AuthViewModel
 import com.manikandareas.codileap.auth.presentation.auth_register.AuthRegisterScreen
@@ -19,7 +18,12 @@ import com.manikandareas.codileap.auth.presentation.auth_register.AuthRegisterVi
 import com.manikandareas.codileap.auth.presentation.auth_signIn.AuthSignInScreen
 import com.manikandareas.codileap.auth.presentation.auth_signIn.AuthSignInViewModel
 import com.manikandareas.codileap.core.presentation.util.ObserveAsEvents
+import com.manikandareas.codileap.courses.presentation.CoursesAction
+import com.manikandareas.codileap.courses.presentation.CoursesScreen
+import com.manikandareas.codileap.home.presentation.HomeAction
+import com.manikandareas.codileap.home.presentation.HomeScreen
 import com.manikandareas.codileap.intro.presentation.IntroScreen
+import com.manikandareas.codileap.settings.presentation.SettingsScreen
 import org.koin.androidx.compose.koinViewModel
 
 
@@ -76,10 +80,30 @@ fun CodiLeapNavigation(
             }
 
 
-//            navigation<Destination.HomeGraph>(
-//                startDestination = Destination.HomeGraph
-//            ) {
-//            }
+            navigation<Destination.HomeGraph>(
+                startDestination = Destination.HomeScreen
+            ) {
+                composable<Destination.HomeScreen> {
+                     HomeScreen(onAction = {
+                         when(it){
+                             is HomeAction.NavigateTo -> navController.navigate(it.des)
+                         }
+                     })
+                }
+                composable<Destination.CoursesScreen> {
+                    CoursesScreen(onAction = {
+                        when(it){
+                            is CoursesAction.NavigateTo -> navController.navigate(it.des)
+                        }
+                    })
+                }
+                composable<Destination.AnalyticsScreen> {
+                    AnalyticsScreen()
+                }
+                composable<Destination.SettingsScreen> {
+                    SettingsScreen()
+                }
+            }
         }
     }
 }
