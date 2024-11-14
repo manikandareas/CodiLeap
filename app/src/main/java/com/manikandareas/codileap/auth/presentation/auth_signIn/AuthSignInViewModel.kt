@@ -16,6 +16,12 @@ class AuthSignInViewModel(private val navigator: Navigator) : ViewModel() {
             AuthSignInAction.OnBackClicked -> viewModelScope.launch {
                 navigator.navigateUp()
             }
+
+            AuthSignInAction.OnSignInClicked -> viewModelScope.launch{
+                navigator.navigate(Destination.HomeGraph, {
+                    popUpTo(Destination.AuthGraph) { inclusive = true }
+                })
+            }
         }
     }
 }
