@@ -63,34 +63,6 @@ import kotlin.math.roundToInt
 
 @Composable
 fun SettingsScreen(onAction: (SettingsAction) -> Unit, modifier: Modifier = Modifier) {
-    val scrollState = rememberScrollState()
-    var isBottomBarVisible by remember { mutableStateOf(true) }
-    var previousScrollOffset by remember { mutableIntStateOf(0) }
-
-    // Observe scroll position and update bottom bar visibility
-    LaunchedEffect(scrollState.value) {
-        // Always show bottom bar when at the top
-        if (scrollState.value == 0) {
-            isBottomBarVisible = true
-            return@LaunchedEffect
-        }
-
-        val currentOffset = scrollState.value
-        if (currentOffset != previousScrollOffset) {
-            // Scrolling down (positive direction) -> hide
-            // Scrolling up (negative direction) -> show
-            isBottomBarVisible = currentOffset < previousScrollOffset
-            previousScrollOffset = currentOffset
-        }
-    }
-
-    // Animate bottom bar translation
-    val bottomBarOffsetHeightPx = with(LocalDensity.current) { 80.dp.toPx() }
-    val bottomBarTranslation by animateFloatAsState(
-        targetValue = if (isBottomBarVisible) 0f else bottomBarOffsetHeightPx,
-        label = "bottomBarTranslation"
-    )
-
     Scaffold(
         modifier = modifier
             .fillMaxSize()
@@ -108,7 +80,6 @@ fun SettingsScreen(onAction: (SettingsAction) -> Unit, modifier: Modifier = Modi
                 },
                 modifier = Modifier
                     .fillMaxWidth()
-                    .offset(y = bottomBarTranslation.roundToInt().dp)
             )
         },
         floatingActionButton = {
