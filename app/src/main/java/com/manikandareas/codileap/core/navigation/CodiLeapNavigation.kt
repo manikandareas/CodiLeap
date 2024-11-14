@@ -23,6 +23,7 @@ import com.manikandareas.codileap.courses.presentation.CoursesScreen
 import com.manikandareas.codileap.home.presentation.HomeAction
 import com.manikandareas.codileap.home.presentation.HomeScreen
 import com.manikandareas.codileap.intro.presentation.IntroScreen
+import com.manikandareas.codileap.settings.presentation.SettingsAction
 import com.manikandareas.codileap.settings.presentation.SettingsScreen
 import org.koin.androidx.compose.koinViewModel
 
@@ -101,7 +102,11 @@ fun CodiLeapNavigation(
                     AnalyticsScreen()
                 }
                 composable<Destination.SettingsScreen> {
-                    SettingsScreen()
+                    SettingsScreen(onAction = {
+                        when(it){
+                            is SettingsAction.NavigateTo -> navController.navigate(it.des)
+                        }
+                    })
                 }
             }
         }
