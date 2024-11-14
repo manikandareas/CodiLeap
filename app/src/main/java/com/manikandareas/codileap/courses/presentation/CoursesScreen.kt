@@ -46,11 +46,12 @@ import com.manikandareas.codileap.courses.presentation.model.DummyLearningPaths
 import com.manikandareas.codileap.courses.presentation.model.TimelineItemUi
 import com.manikandareas.codileap.courses.presentation.model.TimelineNodePosition
 import com.manikandareas.codileap.home.presentation.component.HomeBottomAppBar
+import com.manikandareas.codileap.home.presentation.component.HomeChatBotFab
 import com.manikandareas.codileap.ui.theme.CodiLeapTheme
 import kotlin.math.roundToInt
 
 @Composable
-fun CoursesScreen(onAction: (CoursesAction)-> Unit, modifier: Modifier = Modifier) {
+fun CoursesScreen(onAction: (CoursesAction) -> Unit, modifier: Modifier = Modifier) {
     val scrollState = rememberScrollState()
     var isBottomBarVisible by remember { mutableStateOf(true) }
     var previousScrollOffset by remember { mutableIntStateOf(0) }
@@ -89,12 +90,15 @@ fun CoursesScreen(onAction: (CoursesAction)-> Unit, modifier: Modifier = Modifie
             HomeBottomAppBar(
                 currentRoute = Destination.CoursesScreen,
                 onNavigate = { des ->
-onAction(CoursesAction.NavigateTo(des))
+                    onAction(CoursesAction.NavigateTo(des))
                 },
                 modifier = Modifier
                     .fillMaxWidth()
                     .offset(y = bottomBarTranslation.roundToInt().dp)
             )
+        },
+        floatingActionButton = {
+            HomeChatBotFab()
         },
         modifier = modifier
             .fillMaxSize()
@@ -129,7 +133,7 @@ onAction(CoursesAction.NavigateTo(des))
                             text = "Introduction to Machine Learning",
                             style = MaterialTheme.typography.titleMedium
                         )
-                        Box{}
+                        Box {}
                     }
                 }
                 Spacer(modifier = Modifier.height(32.dp))

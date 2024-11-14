@@ -1,6 +1,6 @@
 @file:OptIn(ExperimentalMaterial3Api::class)
 
-package com.manikandareas.codileap.courses.presentation.component
+package com.manikandareas.codileap.settings.presentation.component
 
 import androidx.compose.foundation.layout.padding
 import androidx.compose.material.icons.Icons
@@ -17,32 +17,21 @@ import androidx.compose.ui.tooling.preview.PreviewLightDark
 import androidx.compose.ui.unit.dp
 import com.manikandareas.codileap.ui.theme.CodiLeapTheme
 
+
 @Composable
-fun CoursesAppBar(modifier: Modifier = Modifier) {
+fun SettingsAppBar(modifier: Modifier = Modifier) {
     TopAppBar(
         modifier = modifier,
         title = {
-            Text(text = "Pemrograman Web", style = MaterialTheme.typography.titleLarge)
+            Text(text = "Settings", style = MaterialTheme.typography.titleLarge)
         },
-        actions = {
-            IconButton(
-                onClick = {},
-                modifier = Modifier
-                    .padding(end = 12.dp)
-            ) {
-                Icon(
-                    imageVector = Icons.Default.ImportExport,
-                    contentDescription = "Select Modules",
-                )
-            }
-        }
     )
 }
 
 @PreviewLightDark
 @Composable
-fun PreviewCoursesAppBar(modifier: Modifier = Modifier) {
+fun PreviewSettingsAppBar(modifier: Modifier = Modifier) {
     CodiLeapTheme {
-        CoursesAppBar(modifier = modifier)
+        SettingsAppBar(modifier = modifier)
     }
 }
