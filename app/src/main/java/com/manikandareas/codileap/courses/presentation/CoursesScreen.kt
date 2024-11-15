@@ -121,7 +121,7 @@ fun CoursesScreen(onAction: (CoursesAction) -> Unit, modifier: Modifier = Modifi
                 ) {
                     Row(
                         modifier = Modifier.fillMaxWidth(),
-                        horizontalArrangement = Arrangement.SpaceBetween,
+                        horizontalArrangement = Arrangement.spacedBy(16.dp),
                         verticalAlignment = Alignment.CenterVertically
                     ) {
                         Icon(
@@ -133,7 +133,6 @@ fun CoursesScreen(onAction: (CoursesAction) -> Unit, modifier: Modifier = Modifi
                             text = "Introduction to Machine Learning",
                             style = MaterialTheme.typography.titleMedium
                         )
-                        Box {}
                     }
                 }
                 Spacer(modifier = Modifier.height(32.dp))

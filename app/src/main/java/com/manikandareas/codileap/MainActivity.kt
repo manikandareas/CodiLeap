@@ -8,6 +8,7 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.core.splashscreen.SplashScreen.Companion.installSplashScreen
 import androidx.navigation.compose.rememberNavController
+import com.manikandareas.codileap.analytics.presentation.AnalyticsScreen
 import com.manikandareas.codileap.core.navigation.CodiLeapNavigation
 import com.manikandareas.codileap.core.navigation.Navigator
 import com.manikandareas.codileap.courses.presentation.CoursesScreen
@@ -29,9 +30,6 @@ class MainActivity : ComponentActivity() {
                     navigator = navigator,
                     startDestination = navigator.startDestination
                 )
-
-//                HomeScreen()
-//                CoursesScreen()
             }
         }
     }

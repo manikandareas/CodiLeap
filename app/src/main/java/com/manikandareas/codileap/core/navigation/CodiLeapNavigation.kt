@@ -10,6 +10,7 @@ import androidx.navigation.NavHostController
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.navigation
+import com.manikandareas.codileap.analytics.presentation.AnalyticsAction
 import com.manikandareas.codileap.analytics.presentation.AnalyticsScreen
 import com.manikandareas.codileap.auth.presentation.AuthScreen
 import com.manikandareas.codileap.auth.presentation.AuthViewModel
@@ -85,25 +86,29 @@ fun CodiLeapNavigation(
                 startDestination = Destination.HomeScreen
             ) {
                 composable<Destination.HomeScreen> {
-                     HomeScreen(onAction = {
-                         when(it){
-                             is HomeAction.NavigateTo -> navController.navigate(it.des)
-                         }
-                     })
+                    HomeScreen(onAction = {
+                        when (it) {
+                            is HomeAction.NavigateTo -> navController.navigate(it.des)
+                        }
+                    })
                 }
                 composable<Destination.CoursesScreen> {
                     CoursesScreen(onAction = {
-                        when(it){
+                        when (it) {
                             is CoursesAction.NavigateTo -> navController.navigate(it.des)
                         }
                     })
                 }
                 composable<Destination.AnalyticsScreen> {
-                    AnalyticsScreen()
+                    AnalyticsScreen(onAction = {
+                        when (it) {
+                            is AnalyticsAction.NavigateTo -> navController.navigate(it.des)
+                        }
+                    })
                 }
                 composable<Destination.SettingsScreen> {
                     SettingsScreen(onAction = {
-                        when(it){
+                        when (it) {
                             is SettingsAction.NavigateTo -> navController.navigate(it.des)
                         }
                     })
