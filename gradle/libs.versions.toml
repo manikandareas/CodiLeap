@@ -18,6 +18,7 @@ composeNavigation = "2.8.3"
 serialization = "1.6.3"
 composeAnimation = "1.7.5"
 coil = "2.7.0"
+ychartsVersion = "2.1.0"
 
 [libraries]
 androidx-core-ktx = { group = "androidx.core", name = "core-ktx", version.ref = "coreKtx" }
@@ -51,6 +52,7 @@ androidx-compose-animation = { group = "androidx.compose.animation", name = "ani
 androidx-ui-text-google-fonts = { module = "androidx.compose.ui:ui-text-google-fonts", version.ref = "uiTextGoogleFonts" }
 coil = { module = "io.coil-kt:coil", version.ref = "coil" }
 coil-kt-coil-compose = { module = "io.coil-kt:coil-compose", version.ref = "coil" }
+yml-ycharts = { module = "co.yml:ycharts", version.ref = "ychartsVersion" }
 
 [plugins]
 android-application = { id = "com.android.application", version.ref = "agp" }
