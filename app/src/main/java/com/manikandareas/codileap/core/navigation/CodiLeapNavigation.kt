@@ -24,6 +24,8 @@ import com.manikandareas.codileap.courses.presentation.CoursesScreen
 import com.manikandareas.codileap.home.presentation.HomeAction
 import com.manikandareas.codileap.home.presentation.HomeScreen
 import com.manikandareas.codileap.intro.presentation.IntroScreen
+import com.manikandareas.codileap.screening.presentation.ScreeningAction
+import com.manikandareas.codileap.screening.presentation.ScreeningScreen
 import com.manikandareas.codileap.settings.presentation.SettingsAction
 import com.manikandareas.codileap.settings.presentation.SettingsScreen
 import org.koin.androidx.compose.koinViewModel
@@ -78,6 +80,20 @@ fun CodiLeapNavigation(
                 composable<Destination.LoginScreen> {
                     val viewModel = koinViewModel<AuthSignInViewModel>()
                     AuthSignInScreen(onAction = viewModel::onAction)
+                }
+            }
+
+            navigation<Destination.ScreeningGraph>(
+                startDestination = Destination.ScreeningScreen
+            ) {
+                composable<Destination.ScreeningScreen> {
+                    ScreeningScreen(
+                        onAction = {
+                            when (it) {
+                                is ScreeningAction.NavigateTo -> navController.navigate(it.des)
+                            }
+                        }
+                    )
                 }
             }
 
