@@ -18,8 +18,8 @@ class AuthSignInViewModel(private val navigator: Navigator) : ViewModel() {
             }
 
             AuthSignInAction.OnSignInClicked -> viewModelScope.launch{
-                navigator.navigate(Destination.HomeGraph, {
-                    popUpTo(Destination.AuthGraph) { inclusive = true }
+                navigator.navigate(Destination.ScreeningGraph, {
+                    popUpTo(Destination.ScreeningScreen) { inclusive = true }
                 })
             }
         }

@@ -21,6 +21,11 @@ sealed interface Destination {
     @Serializable
     data object IntroScreen : Destination
 
+    @Serializable
+    data object ScreeningGraph : Destination
+
+    @Serializable
+    data object ScreeningScreen : Destination
 
     @Serializable
     data object HomeGraph : Destination
@@ -39,7 +44,6 @@ sealed interface Destination {
 
     @Serializable
     data object ProfileScreen : Destination
-
 
 
 }
