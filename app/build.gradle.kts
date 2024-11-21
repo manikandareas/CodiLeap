@@ -32,6 +32,7 @@ android {
         }
         debug {
             buildConfigField("String", "BASE_URL", "\"https://story-api.dicoding.dev/v1/\"")
+            buildConfigField("String", "APP_SECRET_KEY", "\"codileap_secret_key\"")
         }
     }
     compileOptions {
@@ -68,6 +69,8 @@ dependencies {
     implementation(libs.androidx.material.icons.extended.android)
 
     implementation (libs.yml.ycharts)
+
+    implementation (libs.kotlinx.serialization.json)
 
     implementation(libs.androidx.core.ktx)
     implementation(libs.androidx.lifecycle.runtime.ktx)
