@@ -3,7 +3,6 @@ package com.manikandareas.codileap.courses.presentation
 import androidx.compose.animation.core.animateFloatAsState
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
-import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
@@ -37,21 +36,27 @@ import androidx.compose.ui.platform.LocalDensity
 import androidx.compose.ui.tooling.preview.PreviewLightDark
 import androidx.compose.ui.unit.dp
 import com.manikandareas.codileap.core.navigation.Destination
+import com.manikandareas.codileap.courses.data.dummy.createLessonsForModule
+import com.manikandareas.codileap.courses.data.dummy.createModulesForLearningPath
+import com.manikandareas.codileap.courses.data.dummy.learningPathsDummy
 import com.manikandareas.codileap.courses.presentation.component.CoursesAppBar
-import com.manikandareas.codileap.courses.presentation.component.TimelineItem
-import com.manikandareas.codileap.courses.presentation.component.TimelineNode
+import com.manikandareas.codileap.courses.presentation.component.LessonItem
+import com.manikandareas.codileap.courses.presentation.component.LessonNode
 import com.manikandareas.codileap.courses.presentation.defaults.CircleParametersDefaults
 import com.manikandareas.codileap.courses.presentation.defaults.LineParametersDefaults
-import com.manikandareas.codileap.courses.presentation.model.DummyLearningPaths
-import com.manikandareas.codileap.courses.presentation.model.TimelineItemUi
-import com.manikandareas.codileap.courses.presentation.model.TimelineNodePosition
+import com.manikandareas.codileap.courses.presentation.model.LessonNodePosition
+import com.manikandareas.codileap.courses.presentation.model.toUiModel
 import com.manikandareas.codileap.home.presentation.component.HomeBottomAppBar
 import com.manikandareas.codileap.home.presentation.component.HomeChatBotFab
 import com.manikandareas.codileap.ui.theme.CodiLeapTheme
 import kotlin.math.roundToInt
 
 @Composable
-fun CoursesScreen(onAction: (CoursesAction) -> Unit, modifier: Modifier = Modifier) {
+fun CoursesScreen(
+    state: CoursesState,
+    onAction: (CoursesAction) -> Unit,
+    modifier: Modifier = Modifier
+) {
     val scrollState = rememberScrollState()
     var isBottomBarVisible by remember { mutableStateOf(true) }
     var previousScrollOffset by remember { mutableIntStateOf(0) }
@@ -79,8 +84,6 @@ fun CoursesScreen(onAction: (CoursesAction) -> Unit, modifier: Modifier = Modifi
         targetValue = if (isBottomBarVisible) 0f else bottomBarOffsetHeightPx,
         label = "bottomBarTranslation"
     )
-
-    val dummyData = DummyLearningPaths["Machine Learning"]!!
 
     Scaffold(
         topBar = {
@@ -138,25 +141,25 @@ fun CoursesScreen(onAction: (CoursesAction) -> Unit, modifier: Modifier = Modifi
                 Spacer(modifier = Modifier.height(32.dp))
             }
             items(
-                items = dummyData[0].lessons,
-                key = { item -> item.title }
+                items = state.lessons,
+                key = { item -> item.id }
             ) { item ->
                 // Calculate position dynamically based on index
                 val position = when (item) {
-                    dummyData[0].lessons.first() -> TimelineNodePosition.FIRST
-                    dummyData[0].lessons.last() -> TimelineNodePosition.LAST
-                    else -> TimelineNodePosition.MIDDLE
+                    state.lessons.first() -> LessonNodePosition.FIRST
+                    state.lessons.last() -> LessonNodePosition.LAST
+                    else -> LessonNodePosition.MIDDLE
                 }
 
                 // Line parameters change based on position
                 val lineParameters = when (position) {
-                    TimelineNodePosition.LAST -> null
-                    TimelineNodePosition.FIRST -> LineParametersDefaults.linearGradient(
+                    LessonNodePosition.LAST -> null
+                    LessonNodePosition.FIRST -> LineParametersDefaults.linearGradient(
                         startColor = Color(0xFF00FF9C).copy(alpha = 0.2F),
                         endColor = Color(0xFF00FF9C).copy(alpha = 0.2F)
                     )
 
-                    TimelineNodePosition.MIDDLE -> LineParametersDefaults.linearGradient(
+                    LessonNodePosition.MIDDLE -> LineParametersDefaults.linearGradient(
                         startColor = Color(0xFF00FF9C).copy(alpha = 0.2F),
                         endColor = Color(0xFF00FF9C).copy(alpha = 0.2F)
                     )
@@ -164,11 +167,11 @@ fun CoursesScreen(onAction: (CoursesAction) -> Unit, modifier: Modifier = Modifi
 
                 // Circle radius changes based on position
                 val circleColor = when (position) {
-                    TimelineNodePosition.FIRST -> Color(0xFF00FF9C)
+                    LessonNodePosition.FIRST -> Color(0xFF00FF9C)
                     else -> Color(0xFF00FF9C).copy(alpha = 0.3F)
                 }
 
-                TimelineNode(
+                LessonNode(
                     position = position,
                     circleParameters = CircleParametersDefaults.circleParameters(
                         backgroundColor = circleColor,
@@ -176,13 +179,10 @@ fun CoursesScreen(onAction: (CoursesAction) -> Unit, modifier: Modifier = Modifi
                     ),
                     lineParameters = lineParameters
                 ) { modifier ->
-                    TimelineItem(
+                    LessonItem(
                         modifier = modifier,
-                        lesson = TimelineItemUi(
-                            title = item.title,
-                            unitCount = item.units.size,
-                            durationInMinutes = item.durationInMinutes
-                        )
+                        lesson = item,
+                        onClick = {}
                     )
                 }
             }
@@ -194,7 +194,22 @@ fun CoursesScreen(onAction: (CoursesAction) -> Unit, modifier: Modifier = Modifi
 @PreviewLightDark
 @Composable
 fun PreviewCoursesScreen(modifier: Modifier = Modifier) {
+    val selectedLearningPath = learningPathsDummy.first().toUiModel()
+    val selectedModule = createModulesForLearningPath(
+        learningPathId = selectedLearningPath.id,
+        pathName = selectedLearningPath.name
+    ).first().toUiModel()
+    val state = CoursesState(
+        isLoading = false,
+        selectedLearningPath = selectedLearningPath,
+        learningPaths = learningPathsDummy.map { it.toUiModel() },
+        selectedModule = selectedModule,
+        lessons = createLessonsForModule(
+            learningPath = selectedLearningPath.name,
+            moduleName = selectedModule.name
+        ).map { it.toUiModel() }
+    )
     CodiLeapTheme {
-        CoursesScreen(modifier = modifier, onAction = {})
+        CoursesScreen(modifier = modifier, state = state, onAction = {})
     }
 }
