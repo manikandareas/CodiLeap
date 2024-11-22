@@ -1,5 +1,3 @@
-@file:OptIn(ExperimentalMaterial3Api::class)
-
 package com.manikandareas.codileap.chatbot.presentation.component
 
 import androidx.compose.foundation.background
@@ -180,7 +178,7 @@ fun PreviewChatBubble() {
         Column {
             ChatBubble(message = ChatMessage("Hello! How can I help you?", false))
             Spacer(modifier = Modifier.height(8.dp))
-            ChatBubble(message = ChatMessage("I need help with my learning path", true))
+            ChatBubble(message = ChatMessage("I need help with coding", true))
         }
     }
 }
