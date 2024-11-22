@@ -5,7 +5,6 @@ import androidx.compose.foundation.layout.BoxScope
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.defaultMinSize
 import androidx.compose.foundation.layout.fillMaxWidth
-import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.wrapContentSize
 import androidx.compose.runtime.Composable
@@ -25,13 +24,13 @@ import com.manikandareas.codileap.courses.presentation.defaults.LineParametersDe
 import com.manikandareas.codileap.courses.presentation.model.CircleParameters
 import com.manikandareas.codileap.courses.presentation.model.LineParameters
 import com.manikandareas.codileap.courses.presentation.model.StrokeParameters
-import com.manikandareas.codileap.courses.presentation.model.TimelineNodePosition
+import com.manikandareas.codileap.courses.presentation.model.LessonNodePosition
 import com.manikandareas.codileap.ui.theme.CodiLeapTheme
 import com.manikandareas.codileap.R
 
 @Composable
-fun TimelineNode(
-    position: TimelineNodePosition,
+fun LessonNode(
+    position: LessonNodePosition,
     circleParameters: CircleParameters,
     lineParameters: LineParameters? = null,
     contentStartOffset: Dp = 16.dp,
@@ -93,67 +92,67 @@ fun TimelineNode(
                 .defaultMinSize(minHeight = circleParameters.radius * 2)
                 .padding(
                     start = circleParameters.radius * 2 + contentStartOffset,
-                    bottom = if (position != TimelineNodePosition.LAST) spacer else 0.dp
+                    bottom = if (position != LessonNodePosition.LAST) spacer else 0.dp
                 )
         )
     }
 }
-
-@Preview(showBackground = true)
-@Composable
-private fun TimelinePreview() {
-    CodiLeapTheme() {
-        Column(
-            modifier = Modifier
-                .fillMaxWidth()
-                .padding(16.dp)
-        ) {
-            TimelineNode(
-                position = TimelineNodePosition.FIRST,
-                circleParameters = CircleParametersDefaults.circleParameters(
-                    backgroundColor = Color.LightGray
-                ),
-                lineParameters = LineParametersDefaults.linearGradient(
-                    startColor = Color.Blue,
-                    endColor = Color.Blue
-                )
-            ) { modifier ->
-                TimelineItem(
-                    modifier = modifier,
-                    lesson = dummyTimelineItem
-                )
-            }
-
-            TimelineNode(
-                position = TimelineNodePosition.MIDDLE,
-                circleParameters = CircleParametersDefaults.circleParameters(
-                    backgroundColor = Color.Magenta
-                ),
-                contentStartOffset = 16.dp,
-                lineParameters = LineParametersDefaults.linearGradient(
-                    startColor = Color.Cyan,
-                    endColor = Color.Cyan
-                )
-            ) { modifier ->
-                TimelineItem(
-                    modifier = modifier,
-                    lesson = dummyTimelineItem
-                )
-            }
-
-            TimelineNode(
-                TimelineNodePosition.LAST,
-                circleParameters = CircleParametersDefaults.circleParameters(
-                    backgroundColor = Color.Yellow,
-                    stroke = StrokeParameters(color = Color.Yellow, width = 2.dp),
-                    icon = R.drawable.ic_lock
-                )
-            ) { modifier ->
-                TimelineItem(
-                    modifier = modifier,
-                    lesson = dummyTimelineItem
-                )
-            }
-        }
-    }
-}
+//
+//@Preview(showBackground = true)
+//@Composable
+//private fun LessonPreview() {
+//    CodiLeapTheme() {
+//        Column(
+//            modifier = Modifier
+//                .fillMaxWidth()
+//                .padding(16.dp)
+//        ) {
+//            LessonNode(
+//                position = LessonNodePosition.FIRST,
+//                circleParameters = CircleParametersDefaults.circleParameters(
+//                    backgroundColor = Color.LightGray
+//                ),
+//                lineParameters = LineParametersDefaults.linearGradient(
+//                    startColor = Color.Blue,
+//                    endColor = Color.Blue
+//                )
+//            ) { modifier ->
+//                LessonItem(
+//                    modifier = modifier,
+//                    lesson = dummyTimelineItem
+//                )
+//            }
+//
+//            LessonNode(
+//                position = LessonNodePosition.MIDDLE,
+//                circleParameters = CircleParametersDefaults.circleParameters(
+//                    backgroundColor = Color.Magenta
+//                ),
+//                contentStartOffset = 16.dp,
+//                lineParameters = LineParametersDefaults.linearGradient(
+//                    startColor = Color.Cyan,
+//                    endColor = Color.Cyan
+//                )
+//            ) { modifier ->
+//                LessonItem(
+//                    modifier = modifier,
+//                    lesson = dummyTimelineItem
+//                )
+//            }
+//
+//            LessonNode(
+//                LessonNodePosition.LAST,
+//                circleParameters = CircleParametersDefaults.circleParameters(
+//                    backgroundColor = Color.Yellow,
+//                    stroke = StrokeParameters(color = Color.Yellow, width = 2.dp),
+//                    icon = R.drawable.ic_lock
+//                )
+//            ) { modifier ->
+//                LessonItem(
+//                    modifier = modifier,
+//                    lesson = dummyTimelineItem
+//                )
+//            }
+//        }
+//    }
+//}

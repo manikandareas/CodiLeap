@@ -19,8 +19,13 @@ import com.manikandareas.codileap.auth.presentation.auth_register.AuthRegisterVi
 import com.manikandareas.codileap.auth.presentation.auth_signIn.AuthSignInScreen
 import com.manikandareas.codileap.auth.presentation.auth_signIn.AuthSignInViewModel
 import com.manikandareas.codileap.core.presentation.util.ObserveAsEvents
+import com.manikandareas.codileap.courses.data.dummy.createLessonsForModule
+import com.manikandareas.codileap.courses.data.dummy.createModulesForLearningPath
+import com.manikandareas.codileap.courses.data.dummy.learningPathsDummy
 import com.manikandareas.codileap.courses.presentation.CoursesAction
 import com.manikandareas.codileap.courses.presentation.CoursesScreen
+import com.manikandareas.codileap.courses.presentation.CoursesState
+import com.manikandareas.codileap.courses.presentation.model.toUiModel
 import com.manikandareas.codileap.home.presentation.HomeAction
 import com.manikandareas.codileap.home.presentation.HomeScreen
 import com.manikandareas.codileap.intro.presentation.IntroScreen
@@ -109,11 +114,28 @@ fun CodiLeapNavigation(
                     })
                 }
                 composable<Destination.CoursesScreen> {
-                    CoursesScreen(onAction = {
-                        when (it) {
-                            is CoursesAction.NavigateTo -> navController.navigate(it.des)
-                        }
-                    })
+                    val selectedLearningPath = learningPathsDummy.first().toUiModel()
+                    val selectedModule = createModulesForLearningPath(
+                        learningPathId = selectedLearningPath.id,
+                        pathName = selectedLearningPath.name
+                    ).first().toUiModel()
+                    val state = CoursesState(
+                        isLoading = false,
+                        selectedLearningPath = selectedLearningPath,
+                        learningPaths = learningPathsDummy.map { it.toUiModel() },
+                        selectedModule = selectedModule,
+                        lessons = createLessonsForModule(
+                            learningPath = selectedLearningPath.name,
+                            moduleName = selectedModule.name
+                        ).map { it.toUiModel() }
+                    )
+                    CoursesScreen(
+                        state = state,
+                        onAction = {
+                            when (it) {
+                                is CoursesAction.NavigateTo -> navController.navigate(it.des)
+                            }
+                        })
                 }
                 composable<Destination.AnalyticsScreen> {
                     AnalyticsScreen(onAction = {
