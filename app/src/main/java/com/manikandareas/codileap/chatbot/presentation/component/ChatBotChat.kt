@@ -1,3 +1,5 @@
+@file:OptIn(ExperimentalMaterial3Api::class)
+
 package com.manikandareas.codileap.chatbot.presentation.component
 
 import androidx.compose.foundation.background
