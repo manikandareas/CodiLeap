@@ -180,7 +180,7 @@ fun PreviewChatBubble() {
         Column {
             ChatBubble(message = ChatMessage("Hello! How can I help you?", false))
             Spacer(modifier = Modifier.height(8.dp))
-            ChatBubble(message = ChatMessage("I need help with coding", true))
+            ChatBubble(message = ChatMessage("I need help with my learning path", true))
         }
     }
 }
