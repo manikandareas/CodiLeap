@@ -2,7 +2,6 @@ package com.manikandareas.codileap.analytics.presentation
 
 import androidx.compose.animation.core.animateFloatAsState
 import androidx.compose.foundation.background
-import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
@@ -24,9 +23,7 @@ import androidx.compose.runtime.mutableIntStateOf
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
-import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.LocalDensity
 import androidx.compose.ui.tooling.preview.PreviewLightDark
 import androidx.compose.ui.unit.dp
@@ -39,9 +36,7 @@ import com.manikandareas.codileap.analytics.presentation.model.ChronotypeUi
 import com.manikandareas.codileap.core.navigation.Destination
 import com.manikandareas.codileap.home.presentation.component.HomeBottomAppBar
 import com.manikandareas.codileap.home.presentation.component.HomeChatBotFab
-import com.manikandareas.codileap.home.presentation.component.HomeModuleProgress
-import com.manikandareas.codileap.ui.compositions.BarGraph
-import com.manikandareas.codileap.ui.compositions.BarType
+import com.manikandareas.codileap.home.presentation.component.HomeCourseProgress
 import com.manikandareas.codileap.ui.theme.CodiLeapTheme
 import kotlin.math.roundToInt
 
@@ -123,7 +118,7 @@ fun AnalyticsScreen(onAction: (AnalyticsAction) -> Unit, modifier: Modifier = Mo
 
             Spacer(modifier = Modifier.height(16.dp))
 
-            HomeModuleProgress()
+            HomeCourseProgress()
         }
     }
 }

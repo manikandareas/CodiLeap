@@ -24,15 +24,15 @@ import androidx.compose.ui.tooling.preview.PreviewLightDark
 import androidx.compose.ui.unit.dp
 import com.manikandareas.codileap.core.presentation.util.HtmlParser
 import com.manikandareas.codileap.core.presentation.util.HtmlRenderer
-import com.manikandareas.codileap.core.presentation.util.kotlinLesson
-import com.manikandareas.codileap.courses.presentation.component.LessonAppbar
-import com.manikandareas.codileap.courses.presentation.component.LessonBottomAppBar
+import com.manikandareas.codileap.core.presentation.util.kotlinModule
+import com.manikandareas.codileap.courses.presentation.component.ModuleAppBar
+import com.manikandareas.codileap.courses.presentation.component.ModuleBottomAppBar
 import com.manikandareas.codileap.ui.theme.CodiLeapTheme
 
 @Composable
-fun LessonSession(modifier: Modifier = Modifier) {
+fun ModuleSession(modifier: Modifier = Modifier) {
     val parser = HtmlParser()
-    val elements = parser.parseHtml(kotlinLesson)
+    val elements = parser.parseHtml(kotlinModule)
 
     val listState = rememberLazyListState()
     var lastIndex by remember { mutableIntStateOf(0) }
@@ -83,7 +83,7 @@ fun LessonSession(modifier: Modifier = Modifier) {
                 .fillMaxSize()
                 .background(MaterialTheme.colorScheme.background),
             topBar = {
-                LessonAppbar()
+                ModuleAppBar()
             },
             floatingActionButton = {
                 AnimatedVisibility(
@@ -91,7 +91,7 @@ fun LessonSession(modifier: Modifier = Modifier) {
                     enter = slideInVertically(initialOffsetY = { it }),
                     exit = slideOutVertically(targetOffsetY = { it * 40 })
                 ) {
-                    LessonBottomAppBar(modifier = Modifier.offset(y = (40).dp))
+                    ModuleBottomAppBar(modifier = Modifier.offset(y = (40).dp))
                 }
             },
             floatingActionButtonPosition = FabPosition.Center,
@@ -109,9 +109,9 @@ fun LessonSession(modifier: Modifier = Modifier) {
 
 @PreviewLightDark
 @Composable
-fun LessonScreenPreview() {
+private fun ModuleScreenPreview() {
     CodiLeapTheme {
-        LessonSession()
+        ModuleSession()
     }
 }
 

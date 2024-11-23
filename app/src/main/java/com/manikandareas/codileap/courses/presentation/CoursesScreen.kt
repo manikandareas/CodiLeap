@@ -36,15 +36,15 @@ import androidx.compose.ui.platform.LocalDensity
 import androidx.compose.ui.tooling.preview.PreviewLightDark
 import androidx.compose.ui.unit.dp
 import com.manikandareas.codileap.core.navigation.Destination
-import com.manikandareas.codileap.courses.data.dummy.createLessonsForModule
-import com.manikandareas.codileap.courses.data.dummy.createModulesForLearningPath
+import com.manikandareas.codileap.courses.data.dummy.createCoursesForLearningPath
+import com.manikandareas.codileap.courses.data.dummy.createModulesForCourse
 import com.manikandareas.codileap.courses.data.dummy.learningPathsDummy
 import com.manikandareas.codileap.courses.presentation.component.CoursesAppBar
-import com.manikandareas.codileap.courses.presentation.component.LessonItem
-import com.manikandareas.codileap.courses.presentation.component.LessonNode
+import com.manikandareas.codileap.courses.presentation.component.ModuleItem
+import com.manikandareas.codileap.courses.presentation.component.ModuleNode
 import com.manikandareas.codileap.courses.presentation.defaults.CircleParametersDefaults
 import com.manikandareas.codileap.courses.presentation.defaults.LineParametersDefaults
-import com.manikandareas.codileap.courses.presentation.model.LessonNodePosition
+import com.manikandareas.codileap.courses.presentation.model.ModuleNodePosition
 import com.manikandareas.codileap.courses.presentation.model.toUiModel
 import com.manikandareas.codileap.home.presentation.component.HomeBottomAppBar
 import com.manikandareas.codileap.home.presentation.component.HomeChatBotFab
@@ -141,25 +141,25 @@ fun CoursesScreen(
                 Spacer(modifier = Modifier.height(32.dp))
             }
             items(
-                items = state.lessons,
+                items = state.modules,
                 key = { item -> item.id }
             ) { item ->
                 // Calculate position dynamically based on index
                 val position = when (item) {
-                    state.lessons.first() -> LessonNodePosition.FIRST
-                    state.lessons.last() -> LessonNodePosition.LAST
-                    else -> LessonNodePosition.MIDDLE
+                    state.modules.first() -> ModuleNodePosition.FIRST
+                    state.modules.last() -> ModuleNodePosition.LAST
+                    else -> ModuleNodePosition.MIDDLE
                 }
 
                 // Line parameters change based on position
                 val lineParameters = when (position) {
-                    LessonNodePosition.LAST -> null
-                    LessonNodePosition.FIRST -> LineParametersDefaults.linearGradient(
+                    ModuleNodePosition.LAST -> null
+                    ModuleNodePosition.FIRST -> LineParametersDefaults.linearGradient(
                         startColor = Color(0xFF00FF9C).copy(alpha = 0.2F),
                         endColor = Color(0xFF00FF9C).copy(alpha = 0.2F)
                     )
 
-                    LessonNodePosition.MIDDLE -> LineParametersDefaults.linearGradient(
+                    ModuleNodePosition.MIDDLE -> LineParametersDefaults.linearGradient(
                         startColor = Color(0xFF00FF9C).copy(alpha = 0.2F),
                         endColor = Color(0xFF00FF9C).copy(alpha = 0.2F)
                     )
@@ -167,11 +167,11 @@ fun CoursesScreen(
 
                 // Circle radius changes based on position
                 val circleColor = when (position) {
-                    LessonNodePosition.FIRST -> Color(0xFF00FF9C)
+                    ModuleNodePosition.FIRST -> Color(0xFF00FF9C)
                     else -> Color(0xFF00FF9C).copy(alpha = 0.3F)
                 }
 
-                LessonNode(
+                ModuleNode(
                     position = position,
                     circleParameters = CircleParametersDefaults.circleParameters(
                         backgroundColor = circleColor,
@@ -179,9 +179,9 @@ fun CoursesScreen(
                     ),
                     lineParameters = lineParameters
                 ) { modifier ->
-                    LessonItem(
+                    ModuleItem(
                         modifier = modifier,
-                        lesson = item,
+                        module = item,
                         onClick = {}
                     )
                 }
@@ -195,7 +195,7 @@ fun CoursesScreen(
 @Composable
 fun PreviewCoursesScreen(modifier: Modifier = Modifier) {
     val selectedLearningPath = learningPathsDummy.first().toUiModel()
-    val selectedModule = createModulesForLearningPath(
+    val selectedModule = createCoursesForLearningPath(
         learningPathId = selectedLearningPath.id,
         pathName = selectedLearningPath.name
     ).first().toUiModel()
@@ -203,8 +203,8 @@ fun PreviewCoursesScreen(modifier: Modifier = Modifier) {
         isLoading = false,
         selectedLearningPath = selectedLearningPath,
         learningPaths = learningPathsDummy.map { it.toUiModel() },
-        selectedModule = selectedModule,
-        lessons = createLessonsForModule(
+        selectedCourse = selectedModule,
+        modules = createModulesForCourse(
             learningPath = selectedLearningPath.name,
             moduleName = selectedModule.name
         ).map { it.toUiModel() }

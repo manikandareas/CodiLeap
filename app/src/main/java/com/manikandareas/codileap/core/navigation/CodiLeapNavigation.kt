@@ -19,8 +19,8 @@ import com.manikandareas.codileap.auth.presentation.auth_register.AuthRegisterVi
 import com.manikandareas.codileap.auth.presentation.auth_signIn.AuthSignInScreen
 import com.manikandareas.codileap.auth.presentation.auth_signIn.AuthSignInViewModel
 import com.manikandareas.codileap.core.presentation.util.ObserveAsEvents
-import com.manikandareas.codileap.courses.data.dummy.createLessonsForModule
-import com.manikandareas.codileap.courses.data.dummy.createModulesForLearningPath
+import com.manikandareas.codileap.courses.data.dummy.createCoursesForLearningPath
+import com.manikandareas.codileap.courses.data.dummy.createModulesForCourse
 import com.manikandareas.codileap.courses.data.dummy.learningPathsDummy
 import com.manikandareas.codileap.courses.presentation.CoursesAction
 import com.manikandareas.codileap.courses.presentation.CoursesScreen
@@ -115,7 +115,7 @@ fun CodiLeapNavigation(
                 }
                 composable<Destination.CoursesScreen> {
                     val selectedLearningPath = learningPathsDummy.first().toUiModel()
-                    val selectedModule = createModulesForLearningPath(
+                    val selectedModule = createCoursesForLearningPath(
                         learningPathId = selectedLearningPath.id,
                         pathName = selectedLearningPath.name
                     ).first().toUiModel()
@@ -123,8 +123,8 @@ fun CodiLeapNavigation(
                         isLoading = false,
                         selectedLearningPath = selectedLearningPath,
                         learningPaths = learningPathsDummy.map { it.toUiModel() },
-                        selectedModule = selectedModule,
-                        lessons = createLessonsForModule(
+                        selectedCourse = selectedModule,
+                        modules = createModulesForCourse(
                             learningPath = selectedLearningPath.name,
                             moduleName = selectedModule.name
                         ).map { it.toUiModel() }

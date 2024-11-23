@@ -10,8 +10,6 @@ import androidx.core.splashscreen.SplashScreen.Companion.installSplashScreen
 import androidx.navigation.compose.rememberNavController
 import com.manikandareas.codileap.core.navigation.CodiLeapNavigation
 import com.manikandareas.codileap.core.navigation.Navigator
-import com.manikandareas.codileap.courses.presentation.LessonSession
-import com.manikandareas.codileap.courses.presentation.QuizSession
 import com.manikandareas.codileap.ui.theme.CodiLeapTheme
 import org.koin.compose.koinInject
 

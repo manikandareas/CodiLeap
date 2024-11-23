@@ -26,7 +26,6 @@ ychartsVersion = "2.1.0"
 androidx-core-ktx = { group = "androidx.core", name = "core-ktx", version.ref = "coreKtx" }
 androidx-core-splashscreen = { module = "androidx.core:core-splashscreen", version.ref = "coreSplashscreen" }
 androidx-material-icons-extended-android = { module = "androidx.compose.material:material-icons-extended-android", version.ref = "materialIconsExtendedAndroid" }
-jsoup = { module = "org.jsoup:jsoup", version.ref = "jsoup" }
 jsoup-v1181 = { module = "org.jsoup:jsoup", version.ref = "jsoupVersion" }
 junit = { group = "junit", name = "junit", version.ref = "junit" }
 androidx-junit = { group = "androidx.test.ext", name = "junit", version.ref = "junitVersion" }

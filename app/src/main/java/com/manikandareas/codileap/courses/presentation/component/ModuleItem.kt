@@ -28,14 +28,14 @@ import androidx.compose.ui.tooling.preview.PreviewLightDark
 import androidx.compose.ui.unit.dp
 import com.manikandareas.codileap.ui.theme.CodiLeapTheme
 import com.manikandareas.codileap.R
-import com.manikandareas.codileap.courses.data.dummy.createLessonsForModule
-import com.manikandareas.codileap.courses.presentation.model.LessonUi
+import com.manikandareas.codileap.courses.data.dummy.createModulesForCourse
+import com.manikandareas.codileap.courses.presentation.model.ModuleUi
 import com.manikandareas.codileap.courses.presentation.model.toUiModel
 
 
 @Composable
-fun LessonItem(
-    lesson: LessonUi,
+fun ModuleItem(
+    module: ModuleUi,
     onClick: (lessonId: Int) -> Unit,
     modifier: Modifier,
     containerColor: Color = MaterialTheme.colorScheme.surfaceContainer
@@ -45,7 +45,7 @@ fun LessonItem(
         modifier = modifier
             .fillMaxWidth()
             .height(100.dp)
-            .clickable(enabled = true, onClick = { onClick(lesson.id) }),
+            .clickable(enabled = true, onClick = { onClick(module.id) }),
 
         ) {
         Row(
@@ -57,7 +57,7 @@ fun LessonItem(
         ) {
             Image(
                 painter = painterResource(id = R.drawable.ic_lesson_item),
-                contentDescription = "Lesson Item",
+                contentDescription = "Module Item",
                 modifier = Modifier
                     .size(48.dp)
                     .clip(MaterialTheme.shapes.large)
@@ -66,7 +66,7 @@ fun LessonItem(
             )
             Column(verticalArrangement = Arrangement.spacedBy(4.dp)) {
                 Text(
-                    text = lesson.name ?: "No Title",
+                    text = module.name ?: "No Title",
                     style = MaterialTheme.typography.titleMedium
                 )
                 Row(
@@ -82,7 +82,7 @@ fun LessonItem(
                             modifier = Modifier.size(16.dp)
                         )
                         Text(
-                            text = "${lesson.units.size} Units" ?: "No Units",
+                            text = "${module.units.size} Units" ?: "No Units",
                             style = MaterialTheme.typography.labelSmall,
                             modifier = Modifier.padding(start = 4.dp),
                             color = MaterialTheme.colorScheme.onSurface.copy(alpha = 0.6f)
@@ -111,12 +111,12 @@ fun LessonItem(
 
 @PreviewLightDark
 @Composable
-private fun PreviewLessonItem(modifier: Modifier = Modifier) {
+private fun PreviewModuleItem(modifier: Modifier = Modifier) {
     CodiLeapTheme {
-        LessonItem(
+        ModuleItem(
             modifier = modifier,
             containerColor = MaterialTheme.colorScheme.surface,
-            lesson = createLessonsForModule(
+            module = createModulesForCourse(
                 learningPath = "Android Development Fundamentals",
                 moduleName = "Kotlin Basics"
             ).first().toUiModel(),

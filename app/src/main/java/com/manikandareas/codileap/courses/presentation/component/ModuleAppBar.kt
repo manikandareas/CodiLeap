@@ -19,7 +19,7 @@ import androidx.compose.ui.unit.dp
 import com.manikandareas.codileap.ui.theme.CodiLeapTheme
 
 @Composable
-fun LessonAppbar(modifier: Modifier = Modifier) {
+fun ModuleAppBar(modifier: Modifier = Modifier) {
     CenterAlignedTopAppBar(
         modifier = modifier,
         navigationIcon = {
@@ -56,8 +56,8 @@ fun LessonAppbar(modifier: Modifier = Modifier) {
 
 @PreviewLightDark
 @Composable
-fun LessonAppbarPreview() {
+fun ModuleAppbarPreview() {
     CodiLeapTheme {
-        LessonAppbar()
+        ModuleAppBar()
     }
 }
