@@ -22,7 +22,6 @@ import com.manikandareas.codileap.auth.presentation.auth_signIn.AuthSignInViewMo
 import com.manikandareas.codileap.core.presentation.util.ObserveAsEvents
 import com.manikandareas.codileap.core.presentation.util.parcelableType
 import com.manikandareas.codileap.courses.data.dummy.createCoursesForLearningPath
-import com.manikandareas.codileap.courses.data.dummy.createModulesForCourse
 import com.manikandareas.codileap.courses.data.dummy.learningPathsDummy
 import com.manikandareas.codileap.courses.presentation.CoursesAction
 import com.manikandareas.codileap.courses.presentation.CoursesScreen
@@ -131,9 +130,9 @@ fun CodiLeapNavigation(
                         selectedLearningPath = selectedLearningPath,
                         learningPaths = learningPathsDummy.map { it.toUiModel() },
                         selectedCourse = selectedCourse,
-                        modules = createModulesForCourse(
-                            learningPath = selectedLearningPath.name,
-                            moduleName = selectedCourse.name
+                        courses = createCoursesForLearningPath(
+                            learningPathId = selectedLearningPath.id,
+                            pathName = selectedLearningPath.name
                         ).map { it.toUiModel() }
                     )
                     CoursesScreen(
@@ -152,8 +151,6 @@ fun CodiLeapNavigation(
                     typeMap = mapOf(typeOf<ModuleUi>() to parcelableType<ModuleUi>())
                 ) {
                     val arg = it.toRoute<Destination.ModuleScreen>()
-                    println("Received module: ${arg.moduleUi}")
-
                     val state = ModuleState(
                         isLoading = false,
                         moduleUi = arg.moduleUi

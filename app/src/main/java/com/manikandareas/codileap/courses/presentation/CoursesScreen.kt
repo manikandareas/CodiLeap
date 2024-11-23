@@ -1,3 +1,5 @@
+@file:OptIn(ExperimentalMaterial3Api::class)
+
 package com.manikandareas.codileap.courses.presentation
 
 import androidx.compose.animation.core.animateFloatAsState
@@ -15,13 +17,15 @@ import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.filled.ClearAll
+import androidx.compose.material.icons.filled.ImportExport
 import androidx.compose.material3.Button
 import androidx.compose.material3.ButtonDefaults
+import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
+import androidx.compose.material3.rememberModalBottomSheetState
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
@@ -39,9 +43,11 @@ import com.manikandareas.codileap.core.navigation.Destination
 import com.manikandareas.codileap.courses.data.dummy.createCoursesForLearningPath
 import com.manikandareas.codileap.courses.data.dummy.createModulesForCourse
 import com.manikandareas.codileap.courses.data.dummy.learningPathsDummy
+import com.manikandareas.codileap.courses.presentation.component.BottomSheetOptions
 import com.manikandareas.codileap.courses.presentation.component.CoursesAppBar
 import com.manikandareas.codileap.courses.presentation.component.ModuleItem
 import com.manikandareas.codileap.courses.presentation.component.ModuleNode
+import com.manikandareas.codileap.courses.presentation.component.Options
 import com.manikandareas.codileap.courses.presentation.defaults.CircleParametersDefaults
 import com.manikandareas.codileap.courses.presentation.defaults.LineParametersDefaults
 import com.manikandareas.codileap.courses.presentation.model.ModuleNodePosition
@@ -81,9 +87,19 @@ fun CoursesScreen(
         label = "bottomBarTranslation"
     )
 
+    // module sheet
+    val sheetState = rememberModalBottomSheetState(
+        skipPartiallyExpanded = true
+    )
+    var showBottomSheet by remember { mutableStateOf(false) }
+    var clickedOptionsType by remember { mutableStateOf(Options.LEARNING) }
+
     Scaffold(
         topBar = {
-            CoursesAppBar(modifier = Modifier.fillMaxWidth())
+            CoursesAppBar(onClick = {
+                showBottomSheet = true
+                clickedOptionsType = Options.LEARNING
+            }, modifier = Modifier.fillMaxWidth())
         },
         bottomBar = {
             HomeBottomAppBar(
@@ -103,6 +119,35 @@ fun CoursesScreen(
             .fillMaxSize()
             .background(MaterialTheme.colorScheme.background)
     ) { innerPadding ->
+        if (showBottomSheet) {
+            when (clickedOptionsType) {
+                Options.COURSE -> {
+                    BottomSheetOptions(
+                        onDismiss = {
+                            showBottomSheet = false
+                        },
+                        sheetState = sheetState,
+                        items = state.courses,
+                        title = state.selectedCourse?.name ?: "Select Learning Path",
+                        onItemClick = {},
+                        type = Options.COURSE,
+                    )
+                }
+
+                Options.LEARNING -> {
+                    BottomSheetOptions(
+                        onDismiss = {
+                            showBottomSheet = false
+                        },
+                        sheetState = sheetState,
+                        items = state.learningPaths,
+                        title = state.selectedLearningPath?.name ?: "Select Learning Path",
+                        onItemClick = {},
+                        type = Options.LEARNING,
+                    )
+                }
+            }
+        }
         LazyColumn(
             modifier = Modifier
                 .padding(innerPadding)
@@ -110,40 +155,53 @@ fun CoursesScreen(
         ) {
             item {
                 Button(
-                    onClick = {},
+                    onClick = {
+                        showBottomSheet = true
+                        clickedOptionsType = Options.COURSE
+                    },
                     modifier = Modifier.fillMaxWidth(),
                     contentPadding = PaddingValues(vertical = 12.dp, horizontal = 16.dp),
                     shape = MaterialTheme.shapes.medium,
                     colors = ButtonDefaults.buttonColors(
-                        containerColor = MaterialTheme.colorScheme.primary,
+                        containerColor = MaterialTheme.colorScheme.surfaceContainer,
+                        contentColor = MaterialTheme.colorScheme.onSurface
                     )
                 ) {
                     Row(
                         modifier = Modifier.fillMaxWidth(),
-                        horizontalArrangement = Arrangement.spacedBy(16.dp),
+                        horizontalArrangement = Arrangement.SpaceBetween,
                         verticalAlignment = Alignment.CenterVertically
                     ) {
-                        Icon(
-
-                            imageVector = Icons.Default.ClearAll,
-                            contentDescription = "Select Module"
-                        )
                         Text(
                             text = "Introduction to Machine Learning",
-                            style = MaterialTheme.typography.titleMedium
+                            style = MaterialTheme.typography.titleMedium,
+
+                            )
+//                        Icon(
+//
+//                            imageVector = Icons.Default.ClearAll,
+//                            contentDescription = "Select Module"
+//                        )
+                        Icon(
+                            imageVector = Icons.Default.ImportExport,
+                            contentDescription = "Select Modules",
                         )
                     }
                 }
                 Spacer(modifier = Modifier.height(32.dp))
             }
             items(
-                items = state.modules,
+                items = createModulesForCourse(
+                    learningPath = state.selectedLearningPath?.name ?: "",
+                    moduleName = state.selectedCourse?.name ?: ""
+                ).map { it.toUiModel() },
+
                 key = { item -> item.id }
             ) { item ->
                 // Calculate position dynamically based on index
                 val position = when (item) {
-                    state.modules.first() -> ModuleNodePosition.FIRST
-                    state.modules.last() -> ModuleNodePosition.LAST
+                    state.courses.first() -> ModuleNodePosition.FIRST
+                    state.courses.last() -> ModuleNodePosition.LAST
                     else -> ModuleNodePosition.MIDDLE
                 }
 
@@ -152,11 +210,11 @@ fun CoursesScreen(
                     ModuleNodePosition.LAST -> null
                     ModuleNodePosition.FIRST -> LineParametersDefaults.linearGradient(
                         startColor = Color(0xFF00FF9C).copy(alpha = 0.2F),
-                        endColor = Color(0xFF00FF9C).copy(alpha = 0.2F)
+                        endColor = Color(0xFF049C61).copy(alpha = 0.2F)
                     )
 
                     ModuleNodePosition.MIDDLE -> LineParametersDefaults.linearGradient(
-                        startColor = Color(0xFF00FF9C).copy(alpha = 0.2F),
+                        startColor = Color(0xFF049C61).copy(alpha = 0.2F),
                         endColor = Color(0xFF00FF9C).copy(alpha = 0.2F)
                     )
                 }
@@ -203,9 +261,9 @@ fun PreviewCoursesScreen(modifier: Modifier = Modifier) {
         selectedLearningPath = selectedLearningPath,
         learningPaths = learningPathsDummy.map { it.toUiModel() },
         selectedCourse = selectedModule,
-        modules = createModulesForCourse(
-            learningPath = selectedLearningPath.name,
-            moduleName = selectedModule.name
+        courses = createCoursesForLearningPath(
+            learningPathId = selectedLearningPath.id,
+            pathName = selectedLearningPath.name
         ).map { it.toUiModel() }
     )
     CodiLeapTheme {
