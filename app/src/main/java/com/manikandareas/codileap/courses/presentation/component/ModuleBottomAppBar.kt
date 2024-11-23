@@ -18,13 +18,18 @@ import androidx.compose.ui.unit.dp
 import com.manikandareas.codileap.ui.theme.CodiLeapTheme
 
 @Composable
-fun ModuleBottomAppBar(modifier: Modifier = Modifier) {
+fun ModuleBottomAppBar(
+    modifier: Modifier = Modifier,
+    enabled: Boolean = true,
+    onContinue: () -> Unit = {},
+) {
     Row(modifier = modifier.padding(16.dp)) {
         Button(
-            onClick = {},
+            onClick = {onContinue()},
             modifier = Modifier.fillMaxWidth(),
             shape = MaterialTheme.shapes.medium,
             contentPadding = PaddingValues(16.dp),
+            enabled = enabled
         ) {
             Row(verticalAlignment = Alignment.CenterVertically) {
                 Text("Continue")

@@ -61,9 +61,7 @@ fun CoursesScreen(
     var isBottomBarVisible by remember { mutableStateOf(true) }
     var previousScrollOffset by remember { mutableIntStateOf(0) }
 
-    // Observe scroll position and update bottom bar visibility
     LaunchedEffect(scrollState.value) {
-        // Always show bottom bar when at the top
         if (scrollState.value == 0) {
             isBottomBarVisible = true
             return@LaunchedEffect
@@ -71,8 +69,6 @@ fun CoursesScreen(
 
         val currentOffset = scrollState.value
         if (currentOffset != previousScrollOffset) {
-            // Scrolling down (positive direction) -> hide
-            // Scrolling up (negative direction) -> show
             isBottomBarVisible = currentOffset < previousScrollOffset
             previousScrollOffset = currentOffset
         }
@@ -182,7 +178,10 @@ fun CoursesScreen(
                     ModuleItem(
                         modifier = modifier,
                         module = item,
-                        onClick = {}
+                        onClick = {
+                            println("Clicked on module: ${item.name}")
+                            onAction(CoursesAction.OnModuleClicked(item))
+                        }
                     )
                 }
             }

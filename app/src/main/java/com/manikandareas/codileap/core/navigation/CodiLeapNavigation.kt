@@ -9,7 +9,8 @@ import androidx.compose.ui.Modifier
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
-import androidx.navigation.compose.navigation
+import androidx.navigation.navigation
+import androidx.navigation.toRoute
 import com.manikandareas.codileap.analytics.presentation.AnalyticsAction
 import com.manikandareas.codileap.analytics.presentation.AnalyticsScreen
 import com.manikandareas.codileap.auth.presentation.AuthScreen
@@ -19,12 +20,16 @@ import com.manikandareas.codileap.auth.presentation.auth_register.AuthRegisterVi
 import com.manikandareas.codileap.auth.presentation.auth_signIn.AuthSignInScreen
 import com.manikandareas.codileap.auth.presentation.auth_signIn.AuthSignInViewModel
 import com.manikandareas.codileap.core.presentation.util.ObserveAsEvents
+import com.manikandareas.codileap.core.presentation.util.parcelableType
 import com.manikandareas.codileap.courses.data.dummy.createCoursesForLearningPath
 import com.manikandareas.codileap.courses.data.dummy.createModulesForCourse
 import com.manikandareas.codileap.courses.data.dummy.learningPathsDummy
 import com.manikandareas.codileap.courses.presentation.CoursesAction
 import com.manikandareas.codileap.courses.presentation.CoursesScreen
 import com.manikandareas.codileap.courses.presentation.CoursesState
+import com.manikandareas.codileap.courses.presentation.ModuleSession
+import com.manikandareas.codileap.courses.presentation.ModuleState
+import com.manikandareas.codileap.courses.presentation.model.ModuleUi
 import com.manikandareas.codileap.courses.presentation.model.toUiModel
 import com.manikandareas.codileap.home.presentation.HomeAction
 import com.manikandareas.codileap.home.presentation.HomeScreen
@@ -34,6 +39,7 @@ import com.manikandareas.codileap.screening.presentation.ScreeningScreen
 import com.manikandareas.codileap.settings.presentation.SettingsAction
 import com.manikandareas.codileap.settings.presentation.SettingsScreen
 import org.koin.androidx.compose.koinViewModel
+import kotlin.reflect.typeOf
 
 
 @Composable
@@ -113,9 +119,10 @@ fun CodiLeapNavigation(
                         }
                     })
                 }
+
                 composable<Destination.CoursesScreen> {
-                    val selectedLearningPath = learningPathsDummy.first().toUiModel()
-                    val selectedModule = createCoursesForLearningPath(
+                    val selectedLearningPath = learningPathsDummy[2].toUiModel()
+                    val selectedCourse = createCoursesForLearningPath(
                         learningPathId = selectedLearningPath.id,
                         pathName = selectedLearningPath.name
                     ).first().toUiModel()
@@ -123,10 +130,10 @@ fun CodiLeapNavigation(
                         isLoading = false,
                         selectedLearningPath = selectedLearningPath,
                         learningPaths = learningPathsDummy.map { it.toUiModel() },
-                        selectedCourse = selectedModule,
+                        selectedCourse = selectedCourse,
                         modules = createModulesForCourse(
                             learningPath = selectedLearningPath.name,
-                            moduleName = selectedModule.name
+                            moduleName = selectedCourse.name
                         ).map { it.toUiModel() }
                     )
                     CoursesScreen(
@@ -134,9 +141,26 @@ fun CodiLeapNavigation(
                         onAction = {
                             when (it) {
                                 is CoursesAction.NavigateTo -> navController.navigate(it.des)
+                                is CoursesAction.OnModuleClicked -> {
+                                    navController.navigate(Destination.ModuleScreen(it.module))
+                                }
                             }
                         })
                 }
+
+                composable<Destination.ModuleScreen>(
+                    typeMap = mapOf(typeOf<ModuleUi>() to parcelableType<ModuleUi>())
+                ) {
+                    val arg = it.toRoute<Destination.ModuleScreen>()
+                    println("Received module: ${arg.moduleUi}")
+
+                    val state = ModuleState(
+                        isLoading = false,
+                        moduleUi = arg.moduleUi
+                    )
+                    ModuleSession(state = state)
+                }
+
                 composable<Destination.AnalyticsScreen> {
                     AnalyticsScreen(onAction = {
                         when (it) {
@@ -152,6 +176,8 @@ fun CodiLeapNavigation(
                     })
                 }
             }
+
+
         }
     }
 }

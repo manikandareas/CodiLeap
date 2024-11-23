@@ -30,13 +30,14 @@ import com.manikandareas.codileap.ui.theme.CodiLeapTheme
 import com.manikandareas.codileap.R
 import com.manikandareas.codileap.courses.data.dummy.createModulesForCourse
 import com.manikandareas.codileap.courses.presentation.model.ModuleUi
+import com.manikandareas.codileap.courses.presentation.model.UnitUi
 import com.manikandareas.codileap.courses.presentation.model.toUiModel
 
 
 @Composable
 fun ModuleItem(
     module: ModuleUi,
-    onClick: (lessonId: Int) -> Unit,
+    onClick: (module: ModuleUi) -> Unit,
     modifier: Modifier,
     containerColor: Color = MaterialTheme.colorScheme.surfaceContainer
 ) {
@@ -45,7 +46,7 @@ fun ModuleItem(
         modifier = modifier
             .fillMaxWidth()
             .height(100.dp)
-            .clickable(enabled = true, onClick = { onClick(module.id) }),
+            .clickable(enabled = true, onClick = { onClick(module) }),
 
         ) {
         Row(
