@@ -17,7 +17,6 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.derivedStateOf
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableIntStateOf
-import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
@@ -31,7 +30,7 @@ import com.manikandareas.codileap.courses.presentation.component.LessonBottomApp
 import com.manikandareas.codileap.ui.theme.CodiLeapTheme
 
 @Composable
-fun LessonScreen(modifier: Modifier = Modifier) {
+fun LessonSession(modifier: Modifier = Modifier) {
     val parser = HtmlParser()
     val elements = parser.parseHtml(kotlinLesson)
 
@@ -112,7 +111,7 @@ fun LessonScreen(modifier: Modifier = Modifier) {
 @Composable
 fun LessonScreenPreview() {
     CodiLeapTheme {
-        LessonScreen()
+        LessonSession()
     }
 }
 

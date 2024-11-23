@@ -27,7 +27,7 @@ import com.manikandareas.codileap.screening.presentation.component.CodiButton
 import com.manikandareas.codileap.ui.theme.CodiLeapTheme
 
 @Composable
-fun QuizScreen(modifier: Modifier = Modifier) {
+fun QuizSession(modifier: Modifier = Modifier) {
     var selectedButton by remember { mutableIntStateOf(0) }
     Scaffold(
         modifier = modifier
@@ -99,6 +99,6 @@ fun QuizScreen(modifier: Modifier = Modifier) {
 @Composable
 private fun PreviewQuizScreen() {
     CodiLeapTheme {
-        QuizScreen()
+        QuizSession()
     }
 }
