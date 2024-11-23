@@ -3,9 +3,7 @@ package com.manikandareas.codileap.profile.presentation
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.material3.*
-import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.tooling.preview.PreviewLightDark
-import androidx.compose.ui.tooling.preview.PreviewParameter
 import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
@@ -39,7 +37,7 @@ fun ProfileScreen(modifier: Modifier = Modifier) {
             var name by remember { mutableStateOf("") }
             var dateOfBirth by remember { mutableStateOf("") }
             var job by remember { mutableStateOf("") }
-            var income by remember { mutableStateOf("") }
+            var specialty by remember { mutableStateOf("") }
             var gender by remember { mutableStateOf("Male") }
 
             Column(
@@ -70,10 +68,10 @@ fun ProfileScreen(modifier: Modifier = Modifier) {
 
 
                 InputFieldWithLabel(
-                    label = "Monthly Income",
-                    value = income,
-                    onValueChange = { income = it },
-                    keyboardType = KeyboardType.Number
+                    label = "Specialty",
+                    value = specialty,
+                    onValueChange = { specialty = it },
+                    keyboardType = KeyboardType.Text
                 )
 
 
