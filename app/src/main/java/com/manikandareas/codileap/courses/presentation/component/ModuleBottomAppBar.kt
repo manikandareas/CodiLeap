@@ -18,19 +18,24 @@ import androidx.compose.ui.unit.dp
 import com.manikandareas.codileap.ui.theme.CodiLeapTheme
 
 @Composable
-fun LessonBottomAppBar(modifier: Modifier = Modifier) {
+fun ModuleBottomAppBar(
+    modifier: Modifier = Modifier,
+    enabled: Boolean = true,
+    onContinue: () -> Unit = {},
+) {
     Row(modifier = modifier.padding(16.dp)) {
         Button(
-            onClick = {},
+            onClick = {onContinue()},
             modifier = Modifier.fillMaxWidth(),
             shape = MaterialTheme.shapes.medium,
             contentPadding = PaddingValues(16.dp),
+            enabled = enabled
         ) {
             Row(verticalAlignment = Alignment.CenterVertically) {
                 Text("Continue")
                 Icon(
                     imageVector = Icons.AutoMirrored.Default.NavigateNext,
-                    contentDescription = "Next Lesson"
+                    contentDescription = "Next Unit"
                 )
             }
         }
@@ -39,8 +44,8 @@ fun LessonBottomAppBar(modifier: Modifier = Modifier) {
 
 @PreviewLightDark
 @Composable
-fun LessonBottomAppBarPreview() {
+private fun ModuleBottomAppBarPreview() {
     CodiLeapTheme {
-        LessonBottomAppBar()
+        ModuleBottomAppBar()
     }
 }

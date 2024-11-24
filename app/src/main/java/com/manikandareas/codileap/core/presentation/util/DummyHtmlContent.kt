@@ -1,6 +1,6 @@
 package com.manikandareas.codileap.core.presentation.util
 
-val kotlinLesson = """
+val kotlinModule = """
   <h1>Pengenalan Kotlin untuk Android Development</h1>
 
   <div class="alert alert-info">

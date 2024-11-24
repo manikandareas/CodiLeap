@@ -1,7 +1,7 @@
 package com.manikandareas.codileap.courses.presentation.model
 
 
-enum class LessonNodePosition {
+enum class ModuleNodePosition {
     FIRST,
     MIDDLE,
     LAST

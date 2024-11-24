@@ -26,7 +26,7 @@ import com.manikandareas.codileap.home.presentation.component.HomeBanner
 import com.manikandareas.codileap.home.presentation.component.HomeBottomAppBar
 import com.manikandareas.codileap.home.presentation.component.HomeCarousel
 import com.manikandareas.codileap.home.presentation.component.HomeChatBotFab
-import com.manikandareas.codileap.home.presentation.component.HomeModuleProgress
+import com.manikandareas.codileap.home.presentation.component.HomeCourseProgress
 import com.manikandareas.codileap.home.presentation.component.HomeQuizAction
 import com.manikandareas.codileap.home.presentation.component.userUi
 import com.manikandareas.codileap.home.presentation.model.DummyCarouselUi
@@ -100,7 +100,7 @@ fun HomeScreen(onAction:(HomeAction)-> Unit, modifier: Modifier = Modifier) {
             Spacer(modifier = Modifier.height(8.dp))
             HomeBanner(modifier = Modifier.fillMaxWidth())
             Spacer(modifier = Modifier.height(16.dp))
-            HomeModuleProgress(modifier = Modifier.fillMaxWidth())
+            HomeCourseProgress(modifier = Modifier.fillMaxWidth())
             Spacer(modifier = Modifier.height(16.dp))
             HomeQuizAction(modifier = Modifier.fillMaxWidth())
             Spacer(modifier = Modifier.height(16.dp))

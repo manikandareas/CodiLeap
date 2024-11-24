@@ -6,15 +6,14 @@ import kotlinx.serialization.Serializable
 data class ModuleDto(
     val id: Int,
     val name: String,
-    val description: String,
-    val totalLessons: Int,
-    val progress: ModuleProgressDto
+    val status: String,
+    val units: List<UnitDto>
 )
 
-
 @Serializable
-data class ModuleProgressDto (
-    val completed: Int,
-    val total: Int,
-    val percentage: Float,
+data class UnitDto(
+    val id: Int,
+    val order: Int,
+    val content: String,
+    val type: String,
 )

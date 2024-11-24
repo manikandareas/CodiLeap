@@ -19,12 +19,18 @@ import androidx.compose.ui.unit.dp
 import com.manikandareas.codileap.ui.theme.CodiLeapTheme
 
 @Composable
-fun LessonAppbar(modifier: Modifier = Modifier) {
+fun ModuleAppBar(
+    enabled: Boolean = true,
+    onBack: () -> Unit,
+    unitProgress: Float,
+    modifier: Modifier = Modifier
+) {
     CenterAlignedTopAppBar(
         modifier = modifier,
         navigationIcon = {
             IconButton(
-                onClick = {}
+                onClick = { onBack() },
+                enabled = enabled,
             ) {
                 Icon(
                     imageVector = Icons.AutoMirrored.Default.ArrowBackIos,
@@ -35,7 +41,7 @@ fun LessonAppbar(modifier: Modifier = Modifier) {
         },
         title = {
             LinearProgressIndicator(
-                progress = { 0.3f },
+                progress = { unitProgress },
                 modifier = Modifier
                     .fillMaxWidth()
                     .height(12.dp)
@@ -56,8 +62,11 @@ fun LessonAppbar(modifier: Modifier = Modifier) {
 
 @PreviewLightDark
 @Composable
-fun LessonAppbarPreview() {
+fun ModuleAppbarPreview() {
     CodiLeapTheme {
-        LessonAppbar()
+        ModuleAppBar(
+            unitProgress = 0.5f,
+            onBack = {}
+        )
     }
 }

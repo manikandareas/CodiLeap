@@ -4,15 +4,15 @@ import com.manikandareas.codileap.courses.domain.LearningPath
 import java.time.ZonedDateTime
 
 data class LearningPathUi(
-    val id: Int,
-    val name: String,
-    val description: String,
+    override val id: Int,
+    override val name: String,
+    override val description: String,
     val level: String,
-    val totalModules: Int,
+    override val totalModules: Int,
     val estimatedDuration: String,
     val createdAt: ZonedDateTime,
     val updatedAt: ZonedDateTime
-)
+): HasBasicCourse
 
 
 fun LearningPath.toUiModel() = LearningPathUi(

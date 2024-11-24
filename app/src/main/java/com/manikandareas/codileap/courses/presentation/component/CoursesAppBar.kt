@@ -18,7 +18,7 @@ import androidx.compose.ui.unit.dp
 import com.manikandareas.codileap.ui.theme.CodiLeapTheme
 
 @Composable
-fun CoursesAppBar(modifier: Modifier = Modifier) {
+fun CoursesAppBar(onClick: () -> Unit = {}, modifier: Modifier = Modifier) {
     TopAppBar(
         modifier = modifier,
         title = {
@@ -26,7 +26,7 @@ fun CoursesAppBar(modifier: Modifier = Modifier) {
         },
         actions = {
             IconButton(
-                onClick = {},
+                onClick = { onClick() },
                 modifier = Modifier
                     .padding(end = 12.dp)
             ) {

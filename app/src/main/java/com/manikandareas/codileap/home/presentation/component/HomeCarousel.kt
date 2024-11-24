@@ -1,11 +1,11 @@
 package com.manikandareas.codileap.home.presentation.component
 
 import androidx.compose.foundation.Image
+import androidx.compose.foundation.gestures.snapping.SnapPosition
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.Row
-import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
@@ -13,10 +13,8 @@ import androidx.compose.foundation.pager.HorizontalPager
 import androidx.compose.foundation.pager.PagerState
 import androidx.compose.foundation.pager.rememberPagerState
 import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.filled.AccessTime
 import androidx.compose.material.icons.filled.Book
 import androidx.compose.material.icons.filled.Groups
-import androidx.compose.material3.Badge
 import androidx.compose.material3.Card
 import androidx.compose.material3.CardColors
 import androidx.compose.material3.Icon
@@ -25,7 +23,6 @@ import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.graphicsLayer
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.platform.LocalContext
@@ -34,17 +31,16 @@ import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.tooling.preview.PreviewLightDark
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.lerp
-import coil.compose.AsyncImage
 import coil.compose.SubcomposeAsyncImage
 import coil.request.ImageRequest
 import coil.size.Scale
-import com.manikandareas.codileap.home.presentation.model.CarouselItemUi
-import com.manikandareas.codileap.home.presentation.model.CarouselUi
-import com.manikandareas.codileap.ui.theme.CodiLeapTheme
-import kotlin.math.absoluteValue
 import com.manikandareas.codileap.R
 import com.manikandareas.codileap.core.presentation.util.truncateWithEllipsis
+import com.manikandareas.codileap.home.presentation.model.CarouselItemUi
+import com.manikandareas.codileap.home.presentation.model.CarouselUi
 import com.manikandareas.codileap.home.presentation.model.DummyCarouselUi
+import com.manikandareas.codileap.ui.theme.CodiLeapTheme
+import kotlin.math.absoluteValue
 
 @Composable
 fun HomeCarousel(carouselUi: CarouselUi, modifier: Modifier = Modifier) {
@@ -58,7 +54,9 @@ fun HomeCarousel(carouselUi: CarouselUi, modifier: Modifier = Modifier) {
 
     HorizontalPager(
         state = pagerState,
-        modifier = modifier
+        modifier = modifier,
+        contentPadding= contentPadding,
+        snapPosition = SnapPosition.Center
     ) { index ->
         CardContent(carouselUi.items[index], index, pagerState)
     }
@@ -91,7 +89,7 @@ fun CardContent(itemUi: CarouselItemUi, index: Int, pagerState: PagerState) {
             contentColor = MaterialTheme.colorScheme.onSurface,
             disabledContentColor = MaterialTheme.colorScheme.onSurface.copy(alpha = 0.6f),
             disabledContainerColor = MaterialTheme.colorScheme.surface.copy(alpha = 0.6f),
-            )
+        ),
     ) {
         Column {
             SubcomposeAsyncImage(
