@@ -26,12 +26,11 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.tooling.preview.PreviewLightDark
 import androidx.compose.ui.unit.dp
-import com.manikandareas.codileap.ui.theme.CodiLeapTheme
 import com.manikandareas.codileap.R
 import com.manikandareas.codileap.courses.data.dummy.createModulesForCourse
 import com.manikandareas.codileap.courses.presentation.model.ModuleUi
-import com.manikandareas.codileap.courses.presentation.model.UnitUi
 import com.manikandareas.codileap.courses.presentation.model.toUiModel
+import com.manikandareas.codileap.ui.theme.CodiLeapTheme
 
 
 @Composable
@@ -39,7 +38,8 @@ fun ModuleItem(
     module: ModuleUi,
     onClick: (module: ModuleUi) -> Unit,
     modifier: Modifier,
-    containerColor: Color = MaterialTheme.colorScheme.surfaceContainer
+    containerColor: Color = MaterialTheme.colorScheme.surfaceContainer,
+    isLocked: Boolean = false
 ) {
     Card(
         colors = CardDefaults.cardColors(containerColor = containerColor),
@@ -65,7 +65,7 @@ fun ModuleItem(
                     .background(MaterialTheme.colorScheme.onSurface)
                     .padding(10.dp)
             )
-            Column(verticalArrangement = Arrangement.spacedBy(4.dp)) {
+            Column(verticalArrangement = Arrangement.spacedBy(4.dp), modifier = Modifier.weight(1F)) {
                 Text(
                     text = module.name ?: "No Title",
                     style = MaterialTheme.typography.titleMedium
@@ -90,22 +90,17 @@ fun ModuleItem(
                         )
                     }
 
-//                    Row(verticalAlignment = Alignment.CenterVertically) {
-//                        Icon(
-//                            imageVector = Icons.Default.AccessTime,
-//                            contentDescription = "Times",
-//                            tint = MaterialTheme.colorScheme.primary,
-//                            modifier = Modifier.size(16.dp)
-//                        )
-//                        Text(
-//                            text = "${lesson.} Minutes" ?: "No Time",
-//                            style = MaterialTheme.typography.labelSmall,
-//                            modifier = Modifier.padding(start = 4.dp),
-//                            color = MaterialTheme.colorScheme.onSurface.copy(alpha = 0.6f)
-//                        )
-//                    }
                 }
             }
+
+            if (isLocked) {
+                Image(
+                    painter = painterResource(id = R.drawable.ic_lock),
+                    contentDescription = "Locked",
+                    modifier = Modifier.size(32.dp)
+                )
+            }
+
         }
     }
 }
@@ -121,7 +116,8 @@ private fun PreviewModuleItem(modifier: Modifier = Modifier) {
                 learningPath = "Android Development Fundamentals",
                 moduleName = "Kotlin Basics"
             ).first().toUiModel(),
-            onClick = {}
+            onClick = {},
+            isLocked = true
         )
     }
 }
