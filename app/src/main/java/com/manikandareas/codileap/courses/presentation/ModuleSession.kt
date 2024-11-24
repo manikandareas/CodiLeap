@@ -179,7 +179,7 @@ private fun ModuleScreenPreview() {
         ModuleSession(
             state = ModuleState(
                 moduleUi = createModulesForCourse(
-                    learningPath = "Android Development Fundamentals", moduleName = "Kotlin Basics"
+                    learningPath = "Android Development Fundamentals", courseName = "Kotlin Basics"
                 ).first().toUiModel()
             ),
         )
