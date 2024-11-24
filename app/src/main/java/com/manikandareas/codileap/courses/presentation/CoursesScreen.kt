@@ -96,7 +96,9 @@ fun CoursesScreen(
 
     Scaffold(
         topBar = {
-            CoursesAppBar(onClick = {
+            CoursesAppBar(
+                title = state.selectedLearningPath?.name ?: "Learning Path",
+                onClick = {
                 showBottomSheet = true
                 clickedOptionsType = Options.LEARNING
             }, modifier = Modifier.fillMaxWidth())
@@ -173,7 +175,7 @@ fun CoursesScreen(
                         verticalAlignment = Alignment.CenterVertically
                     ) {
                         Text(
-                            text = "Introduction to Machine Learning",
+                            text = state.selectedCourse?.name ?: "Module Name",
                             style = MaterialTheme.typography.titleMedium,
 
                             )
@@ -193,7 +195,7 @@ fun CoursesScreen(
             items(
                 items = createModulesForCourse(
                     learningPath = state.selectedLearningPath?.name ?: "",
-                    moduleName = state.selectedCourse?.name ?: ""
+                    courseName = state.selectedCourse?.name ?: ""
                 ).map { it.toUiModel() },
 
                 key = { item -> item.id }

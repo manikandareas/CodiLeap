@@ -114,7 +114,7 @@ private fun PreviewModuleItem(modifier: Modifier = Modifier) {
             containerColor = MaterialTheme.colorScheme.surface,
             module = createModulesForCourse(
                 learningPath = "Android Development Fundamentals",
-                moduleName = "Kotlin Basics"
+                courseName = "Kotlin Basics"
             ).first().toUiModel(),
             onClick = {},
             isLocked = true

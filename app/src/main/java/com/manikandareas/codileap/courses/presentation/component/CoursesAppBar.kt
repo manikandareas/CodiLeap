@@ -13,16 +13,21 @@ import androidx.compose.material3.Text
 import androidx.compose.material3.TopAppBar
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.tooling.preview.PreviewLightDark
 import androidx.compose.ui.unit.dp
 import com.manikandareas.codileap.ui.theme.CodiLeapTheme
 
 @Composable
-fun CoursesAppBar(onClick: () -> Unit = {}, modifier: Modifier = Modifier) {
+fun CoursesAppBar(
+    title: String = "Learning Path",
+    onClick: () -> Unit = {},
+    modifier: Modifier = Modifier
+) {
     TopAppBar(
         modifier = modifier,
         title = {
-            Text(text = "Pemrograman Web", style = MaterialTheme.typography.titleLarge)
+            Text(text = title, style = MaterialTheme.typography.titleLarge, maxLines = 1, overflow = TextOverflow.Ellipsis)
         },
         actions = {
             IconButton(
