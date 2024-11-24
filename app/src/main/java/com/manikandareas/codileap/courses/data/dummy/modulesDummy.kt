@@ -1,149 +1,170 @@
 package com.manikandareas.codileap.courses.data.dummy
 
 import com.manikandareas.codileap.courses.domain.Module
-import com.manikandareas.codileap.courses.domain.Progress
+import     com.manikandareas.codileap.courses.domain.Unit
 
-// Function to create modules for each learning path
-fun createModulesForLearningPath(learningPathId: Int, pathName: String): List<Module> {
-    return when (pathName) {
-        "Android Development Fundamentals" -> listOf(
+// Function to create lessons for each module
+fun createModulesForCourse(learningPath: String, moduleName: String): List<Module> {
+    return when {
+        learningPath == "Android Development Fundamentals" && moduleName == "Kotlin Basics" -> listOf(
             Module(
                 id = 1,
-                name = "Kotlin Basics",
-                description = "Introduction to Kotlin programming language",
-                totalLessons = 15,
-                progress = Progress(completed = 10, total = 15, percentage = 66.7f)
+                name = "Introduction to Kotlin",
+                status = "Completed",
+                units = listOf(
+                    Unit(
+                        id = 1,
+                        order = 1,
+                        content = "What is Kotlin? Overview of the Language",
+                        type = "Video Lecture"
+                    ),
+                    Unit(
+                        id = 2,
+                        order = 2,
+                        content = "Setting Up Kotlin Development Environment",
+                        type = "Tutorial"
+                    ),
+                    Unit(
+                        id = 3,
+                        order = 3,
+                        content = "Basic Syntax and Variables",
+                        type = "Interactive Coding"
+                    )
+                )
             ),
             Module(
                 id = 2,
-                name = "Android Studio Setup",
-                description = "Setting up development environment and tools",
-                totalLessons = 10,
-                progress = Progress(completed = 8, total = 10, percentage = 80f)
-            ),
-            Module(
-                id = 3,
-                name = "UI/UX Design in Android",
-                description = "Creating user interfaces and experience",
-                totalLessons = 20,
-                progress = Progress(completed = 12, total = 20, percentage = 60f)
+                name = "Kotlin Functions and OOP",
+                status = "In Progress",
+                units = listOf(
+                    Unit(
+                        id = 1,
+                        order = 1,
+                        content = "Defining and Calling Functions",
+                        type = "Video Lecture"
+                    ),
+                    Unit(
+                        id = 2,
+                        order = 2,
+                        content = "Object-Oriented Programming Concepts",
+                        type = "Tutorial"
+                    ),
+                    Unit(
+                        id = 3,
+                        order = 3,
+                        content = "Classes and Inheritance in Kotlin",
+                        type = "Coding Exercise"
+                    )
+                )
             )
         )
-        "Full Stack Web Development" -> listOf(
+
+        learningPath == "DevOps Engineering Mastery" && moduleName == "Linux and Shell Scripting" -> listOf(
             Module(
                 id = 1,
-                name = "Frontend Fundamentals",
-                description = "HTML, CSS, and JavaScript basics",
-                totalLessons = 25,
-                progress = Progress(completed = 18, total = 25, percentage = 72f)
+                name = "Linux Command Line Basics",
+                status = "Completed",
+                units = listOf(
+                    Unit(
+                        id = 1,
+                        order = 1,
+                        content = "Introduction to Linux Terminal",
+                        type = "Video Lecture"
+                    ),
+                    Unit(
+                        id = 2,
+                        order = 2,
+                        content = "File System Navigation",
+                        type = "Hands-on Lab"
+                    ),
+                    Unit(
+                        id = 3,
+                        order = 3,
+                        content = "File Manipulation Commands",
+                        type = "Interactive Exercise"
+                    )
+                )
             ),
             Module(
                 id = 2,
-                name = "Backend Development",
-                description = "Server-side programming with Node.js",
-                totalLessons = 22,
-                progress = Progress(completed = 15, total = 22, percentage = 68.2f)
-            ),
-            Module(
-                id = 3,
-                name = "Database Management",
-                description = "Database design and management",
-                totalLessons = 18,
-                progress = Progress(completed = 10, total = 18, percentage = 55.6f)
+                name = "Shell Scripting Fundamentals",
+                status = "In Progress",
+                units = listOf(
+                    Unit(
+                        id = 1,
+                        order = 1,
+                        content = "Writing First Bash Script",
+                        type = "Tutorial"
+                    ),
+                    Unit(
+                        id = 2,
+                        order = 2,
+                        content = "Conditional Statements in Bash",
+                        type = "Coding Exercise"
+                    ),
+                    Unit(
+                        id = 3,
+                        order = 3,
+                        content = "Loops and Script Automation",
+                        type = "Advanced Lab"
+                    )
+                )
             )
         )
-        "DevOps Engineering Mastery" -> listOf(
+
+        learningPath == "Machine Learning Fundamentals" && moduleName == "Python for Data Science" -> listOf(
             Module(
                 id = 1,
-                name = "Linux and Shell Scripting",
-                description = "Advanced Linux administration and scripting",
-                totalLessons = 20,
-                progress = Progress(completed = 15, total = 20, percentage = 75f)
+                name = "Python Programming Basics",
+                status = "Completed",
+                units = listOf(
+                    Unit(
+                        id = 1,
+                        order = 1,
+                        content = "Python Syntax and Data Types",
+                        type = "Video Lecture"
+                    ),
+                    Unit(
+                        id = 2,
+                        order = 2,
+                        content = "Control Structures and Functions",
+                        type = "Interactive Coding"
+                    ),
+                    Unit(
+                        id = 3,
+                        order = 3,
+                        content = "Working with Lists and Dictionaries",
+                        type = "Coding Exercise"
+                    )
+                )
             ),
             Module(
                 id = 2,
-                name = "Containerization with Docker",
-                description = "Docker and container orchestration",
-                totalLessons = 25,
-                progress = Progress(completed = 17, total = 25, percentage = 68f)
-            ),
-            Module(
-                id = 3,
-                name = "CI/CD Pipelines",
-                description = "Continuous Integration and Continuous Deployment",
-                totalLessons = 22,
-                progress = Progress(completed = 12, total = 22, percentage = 54.5f)
+                name = "Data Science Libraries",
+                status = "In Progress",
+                units = listOf(
+                    Unit(
+                        id = 1,
+                        order = 1,
+                        content = "NumPy Fundamentals",
+                        type = "Tutorial"
+                    ),
+                    Unit(
+                        id = 2,
+                        order = 2,
+                        content = "Pandas for Data Manipulation",
+                        type = "Hands-on Lab"
+                    ),
+                    Unit(
+                        id = 3,
+                        order = 3,
+                        content = "Data Visualization with Matplotlib",
+                        type = "Project-based Learning"
+                    )
+                )
             )
         )
-        "Machine Learning Fundamentals" -> listOf(
-            Module(
-                id = 1,
-                name = "Python for Data Science",
-                description = "Python programming for machine learning",
-                totalLessons = 18,
-                progress = Progress(completed = 12, total = 18, percentage = 66.7f)
-            ),
-            Module(
-                id = 2,
-                name = "Statistical Learning",
-                description = "Statistical foundations of machine learning",
-                totalLessons = 15,
-                progress = Progress(completed = 8, total = 15, percentage = 53.3f)
-            ),
-            Module(
-                id = 3,
-                name = "Supervised Learning Algorithms",
-                description = "Introduction to classification and regression",
-                totalLessons = 20,
-                progress = Progress(completed = 14, total = 20, percentage = 70f)
-            )
-        )
-        "Cybersecurity Fundamentals" -> listOf(
-            Module(
-                id = 1,
-                name = "Network Security Basics",
-                description = "Understanding network vulnerabilities and protection",
-                totalLessons = 22,
-                progress = Progress(completed = 16, total = 22, percentage = 72.7f)
-            ),
-            Module(
-                id = 2,
-                name = "Ethical Hacking",
-                description = "Penetration testing and security assessment",
-                totalLessons = 25,
-                progress = Progress(completed = 15, total = 25, percentage = 60f)
-            ),
-            Module(
-                id = 3,
-                name = "Cryptography Fundamentals",
-                description = "Encryption and security protocols",
-                totalLessons = 18,
-                progress = Progress(completed = 10, total = 18, percentage = 55.6f)
-            )
-        )
-        "Blockchain and Cryptocurrency Technologies" -> listOf(
-            Module(
-                id = 1,
-                name = "Blockchain Fundamentals",
-                description = "Introduction to blockchain technology",
-                totalLessons = 20,
-                progress = Progress(completed = 14, total = 20, percentage = 70f)
-            ),
-            Module(
-                id = 2,
-                name = "Smart Contracts",
-                description = "Developing smart contracts with Solidity",
-                totalLessons = 25,
-                progress = Progress(completed = 17, total = 25, percentage = 68f)
-            ),
-            Module(
-                id = 3,
-                name = "Cryptocurrency Ecosystem",
-                description = "Understanding cryptocurrencies and tokenomics",
-                totalLessons = 18,
-                progress = Progress(completed = 12, total = 18, percentage = 66.7f)
-            )
-        )
+
         else -> emptyList()
     }
 }

@@ -26,7 +26,7 @@ import androidx.compose.ui.unit.dp
 import com.manikandareas.codileap.ui.theme.CodiLeapTheme
 
 @Composable
-fun HomeModuleProgress(modifier: Modifier = Modifier) {
+fun HomeCourseProgress(modifier: Modifier = Modifier) {
     Row(
         modifier = modifier
             .fillMaxWidth()
@@ -39,7 +39,7 @@ fun HomeModuleProgress(modifier: Modifier = Modifier) {
         Column(modifier = Modifier.weight(1f), verticalArrangement = Arrangement.spacedBy(4.dp)) {
             Text(text = "24 Steps completed!", style = MaterialTheme.typography.titleMedium)
             Text(
-                text = "Variables - Module 2, lesson 9!",
+                text = "Variables - Course 2, module 9!",
                 style = MaterialTheme.typography.labelMedium
             )
             LinearProgressIndicator(progress = { 0.5f }, modifier = Modifier.height(8.dp))
@@ -68,6 +68,6 @@ fun HomeModuleProgress(modifier: Modifier = Modifier) {
 @Composable
 fun PreviewHomeModuleProgress(modifier: Modifier = Modifier) {
     CodiLeapTheme {
-        HomeModuleProgress(modifier = modifier)
+        HomeCourseProgress(modifier = modifier)
     }
 }

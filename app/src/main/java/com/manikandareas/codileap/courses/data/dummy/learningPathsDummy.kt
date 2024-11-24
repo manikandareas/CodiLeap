@@ -3,7 +3,6 @@ package com.manikandareas.codileap.courses.data.dummy
 import com.manikandareas.codileap.courses.domain.LearningPath
 
 val learningPathsDummy = listOf(
-    // Software Development Paths
     LearningPath(
         id = 1,
         name = "Android Development Fundamentals",
@@ -11,8 +10,8 @@ val learningPathsDummy = listOf(
         level = "Beginner",
         totalModules = 12,
         estimatedDuration = "3 months",
-        createdAt = "2024-01-15",
-        updatedAt = "2024-02-20"
+        createdAt = "2024-01-15T00:00:00Z",
+        updatedAt = "2024-02-20T00:00:00Z"
     ),
     LearningPath(
         id = 2,
@@ -21,8 +20,8 @@ val learningPathsDummy = listOf(
         level = "Intermediate",
         totalModules = 15,
         estimatedDuration = "5 months",
-        createdAt = "2024-02-01",
-        updatedAt = "2024-03-10"
+        createdAt = "2024-02-01T00:00:00Z",
+        updatedAt = "2024-03-10T00:00:00Z"
     ),
 
     // DevOps Learning Path
@@ -33,8 +32,8 @@ val learningPathsDummy = listOf(
         level = "Advanced",
         totalModules = 14,
         estimatedDuration = "4 months",
-        createdAt = "2024-01-30",
-        updatedAt = "2024-04-15"
+        createdAt = "2024-01-30T00:00:00Z",
+        updatedAt = "2024-04-15T00:00:00Z"
     ),
     LearningPath(
         id = 4,
@@ -43,8 +42,8 @@ val learningPathsDummy = listOf(
         level = "Intermediate",
         totalModules = 10,
         estimatedDuration = "3 months",
-        createdAt = "2024-03-05",
-        updatedAt = "2024-04-01"
+        createdAt = "2024-03-05T00:00:00Z",
+        updatedAt = "2024-04-01T00:00:00Z"
     ),
 
     // Machine Learning Paths
@@ -55,8 +54,8 @@ val learningPathsDummy = listOf(
         level = "Beginner",
         totalModules = 12,
         estimatedDuration = "3.5 months",
-        createdAt = "2024-02-15",
-        updatedAt = "2024-03-25"
+        createdAt = "2024-02-15T00:00:00Z",
+        updatedAt = "2024-03-25T00:00:00Z"
     ),
     LearningPath(
         id = 6,
@@ -65,8 +64,8 @@ val learningPathsDummy = listOf(
         level = "Advanced",
         totalModules = 16,
         estimatedDuration = "6 months",
-        createdAt = "2024-01-10",
-        updatedAt = "2024-04-10"
+        createdAt = "2024-01-10T00:00:00Z",
+        updatedAt = "2024-04-10T00:00:00Z"
     ),
 
     // Data Science Path
@@ -77,8 +76,8 @@ val learningPathsDummy = listOf(
         level = "Intermediate",
         totalModules = 13,
         estimatedDuration = "4.5 months",
-        createdAt = "2024-02-20",
-        updatedAt = "2024-03-30"
+        createdAt = "2024-02-20T00:00:00Z",
+        updatedAt = "2024-03-30T00:00:00Z"
     ),
 
     // Cybersecurity Path
@@ -89,8 +88,8 @@ val learningPathsDummy = listOf(
         level = "Intermediate",
         totalModules = 11,
         estimatedDuration = "3.5 months",
-        createdAt = "2024-03-01",
-        updatedAt = "2024-04-05"
+        createdAt = "2024-03-01T00:00:00Z",
+        updatedAt = "2024-04-05T00:00:00Z"
     ),
 
     // Blockchain Technology Path
@@ -101,7 +100,7 @@ val learningPathsDummy = listOf(
         level = "Advanced",
         totalModules = 12,
         estimatedDuration = "4 months",
-        createdAt = "2024-02-10",
-        updatedAt = "2024-03-20"
+        createdAt = "2024-02-10T00:00:00Z",
+        updatedAt = "2024-03-20T00:00:00Z"
     )
 )

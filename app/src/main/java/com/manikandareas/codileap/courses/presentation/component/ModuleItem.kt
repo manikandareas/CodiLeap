@@ -26,26 +26,27 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.tooling.preview.PreviewLightDark
 import androidx.compose.ui.unit.dp
-import com.manikandareas.codileap.ui.theme.CodiLeapTheme
 import com.manikandareas.codileap.R
-import com.manikandareas.codileap.courses.data.dummy.createLessonsForModule
-import com.manikandareas.codileap.courses.presentation.model.LessonUi
+import com.manikandareas.codileap.courses.data.dummy.createModulesForCourse
+import com.manikandareas.codileap.courses.presentation.model.ModuleUi
 import com.manikandareas.codileap.courses.presentation.model.toUiModel
+import com.manikandareas.codileap.ui.theme.CodiLeapTheme
 
 
 @Composable
-fun LessonItem(
-    lesson: LessonUi,
-    onClick: (lessonId: Int) -> Unit,
+fun ModuleItem(
+    module: ModuleUi,
+    onClick: (module: ModuleUi) -> Unit,
     modifier: Modifier,
-    containerColor: Color = MaterialTheme.colorScheme.surfaceContainer
+    containerColor: Color = MaterialTheme.colorScheme.surfaceContainer,
+    isLocked: Boolean = false
 ) {
     Card(
         colors = CardDefaults.cardColors(containerColor = containerColor),
         modifier = modifier
             .fillMaxWidth()
             .height(100.dp)
-            .clickable(enabled = true, onClick = { onClick(lesson.id) }),
+            .clickable(enabled = true, onClick = { onClick(module) }),
 
         ) {
         Row(
@@ -57,16 +58,16 @@ fun LessonItem(
         ) {
             Image(
                 painter = painterResource(id = R.drawable.ic_lesson_item),
-                contentDescription = "Lesson Item",
+                contentDescription = "Module Item",
                 modifier = Modifier
                     .size(48.dp)
                     .clip(MaterialTheme.shapes.large)
                     .background(MaterialTheme.colorScheme.onSurface)
                     .padding(10.dp)
             )
-            Column(verticalArrangement = Arrangement.spacedBy(4.dp)) {
+            Column(verticalArrangement = Arrangement.spacedBy(4.dp), modifier = Modifier.weight(1F)) {
                 Text(
-                    text = lesson.name ?: "No Title",
+                    text = module.name ?: "No Title",
                     style = MaterialTheme.typography.titleMedium
                 )
                 Row(
@@ -82,45 +83,41 @@ fun LessonItem(
                             modifier = Modifier.size(16.dp)
                         )
                         Text(
-                            text = "${lesson.units.size} Units" ?: "No Units",
+                            text = "${module.units.size} Units" ?: "No Units",
                             style = MaterialTheme.typography.labelSmall,
                             modifier = Modifier.padding(start = 4.dp),
                             color = MaterialTheme.colorScheme.onSurface.copy(alpha = 0.6f)
                         )
                     }
 
-//                    Row(verticalAlignment = Alignment.CenterVertically) {
-//                        Icon(
-//                            imageVector = Icons.Default.AccessTime,
-//                            contentDescription = "Times",
-//                            tint = MaterialTheme.colorScheme.primary,
-//                            modifier = Modifier.size(16.dp)
-//                        )
-//                        Text(
-//                            text = "${lesson.} Minutes" ?: "No Time",
-//                            style = MaterialTheme.typography.labelSmall,
-//                            modifier = Modifier.padding(start = 4.dp),
-//                            color = MaterialTheme.colorScheme.onSurface.copy(alpha = 0.6f)
-//                        )
-//                    }
                 }
             }
+
+            if (isLocked) {
+                Image(
+                    painter = painterResource(id = R.drawable.ic_lock),
+                    contentDescription = "Locked",
+                    modifier = Modifier.size(32.dp)
+                )
+            }
+
         }
     }
 }
 
 @PreviewLightDark
 @Composable
-private fun PreviewLessonItem(modifier: Modifier = Modifier) {
+private fun PreviewModuleItem(modifier: Modifier = Modifier) {
     CodiLeapTheme {
-        LessonItem(
+        ModuleItem(
             modifier = modifier,
             containerColor = MaterialTheme.colorScheme.surface,
-            lesson = createLessonsForModule(
+            module = createModulesForCourse(
                 learningPath = "Android Development Fundamentals",
                 moduleName = "Kotlin Basics"
             ).first().toUiModel(),
-            onClick = {}
+            onClick = {},
+            isLocked = true
         )
     }
 }

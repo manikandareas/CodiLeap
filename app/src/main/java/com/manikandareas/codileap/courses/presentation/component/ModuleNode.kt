@@ -2,35 +2,26 @@ package com.manikandareas.codileap.courses.presentation.component
 
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.BoxScope
-import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.defaultMinSize
-import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.wrapContentSize
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.drawBehind
 import androidx.compose.ui.geometry.Offset
-import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.drawscope.Stroke
 import androidx.compose.ui.graphics.drawscope.drawIntoCanvas
 import androidx.compose.ui.graphics.drawscope.withTransform
 import androidx.compose.ui.res.painterResource
-import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
-import com.manikandareas.codileap.courses.presentation.defaults.CircleParametersDefaults
-import com.manikandareas.codileap.courses.presentation.defaults.LineParametersDefaults
 import com.manikandareas.codileap.courses.presentation.model.CircleParameters
 import com.manikandareas.codileap.courses.presentation.model.LineParameters
-import com.manikandareas.codileap.courses.presentation.model.StrokeParameters
-import com.manikandareas.codileap.courses.presentation.model.LessonNodePosition
-import com.manikandareas.codileap.ui.theme.CodiLeapTheme
-import com.manikandareas.codileap.R
+import com.manikandareas.codileap.courses.presentation.model.ModuleNodePosition
 
 @Composable
-fun LessonNode(
-    position: LessonNodePosition,
+fun ModuleNode(
+    position: ModuleNodePosition,
     circleParameters: CircleParameters,
     lineParameters: LineParameters? = null,
     contentStartOffset: Dp = 16.dp,
@@ -92,7 +83,7 @@ fun LessonNode(
                 .defaultMinSize(minHeight = circleParameters.radius * 2)
                 .padding(
                     start = circleParameters.radius * 2 + contentStartOffset,
-                    bottom = if (position != LessonNodePosition.LAST) spacer else 0.dp
+                    bottom = if (position != ModuleNodePosition.LAST) spacer else 0.dp
                 )
         )
     }

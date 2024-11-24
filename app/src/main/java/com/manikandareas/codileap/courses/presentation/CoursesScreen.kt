@@ -1,3 +1,5 @@
+@file:OptIn(ExperimentalMaterial3Api::class)
+
 package com.manikandareas.codileap.courses.presentation
 
 import androidx.compose.animation.core.animateFloatAsState
@@ -15,13 +17,15 @@ import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.filled.ClearAll
+import androidx.compose.material.icons.filled.ImportExport
 import androidx.compose.material3.Button
 import androidx.compose.material3.ButtonDefaults
+import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
+import androidx.compose.material3.rememberModalBottomSheetState
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
@@ -36,15 +40,17 @@ import androidx.compose.ui.platform.LocalDensity
 import androidx.compose.ui.tooling.preview.PreviewLightDark
 import androidx.compose.ui.unit.dp
 import com.manikandareas.codileap.core.navigation.Destination
-import com.manikandareas.codileap.courses.data.dummy.createLessonsForModule
-import com.manikandareas.codileap.courses.data.dummy.createModulesForLearningPath
+import com.manikandareas.codileap.courses.data.dummy.createCoursesForLearningPath
+import com.manikandareas.codileap.courses.data.dummy.createModulesForCourse
 import com.manikandareas.codileap.courses.data.dummy.learningPathsDummy
+import com.manikandareas.codileap.courses.presentation.component.BottomSheetOptions
 import com.manikandareas.codileap.courses.presentation.component.CoursesAppBar
-import com.manikandareas.codileap.courses.presentation.component.LessonItem
-import com.manikandareas.codileap.courses.presentation.component.LessonNode
+import com.manikandareas.codileap.courses.presentation.component.ModuleItem
+import com.manikandareas.codileap.courses.presentation.component.ModuleNode
+import com.manikandareas.codileap.courses.presentation.component.Options
 import com.manikandareas.codileap.courses.presentation.defaults.CircleParametersDefaults
 import com.manikandareas.codileap.courses.presentation.defaults.LineParametersDefaults
-import com.manikandareas.codileap.courses.presentation.model.LessonNodePosition
+import com.manikandareas.codileap.courses.presentation.model.ModuleNodePosition
 import com.manikandareas.codileap.courses.presentation.model.toUiModel
 import com.manikandareas.codileap.home.presentation.component.HomeBottomAppBar
 import com.manikandareas.codileap.home.presentation.component.HomeChatBotFab
@@ -61,9 +67,7 @@ fun CoursesScreen(
     var isBottomBarVisible by remember { mutableStateOf(true) }
     var previousScrollOffset by remember { mutableIntStateOf(0) }
 
-    // Observe scroll position and update bottom bar visibility
     LaunchedEffect(scrollState.value) {
-        // Always show bottom bar when at the top
         if (scrollState.value == 0) {
             isBottomBarVisible = true
             return@LaunchedEffect
@@ -71,8 +75,6 @@ fun CoursesScreen(
 
         val currentOffset = scrollState.value
         if (currentOffset != previousScrollOffset) {
-            // Scrolling down (positive direction) -> hide
-            // Scrolling up (negative direction) -> show
             isBottomBarVisible = currentOffset < previousScrollOffset
             previousScrollOffset = currentOffset
         }
@@ -85,9 +87,19 @@ fun CoursesScreen(
         label = "bottomBarTranslation"
     )
 
+    // module sheet
+    val sheetState = rememberModalBottomSheetState(
+        skipPartiallyExpanded = true
+    )
+    var showBottomSheet by remember { mutableStateOf(false) }
+    var clickedOptionsType by remember { mutableStateOf(Options.LEARNING) }
+
     Scaffold(
         topBar = {
-            CoursesAppBar(modifier = Modifier.fillMaxWidth())
+            CoursesAppBar(onClick = {
+                showBottomSheet = true
+                clickedOptionsType = Options.LEARNING
+            }, modifier = Modifier.fillMaxWidth())
         },
         bottomBar = {
             HomeBottomAppBar(
@@ -107,6 +119,35 @@ fun CoursesScreen(
             .fillMaxSize()
             .background(MaterialTheme.colorScheme.background)
     ) { innerPadding ->
+        if (showBottomSheet) {
+            when (clickedOptionsType) {
+                Options.COURSE -> {
+                    BottomSheetOptions(
+                        onDismiss = {
+                            showBottomSheet = false
+                        },
+                        sheetState = sheetState,
+                        items = state.courses,
+                        title = state.selectedCourse?.name ?: "Select Learning Path",
+                        onItemClick = {},
+                        type = Options.COURSE,
+                    )
+                }
+
+                Options.LEARNING -> {
+                    BottomSheetOptions(
+                        onDismiss = {
+                            showBottomSheet = false
+                        },
+                        sheetState = sheetState,
+                        items = state.learningPaths,
+                        title = state.selectedLearningPath?.name ?: "Select Learning Path",
+                        onItemClick = {},
+                        type = Options.LEARNING,
+                    )
+                }
+            }
+        }
         LazyColumn(
             modifier = Modifier
                 .padding(innerPadding)
@@ -114,64 +155,77 @@ fun CoursesScreen(
         ) {
             item {
                 Button(
-                    onClick = {},
+                    onClick = {
+                        showBottomSheet = true
+                        clickedOptionsType = Options.COURSE
+                    },
                     modifier = Modifier.fillMaxWidth(),
                     contentPadding = PaddingValues(vertical = 12.dp, horizontal = 16.dp),
                     shape = MaterialTheme.shapes.medium,
                     colors = ButtonDefaults.buttonColors(
-                        containerColor = MaterialTheme.colorScheme.primary,
+                        containerColor = MaterialTheme.colorScheme.surfaceContainer,
+                        contentColor = MaterialTheme.colorScheme.onSurface
                     )
                 ) {
                     Row(
                         modifier = Modifier.fillMaxWidth(),
-                        horizontalArrangement = Arrangement.spacedBy(16.dp),
+                        horizontalArrangement = Arrangement.SpaceBetween,
                         verticalAlignment = Alignment.CenterVertically
                     ) {
-                        Icon(
-
-                            imageVector = Icons.Default.ClearAll,
-                            contentDescription = "Select Module"
-                        )
                         Text(
                             text = "Introduction to Machine Learning",
-                            style = MaterialTheme.typography.titleMedium
+                            style = MaterialTheme.typography.titleMedium,
+
+                            )
+//                        Icon(
+//
+//                            imageVector = Icons.Default.ClearAll,
+//                            contentDescription = "Select Module"
+//                        )
+                        Icon(
+                            imageVector = Icons.Default.ImportExport,
+                            contentDescription = "Select Modules",
                         )
                     }
                 }
                 Spacer(modifier = Modifier.height(32.dp))
             }
             items(
-                items = state.lessons,
+                items = createModulesForCourse(
+                    learningPath = state.selectedLearningPath?.name ?: "",
+                    moduleName = state.selectedCourse?.name ?: ""
+                ).map { it.toUiModel() },
+
                 key = { item -> item.id }
             ) { item ->
                 // Calculate position dynamically based on index
                 val position = when (item) {
-                    state.lessons.first() -> LessonNodePosition.FIRST
-                    state.lessons.last() -> LessonNodePosition.LAST
-                    else -> LessonNodePosition.MIDDLE
+                    state.courses.first() -> ModuleNodePosition.FIRST
+                    state.courses.last() -> ModuleNodePosition.LAST
+                    else -> ModuleNodePosition.MIDDLE
                 }
 
                 // Line parameters change based on position
                 val lineParameters = when (position) {
-                    LessonNodePosition.LAST -> null
-                    LessonNodePosition.FIRST -> LineParametersDefaults.linearGradient(
+                    ModuleNodePosition.LAST -> null
+                    ModuleNodePosition.FIRST -> LineParametersDefaults.linearGradient(
                         startColor = Color(0xFF00FF9C).copy(alpha = 0.2F),
-                        endColor = Color(0xFF00FF9C).copy(alpha = 0.2F)
+                        endColor = Color(0xFF049C61).copy(alpha = 0.2F)
                     )
 
-                    LessonNodePosition.MIDDLE -> LineParametersDefaults.linearGradient(
-                        startColor = Color(0xFF00FF9C).copy(alpha = 0.2F),
+                    ModuleNodePosition.MIDDLE -> LineParametersDefaults.linearGradient(
+                        startColor = Color(0xFF049C61).copy(alpha = 0.2F),
                         endColor = Color(0xFF00FF9C).copy(alpha = 0.2F)
                     )
                 }
 
                 // Circle radius changes based on position
                 val circleColor = when (position) {
-                    LessonNodePosition.FIRST -> Color(0xFF00FF9C)
+                    ModuleNodePosition.FIRST -> Color(0xFF00FF9C)
                     else -> Color(0xFF00FF9C).copy(alpha = 0.3F)
                 }
 
-                LessonNode(
+                ModuleNode(
                     position = position,
                     circleParameters = CircleParametersDefaults.circleParameters(
                         backgroundColor = circleColor,
@@ -179,10 +233,13 @@ fun CoursesScreen(
                     ),
                     lineParameters = lineParameters
                 ) { modifier ->
-                    LessonItem(
+                    ModuleItem(
                         modifier = modifier,
-                        lesson = item,
-                        onClick = {}
+                        module = item,
+                        onClick = {
+                            println("Clicked on module: ${item.name}")
+                            onAction(CoursesAction.OnModuleClicked(item))
+                        }
                     )
                 }
             }
@@ -195,7 +252,7 @@ fun CoursesScreen(
 @Composable
 fun PreviewCoursesScreen(modifier: Modifier = Modifier) {
     val selectedLearningPath = learningPathsDummy.first().toUiModel()
-    val selectedModule = createModulesForLearningPath(
+    val selectedModule = createCoursesForLearningPath(
         learningPathId = selectedLearningPath.id,
         pathName = selectedLearningPath.name
     ).first().toUiModel()
@@ -203,10 +260,10 @@ fun PreviewCoursesScreen(modifier: Modifier = Modifier) {
         isLoading = false,
         selectedLearningPath = selectedLearningPath,
         learningPaths = learningPathsDummy.map { it.toUiModel() },
-        selectedModule = selectedModule,
-        lessons = createLessonsForModule(
-            learningPath = selectedLearningPath.name,
-            moduleName = selectedModule.name
+        selectedCourse = selectedModule,
+        courses = createCoursesForLearningPath(
+            learningPathId = selectedLearningPath.id,
+            pathName = selectedLearningPath.name
         ).map { it.toUiModel() }
     )
     CodiLeapTheme {

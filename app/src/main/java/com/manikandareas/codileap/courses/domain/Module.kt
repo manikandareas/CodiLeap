@@ -3,14 +3,13 @@ package com.manikandareas.codileap.courses.domain
 data class Module (
     val id: Int,
     val name: String,
-    val description: String,
-    val totalLessons: Int,
-    val progress: Progress
+    val status: String,
+    val units: List<Unit>
 )
 
-data class Progress (
-    val completed: Int,
-    val total: Int,
-    val percentage: Float
+data class Unit (
+    val id: Int,
+    val order: Int,
+    val content: String,
+    val type: String
 )
-

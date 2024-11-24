@@ -1,5 +1,6 @@
 package com.manikandareas.codileap.core.navigation
 
+import com.manikandareas.codileap.courses.presentation.model.ModuleUi
 import kotlinx.serialization.Serializable
 
 sealed interface Destination {
@@ -35,6 +36,12 @@ sealed interface Destination {
 
     @Serializable
     data object CoursesScreen : Destination
+
+    @Serializable
+    data object ModuleGraph : Destination
+
+    @Serializable
+    data class ModuleScreen(val moduleUi: ModuleUi) : Destination
 
     @Serializable
     data object AnalyticsScreen : Destination

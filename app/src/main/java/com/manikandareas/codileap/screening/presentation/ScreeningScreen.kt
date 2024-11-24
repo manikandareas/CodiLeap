@@ -4,26 +4,21 @@ import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
-import androidx.compose.foundation.layout.Row
-import androidx.compose.foundation.layout.Spacer
+import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
-import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.pager.HorizontalPager
 import androidx.compose.foundation.pager.rememberPagerState
 import androidx.compose.material3.Button
 import androidx.compose.material3.MaterialTheme
-import androidx.compose.material3.OutlinedTextField
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.derivedStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.rememberCoroutineScope
-import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.PreviewLightDark
 import androidx.compose.ui.unit.dp
 import com.manikandareas.codileap.core.navigation.Destination
@@ -33,7 +28,6 @@ import com.manikandareas.codileap.screening.presentation.component.ScreeningExpe
 import com.manikandareas.codileap.screening.presentation.component.ScreeningMotive
 import com.manikandareas.codileap.screening.presentation.component.ScreeningName
 import com.manikandareas.codileap.screening.presentation.component.ScreeningWelcome
-import com.manikandareas.codileap.screening.presentation.model.ScreeningUi
 import com.manikandareas.codileap.ui.theme.CodiLeapTheme
 
 
@@ -89,7 +83,8 @@ fun ScreeningScreen(onAction: (ScreeningAction) -> Unit, modifier: Modifier = Mo
                 Button(
                     onClick = { onAction(ScreeningAction.NavigateTo(Destination.HomeGraph)) },
                     modifier = Modifier.fillMaxWidth(),
-                    shape = MaterialTheme.shapes.medium
+                    shape = MaterialTheme.shapes.medium,
+                    contentPadding = PaddingValues(16.dp)
                 ) {
                     Text("Let's Go")
                 }

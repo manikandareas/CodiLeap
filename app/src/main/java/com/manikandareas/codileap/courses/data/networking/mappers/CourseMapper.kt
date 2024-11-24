@@ -1,11 +1,11 @@
 package com.manikandareas.codileap.courses.data.networking.mappers
 
-import com.manikandareas.codileap.courses.data.networking.dto.LessonDto
+import com.manikandareas.codileap.courses.data.networking.dto.ModuleDto
 import com.manikandareas.codileap.courses.data.networking.dto.UnitDto
-import com.manikandareas.codileap.courses.domain.Lesson
+import com.manikandareas.codileap.courses.domain.Module
 import com.manikandareas.codileap.courses.domain.Unit
 
-fun LessonDto.toDomain() = Lesson(
+fun ModuleDto.toDomain() = Module(
     id = id,
     name = name,
     status = status,
