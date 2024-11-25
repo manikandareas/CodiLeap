@@ -26,6 +26,7 @@ import com.manikandareas.codileap.courses.data.dummy.learningPathsDummy
 import com.manikandareas.codileap.courses.presentation.CoursesAction
 import com.manikandareas.codileap.courses.presentation.CoursesScreen
 import com.manikandareas.codileap.courses.presentation.CoursesState
+import com.manikandareas.codileap.courses.presentation.ModuleAction
 import com.manikandareas.codileap.courses.presentation.ModuleSession
 import com.manikandareas.codileap.courses.presentation.ModuleState
 import com.manikandareas.codileap.courses.presentation.model.ModuleUi
@@ -70,7 +71,9 @@ fun CodiLeapNavigation(
             ) {
                 composable<Destination.IntroScreen> {
                     IntroScreen(onFinished = {
-                        navController.navigate(Destination.AuthGraph)
+                        navController.navigate(Destination.AuthGraph) {
+                            popUpTo(Destination.AuthGraph) { inclusive = true }
+                        }
                     })
                 }
             }
@@ -100,7 +103,9 @@ fun CodiLeapNavigation(
                     ScreeningScreen(
                         onAction = {
                             when (it) {
-                                is ScreeningAction.NavigateTo -> navController.navigate(it.des)
+                                is ScreeningAction.NavigateTo -> navController.navigate(it.des) {
+                                    popUpTo(it.des) { inclusive = true }
+                                }
                             }
                         }
                     )
@@ -114,7 +119,9 @@ fun CodiLeapNavigation(
                 composable<Destination.HomeScreen> {
                     HomeScreen(onAction = {
                         when (it) {
-                            is HomeAction.NavigateTo -> navController.navigate(it.des)
+                            is HomeAction.NavigateTo -> navController.navigate(it.des) {
+                                popUpTo(it.des) { inclusive = true }
+                            }
                         }
                     })
                 }
@@ -139,7 +146,10 @@ fun CodiLeapNavigation(
                         state = state,
                         onAction = {
                             when (it) {
-                                is CoursesAction.NavigateTo -> navController.navigate(it.des)
+                                is CoursesAction.NavigateTo -> navController.navigate(it.des) {
+                                    popUpTo(it.des) { inclusive = true }
+                                }
+
                                 is CoursesAction.OnModuleClicked -> {
                                     navController.navigate(Destination.ModuleScreen(it.module))
                                 }
@@ -155,20 +165,32 @@ fun CodiLeapNavigation(
                         isLoading = false,
                         moduleUi = arg.moduleUi
                     )
-                    ModuleSession(state = state)
+                    ModuleSession(state = state, onAction = {action ->
+                        when (action) {
+                            is ModuleAction.NavigateBack -> {
+                                navController.navigateUp()
+                            }
+
+                            is ModuleAction.OnContinueClicked -> {}
+                        }
+                    })
                 }
 
                 composable<Destination.AnalyticsScreen> {
                     AnalyticsScreen(onAction = {
                         when (it) {
-                            is AnalyticsAction.NavigateTo -> navController.navigate(it.des)
+                            is AnalyticsAction.NavigateTo -> navController.navigate(it.des) {
+                                popUpTo(it.des) { inclusive = true }
+                            }
                         }
                     })
                 }
                 composable<Destination.SettingsScreen> {
                     SettingsScreen(onAction = {
                         when (it) {
-                            is SettingsAction.NavigateTo -> navController.navigate(it.des)
+                            is SettingsAction.NavigateTo -> navController.navigate(it.des) {
+                                popUpTo(it.des) { inclusive = true }
+                            }
                         }
                     })
                 }

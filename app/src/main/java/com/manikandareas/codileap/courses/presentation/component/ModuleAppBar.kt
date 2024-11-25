@@ -23,6 +23,7 @@ fun ModuleAppBar(
     enabled: Boolean = true,
     onBack: () -> Unit,
     unitProgress: Float,
+    onExit: () -> Unit,
     modifier: Modifier = Modifier
 ) {
     CenterAlignedTopAppBar(
@@ -49,7 +50,7 @@ fun ModuleAppBar(
         },
         actions = {
             IconButton(
-                onClick = {}
+                onClick = { onExit() }
             ) {
                 Icon(
                     imageVector = Icons.Default.Close,
@@ -66,7 +67,8 @@ fun ModuleAppbarPreview() {
     CodiLeapTheme {
         ModuleAppBar(
             unitProgress = 0.5f,
-            onBack = {}
+            onBack = {},
+            onExit = {}
         )
     }
 }

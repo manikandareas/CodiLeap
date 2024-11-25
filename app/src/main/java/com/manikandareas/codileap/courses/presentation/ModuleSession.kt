@@ -3,6 +3,7 @@
 package com.manikandareas.codileap.courses.presentation
 
 import android.widget.Toast
+import androidx.activity.compose.BackHandler
 import androidx.compose.animation.AnimatedContent
 import androidx.compose.animation.AnimatedVisibility
 import androidx.compose.animation.ExperimentalAnimationApi
@@ -17,6 +18,8 @@ import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.offset
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.lazy.rememberLazyListState
+import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.Warning
 import androidx.compose.material3.FabPosition
 import androidx.compose.material3.Scaffold
 import androidx.compose.runtime.Composable
@@ -24,6 +27,7 @@ import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.derivedStateOf
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableIntStateOf
+import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
@@ -34,16 +38,26 @@ import com.manikandareas.codileap.core.presentation.util.HtmlParser
 import com.manikandareas.codileap.core.presentation.util.HtmlRenderer
 import com.manikandareas.codileap.core.presentation.util.kotlinModule
 import com.manikandareas.codileap.courses.data.dummy.createModulesForCourse
+import com.manikandareas.codileap.courses.presentation.component.DialogType
 import com.manikandareas.codileap.courses.presentation.component.ModuleAppBar
 import com.manikandareas.codileap.courses.presentation.component.ModuleBottomAppBar
+import com.manikandareas.codileap.courses.presentation.component.ModuleDialog
 import com.manikandareas.codileap.courses.presentation.model.toUiModel
 import com.manikandareas.codileap.ui.theme.CodiLeapTheme
 
 @Composable
-fun ModuleSession(state: ModuleState, modifier: Modifier = Modifier) {
+fun ModuleSession(
+    state: ModuleState,
+    onAction: (ModuleAction) -> Unit,
+    modifier: Modifier = Modifier
+) {
     val parser = HtmlParser()
     val elements = parser.parseHtml(kotlinModule)
     val units = state.moduleUi.units
+
+    val isAlertDialogOpen = remember { mutableStateOf(false) }
+    var moduleActionType by remember { mutableStateOf(DialogType.ERROR) }
+
 
     var currentUnitIndex by remember { mutableIntStateOf(0) }
     val currentUnit = units[currentUnitIndex]
@@ -91,6 +105,15 @@ fun ModuleSession(state: ModuleState, modifier: Modifier = Modifier) {
         listState.scrollToItem(0)
     }
 
+    BackHandler(enabled = true) {
+        if (currentUnitIndex == 0) {
+            moduleActionType = DialogType.ERROR
+            isAlertDialogOpen.value = true
+        } else {
+            currentUnitIndex--
+        }
+    }
+
     Scaffold(
         modifier = modifier.fillMaxSize(),  // Hapus background di sini
         topBar = {
@@ -102,6 +125,10 @@ fun ModuleSession(state: ModuleState, modifier: Modifier = Modifier) {
                     }
                 },
                 enabled = currentUnitIndex > 0,
+                onExit = {
+                    moduleActionType = DialogType.ERROR
+                    isAlertDialogOpen.value = true
+                }
             )
         },
         floatingActionButton = {
@@ -116,6 +143,8 @@ fun ModuleSession(state: ModuleState, modifier: Modifier = Modifier) {
                         if (currentUnitIndex < units.size - 1) {
                             currentUnitIndex++
                         } else {
+                            moduleActionType = DialogType.SUCCESS
+                            isAlertDialogOpen.value = true
                             Toast.makeText(context, "Module Completed", Toast.LENGTH_SHORT)
                                 .show()
                         }
@@ -125,6 +154,44 @@ fun ModuleSession(state: ModuleState, modifier: Modifier = Modifier) {
         },
         floatingActionButtonPosition = FabPosition.Center,
     ) { innerPadding ->
+
+        if (isAlertDialogOpen.value) {
+            when (moduleActionType) {
+                DialogType.SUCCESS -> {
+                    ModuleDialog(
+                        onConfirmation = {
+                            onAction(ModuleAction.NavigateBack)
+                        },
+                        onDismissRequest = {
+                            isAlertDialogOpen.value = false
+                            onAction(ModuleAction.NavigateBack)
+                        },
+                        dialogTitle = "Yeay, you have completed the lesson!",
+                        dialogText = "You have completed the lesson, you can now move to the next lesson",
+                        dialogType = DialogType.SUCCESS
+                    )
+                }
+
+                DialogType.ERROR -> {
+                    ModuleDialog(
+                        onConfirmation = {
+                            isAlertDialogOpen.value = false
+                            onAction(ModuleAction.NavigateBack)
+                        },
+                        onDismissRequest = {
+                            isAlertDialogOpen.value = false
+                        },
+                        icon = Icons.Default.Warning,
+                        dialogTitle = "Are you sure you want to exit?",
+                        dialogText = "If you exit now, your progress will not be saved",
+                        dialogType = DialogType.ERROR,
+                        dismissTitle = "Cancel",
+                        confirmTitle = "Exit"
+                    )
+                }
+            }
+        }
+
         AnimatedContent(
             modifier = Modifier
                 .fillMaxSize()
@@ -179,9 +246,10 @@ private fun ModuleScreenPreview() {
         ModuleSession(
             state = ModuleState(
                 moduleUi = createModulesForCourse(
-                    learningPath = "Android Development Fundamentals", moduleName = "Kotlin Basics"
+                    learningPath = "Android Development Fundamentals", courseName = "Kotlin Basics"
                 ).first().toUiModel()
             ),
+            onAction = {}
         )
     }
 }

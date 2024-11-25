@@ -3,7 +3,6 @@ package com.manikandareas.codileap.courses.data.dummy
 import com.manikandareas.codileap.courses.domain.Course
 import com.manikandareas.codileap.courses.domain.Progress
 
-// Function to create modules for each learning path
 fun createCoursesForLearningPath(learningPathId: Int, pathName: String): List<Course> {
     return when (pathName) {
         "Android Development Fundamentals" -> listOf(
@@ -75,6 +74,29 @@ fun createCoursesForLearningPath(learningPathId: Int, pathName: String): List<Co
                 progress = Progress(completed = 12, total = 22, percentage = 54.5f)
             )
         )
+        "Cloud Infrastructure and Automation" -> listOf(
+            Course(
+                id = 1,
+                name = "Cloud Computing Fundamentals",
+                description = "Introduction to cloud services and architecture",
+                totalModules = 18,
+                progress = Progress(completed = 12, total = 18, percentage = 66.7f)
+            ),
+            Course(
+                id = 2,
+                name = "Infrastructure as Code",
+                description = "Terraform and CloudFormation",
+                totalModules = 20,
+                progress = Progress(completed = 14, total = 20, percentage = 70f)
+            ),
+            Course(
+                id = 3,
+                name = "Cloud Security",
+                description = "Security best practices for cloud infrastructure",
+                totalModules = 15,
+                progress = Progress(completed = 8, total = 15, percentage = 53.3f)
+            )
+        )
         "Machine Learning Fundamentals" -> listOf(
             Course(
                 id = 1,
@@ -96,6 +118,52 @@ fun createCoursesForLearningPath(learningPathId: Int, pathName: String): List<Co
                 description = "Introduction to classification and regression",
                 totalModules = 20,
                 progress = Progress(completed = 14, total = 20, percentage = 70f)
+            )
+        )
+        "Advanced Deep Learning" -> listOf(
+            Course(
+                id = 1,
+                name = "Neural Networks Architecture",
+                description = "Deep dive into neural network design",
+                totalModules = 22,
+                progress = Progress(completed = 15, total = 22, percentage = 68.2f)
+            ),
+            Course(
+                id = 2,
+                name = "Computer Vision",
+                description = "Image processing and recognition",
+                totalModules = 25,
+                progress = Progress(completed = 18, total = 25, percentage = 72f)
+            ),
+            Course(
+                id = 3,
+                name = "Natural Language Processing",
+                description = "Text processing and language models",
+                totalModules = 20,
+                progress = Progress(completed = 12, total = 20, percentage = 60f)
+            )
+        )
+        "Data Science and Analytics" -> listOf(
+            Course(
+                id = 1,
+                name = "Data Analysis Fundamentals",
+                description = "Basic concepts of data analysis",
+                totalModules = 18,
+                progress = Progress(completed = 14, total = 18, percentage = 77.8f)
+            ),
+            Course(
+                id = 2,
+                name = "Data Visualization",
+                description = "Creating effective data visualizations",
+                totalModules = 15,
+                progress = Progress(completed = 10, total = 15, percentage = 66.7f)
+            ),
+            Course(
+                id = 3,
+                name = "Predictive Modeling",
+                description = "Building predictive models",
+                totalModules = 20,
+                progress = Progress(completed = 13, total = 20, percentage = 65f)
             )
         )
         "Cybersecurity Fundamentals" -> listOf(
