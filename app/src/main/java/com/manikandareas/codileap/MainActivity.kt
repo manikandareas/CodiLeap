@@ -10,6 +10,7 @@ import androidx.core.splashscreen.SplashScreen.Companion.installSplashScreen
 import androidx.navigation.compose.rememberNavController
 import com.manikandareas.codileap.core.navigation.CodiLeapNavigation
 import com.manikandareas.codileap.core.navigation.Navigator
+import com.manikandareas.codileap.settings.presentation.FAQsScreen
 import com.manikandareas.codileap.ui.theme.CodiLeapTheme
 import org.koin.compose.koinInject
 
@@ -29,6 +30,7 @@ class MainActivity : ComponentActivity() {
                 )
 //                LessonSession()
 //                QuizSession()
+//                FAQsScreen()
             }
         }
     }
