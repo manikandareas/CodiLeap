@@ -59,6 +59,9 @@ sealed interface Destination {
     data object ProfileScreen : Destination
 
     @Serializable
+    data object FAQsScreen : Destination
+
+    @Serializable
     data object ChatBotScreen : Destination
 
 
