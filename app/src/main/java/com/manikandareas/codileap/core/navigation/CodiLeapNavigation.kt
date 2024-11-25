@@ -39,6 +39,7 @@ import com.manikandareas.codileap.intro.presentation.IntroScreen
 import com.manikandareas.codileap.profile.presentation.ProfileScreen
 import com.manikandareas.codileap.screening.presentation.ScreeningAction
 import com.manikandareas.codileap.screening.presentation.ScreeningScreen
+import com.manikandareas.codileap.settings.presentation.FAQsScreen
 import com.manikandareas.codileap.settings.presentation.SettingsAction
 import com.manikandareas.codileap.settings.presentation.SettingsScreen
 import org.koin.androidx.compose.koinViewModel
@@ -207,6 +208,10 @@ fun CodiLeapNavigation(
 
                 composable<Destination.ProfileScreen> {
                     ProfileScreen()
+                }
+
+                composable<Destination.FAQsScreen> {
+                    FAQsScreen()
                 }
             }
         }

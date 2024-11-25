@@ -145,7 +145,10 @@ fun SettingsScreen(onAction: (SettingsAction) -> Unit, modifier: Modifier = Modi
             items(SettingMenus, key = { it.title }) { settingItem ->
                 SettingItem(
                     settingUi = settingItem,
-                    modifier = Modifier.fillMaxWidth()
+                    modifier = Modifier.fillMaxWidth(),
+                    onClick = {
+                        onAction(SettingsAction.NavigateTo(settingItem.des))
+                    }
                 )
             }
             item(key = "Customer Support") {
