@@ -9,8 +9,8 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.tooling.preview.PreviewLightDark
 
 @Composable
-fun HomeChatBotFab(modifier: Modifier = Modifier) {
-    FloatingActionButton(modifier=modifier, onClick = {}) {
+fun HomeChatBotFab(onClick: () -> Unit, modifier: Modifier = Modifier) {
+    FloatingActionButton(modifier=modifier, onClick = {onClick()}) {
         Icon(
             imageVector = Icons.Default.ChatBubble,
             contentDescription = "Chat with the bot"
@@ -21,5 +21,5 @@ fun HomeChatBotFab(modifier: Modifier = Modifier) {
 @PreviewLightDark
 @Composable
 fun PreviewHomeChatBotFab(modifier: Modifier = Modifier) {
-    HomeChatBotFab(modifier = modifier)
+    HomeChatBotFab(modifier = modifier, onClick = {})
 }

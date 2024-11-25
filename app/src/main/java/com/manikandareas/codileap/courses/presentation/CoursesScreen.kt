@@ -115,7 +115,9 @@ fun CoursesScreen(
             )
         },
         floatingActionButton = {
-            HomeChatBotFab()
+            HomeChatBotFab(onClick = {
+                onAction(CoursesAction.NavigateTo(Destination.ChatBotScreen))
+            })
         },
         modifier = modifier
             .fillMaxSize()
