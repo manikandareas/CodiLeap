@@ -65,14 +65,14 @@ dependencies {
     implementation(libs.coil.kt.coil.compose)
     implementation(libs.coil)
 
+    implementation (libs.kotlinx.serialization.json)
+    implementation (libs.jsoup.v1181)
+
     implementation(libs.androidx.compose.animation)
     implementation(libs.androidx.core.splashscreen)
     implementation(libs.androidx.material.icons.extended.android)
-
+    
     implementation (libs.yml.ycharts)
-
-    implementation (libs.kotlinx.serialization.json)
-    implementation (libs.jsoup.v1181)
 
     implementation(libs.androidx.core.ktx)
     implementation(libs.androidx.lifecycle.runtime.ktx)
