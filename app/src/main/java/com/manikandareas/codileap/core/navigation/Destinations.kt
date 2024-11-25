@@ -44,13 +44,22 @@ sealed interface Destination {
     data class ModuleScreen(val moduleUi: ModuleUi) : Destination
 
     @Serializable
+    data object QuizScreen : Destination
+
+    @Serializable
     data object AnalyticsScreen : Destination
+
+    @Serializable
+    data object SettingsGraph : Destination
 
     @Serializable
     data object SettingsScreen : Destination
 
     @Serializable
     data object ProfileScreen : Destination
+
+    @Serializable
+    data object ChatBotScreen : Destination
 
 
 }

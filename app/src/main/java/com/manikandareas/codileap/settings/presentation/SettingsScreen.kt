@@ -82,9 +82,11 @@ fun SettingsScreen(onAction: (SettingsAction) -> Unit, modifier: Modifier = Modi
                     .fillMaxWidth()
             )
         },
-        floatingActionButton = {
-            HomeChatBotFab()
-        }
+//        floatingActionButton = {
+//            HomeChatBotFab(onClick = {
+//                onAction(SettingsAction.NavigateTo(Destination.ChatBotScreen))
+//            })
+//        }
 
     ) { innerPadding ->
         LazyColumn(
