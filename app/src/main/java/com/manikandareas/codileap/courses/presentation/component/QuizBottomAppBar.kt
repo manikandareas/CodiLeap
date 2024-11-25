@@ -23,7 +23,7 @@ import androidx.compose.ui.unit.dp
 import com.manikandareas.codileap.ui.theme.CodiLeapTheme
 
 @Composable
-fun QuizBottomAppBar(modifier: Modifier = Modifier) {
+fun QuizBottomAppBar(title: String,modifier: Modifier = Modifier) {
     Row(modifier = modifier.padding(16.dp), horizontalArrangement = Arrangement.spacedBy(8.dp)) {
         Button(
             onClick = {},
@@ -38,7 +38,7 @@ fun QuizBottomAppBar(modifier: Modifier = Modifier) {
             shape = MaterialTheme.shapes.medium
         ) {
             Text(
-                "10:00",
+                title,
                 style = MaterialTheme.typography.bodyMedium,
                 color = MaterialTheme.colorScheme.primary
             )
@@ -71,6 +71,6 @@ fun QuizBottomAppBar(modifier: Modifier = Modifier) {
 @Composable
 private fun PreviewQuizBottomAppBar() {
     CodiLeapTheme {
-        QuizBottomAppBar()
+        QuizBottomAppBar(title = "10:00")
     }
 }

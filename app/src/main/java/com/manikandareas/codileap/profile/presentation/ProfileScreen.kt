@@ -17,7 +17,7 @@ import com.manikandareas.codileap.ui.theme.CodiLeapTheme
 fun ProfileScreen(modifier: Modifier = Modifier) {
     Scaffold(
         topBar = {
-            ProfileAppBar {  }
+            ProfileAppBar { }
         }
     ) { innerPadding ->
         Column(
@@ -41,37 +41,66 @@ fun ProfileScreen(modifier: Modifier = Modifier) {
             var gender by remember { mutableStateOf("Male") }
 
             Column(
-                verticalArrangement = Arrangement.spacedBy(16.dp),
+                verticalArrangement = Arrangement.spacedBy(8.dp),
                 modifier = Modifier.fillMaxWidth()
             ) {
 
-                InputFieldWithLabel(
-                    label = "Your Name",
-                    value = name,
-                    onValueChange = { name = it }
+//                InputFieldWithLabel(
+//                    label = "Your Name",
+//                    value = name,
+//                    onValueChange = { name = it }
+//                )
+//
+//
+//                InputFieldWithLabel(
+//                    label = "Date of Birth",
+//                    value = dateOfBirth,
+//                    onValueChange = { dateOfBirth = it },
+//                    keyboardType = KeyboardType.Text
+//                )
+//
+//
+//                InputFieldWithLabel(
+//                    label = "Your Job",
+//                    value = job,
+//                    onValueChange = { job = it }
+//                )
+//
+//
+//                InputFieldWithLabel(
+//                    label = "Specialty",
+//                    value = specialty,
+//                    onValueChange = { specialty = it },
+//                    keyboardType = KeyboardType.Text
+//                )
+
+                OutlinedTextField(
+                    value = "Vito Andareas Manik",
+                    onValueChange = {},
+                    label = { Text("Your Name") },
+                    modifier = Modifier.fillMaxWidth(),
+                    shape = MaterialTheme.shapes.medium
                 )
-
-
-                InputFieldWithLabel(
-                    label = "Date of Birth",
-                    value = dateOfBirth,
-                    onValueChange = { dateOfBirth = it },
-                    keyboardType = KeyboardType.Text
+                OutlinedTextField(
+                    value = "13 July 2024",
+                    onValueChange = {},
+                    label = { Text("Date of Birth") },
+                    modifier = Modifier.fillMaxWidth(),
+                    shape = MaterialTheme.shapes.medium
                 )
-
-
-                InputFieldWithLabel(
-                    label = "Your Job",
-                    value = job,
-                    onValueChange = { job = it }
+                OutlinedTextField(
+                    value = "Fullstack Developer",
+                    onValueChange = {},
+                    label = { Text("Your Job") },
+                    modifier = Modifier.fillMaxWidth(),
+                    shape = MaterialTheme.shapes.medium
                 )
-
-
-                InputFieldWithLabel(
-                    label = "Specialty",
-                    value = specialty,
-                    onValueChange = { specialty = it },
-                    keyboardType = KeyboardType.Text
+                OutlinedTextField(
+                    value = "Backend",
+                    onValueChange = {},
+                    label = { Text("Specialty") },
+                    modifier = Modifier.fillMaxWidth(),
+                    shape = MaterialTheme.shapes.medium
                 )
 
 
@@ -83,9 +112,10 @@ fun ProfileScreen(modifier: Modifier = Modifier) {
                     )
                     Row(
                         modifier = Modifier.fillMaxWidth(),
-                        horizontalArrangement = Arrangement.spacedBy(16.dp)
+                        horizontalArrangement = Arrangement.spacedBy(16.dp),
+                        verticalAlignment = Alignment.CenterVertically
                     ) {
-                        Row {
+                        Row(verticalAlignment = Alignment.CenterVertically) {
                             RadioButton(
                                 selected = gender == "Male",
                                 onClick = { gender = "Male" }
@@ -96,7 +126,7 @@ fun ProfileScreen(modifier: Modifier = Modifier) {
                                 modifier = Modifier.padding(start = 8.dp)
                             )
                         }
-                        Row {
+                        Row(verticalAlignment = Alignment.CenterVertically) {
                             RadioButton(
                                 selected = gender == "Female",
                                 onClick = { gender = "Female" }

@@ -87,7 +87,9 @@ fun AnalyticsScreen(onAction: (AnalyticsAction) -> Unit, modifier: Modifier = Mo
             )
         },
         floatingActionButton = {
-            HomeChatBotFab()
+            HomeChatBotFab(onClick = {
+                onAction(AnalyticsAction.NavigateTo(Destination.ChatBotScreen))
+            })
         }
 
     ) { innerPadding ->

@@ -16,11 +16,11 @@ import androidx.compose.ui.draw.clip
 import androidx.compose.ui.tooling.preview.PreviewLightDark
 import androidx.compose.ui.unit.dp
 import coil.compose.AsyncImage
-import com.manikandareas.codileap.ui.theme.CodiLeapTheme
 import com.manikandareas.codileap.home.presentation.model.UserUi
+import com.manikandareas.codileap.ui.theme.CodiLeapTheme
 
 @Composable
-fun HomeAppBar(data: UserUi, modifier: Modifier = Modifier) {
+fun HomeAppBar(onProfileClick: () -> Unit, data: UserUi, modifier: Modifier = Modifier) {
     TopAppBar(
         modifier = modifier,
         title = {
@@ -34,7 +34,7 @@ fun HomeAppBar(data: UserUi, modifier: Modifier = Modifier) {
         },
         actions = {
 
-            IconButton(onClick = {}, modifier=Modifier.padding(end = 8.dp)) {
+            IconButton(onClick = {onProfileClick()}, modifier = Modifier.padding(end = 8.dp)) {
                 AsyncImage(
                     data.imageUrl,
                     contentDescription = null,
@@ -51,7 +51,7 @@ fun HomeAppBar(data: UserUi, modifier: Modifier = Modifier) {
 @Composable
 fun PreviewHomeAppBar(modifier: Modifier = Modifier) {
     CodiLeapTheme {
-        HomeAppBar(modifier = modifier, data = userUi)
+        HomeAppBar(modifier = modifier, data = userUi, onProfileClick = {})
     }
 }
 

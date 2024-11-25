@@ -1,6 +1,7 @@
 package com.manikandareas.codileap.home.presentation.component
 
 import androidx.compose.foundation.background
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.PaddingValues
@@ -27,17 +28,19 @@ fun HomeQuizAction(
     modifier: Modifier = Modifier,
     quizTitle: String = "Daily Quiz Challenge",
     quizSubtitle: String = "Test your knowledge!",
-    onQuizStart: () -> Unit = {}
+    onClick: () -> Unit = {}
 ) {
     Row(
         modifier = modifier
             .fillMaxWidth()
             .clip(MaterialTheme.shapes.medium)
             .background(MaterialTheme.colorScheme.surfaceContainer)
-            .padding(16.dp),
+            .padding(16.dp)
+            .clickable(onClick = onClick),
         horizontalArrangement = Arrangement.SpaceBetween,
         verticalAlignment = Alignment.CenterVertically,
-    ) {
+
+        ) {
         Column(
             modifier = Modifier.weight(1f),
             verticalArrangement = Arrangement.spacedBy(4.dp)
@@ -57,7 +60,7 @@ fun HomeQuizAction(
         Spacer(modifier = Modifier.width(8.dp))
 
         Button(
-            onClick = {},
+            onClick = { onClick() },
             modifier = Modifier.weight(.2f),
             contentPadding = PaddingValues(0.dp),
         ) {

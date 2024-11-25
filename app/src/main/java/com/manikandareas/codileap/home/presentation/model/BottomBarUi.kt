@@ -34,6 +34,6 @@ sealed class BottomBarUi(
     object Settings : BottomBarUi(
         title = "Settings",
         icon = Icons.Default.Settings,
-        route = Destination.SettingsScreen
+        route = Destination.SettingsGraph
     )
 }

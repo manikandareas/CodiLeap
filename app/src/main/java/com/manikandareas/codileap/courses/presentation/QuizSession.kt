@@ -1,5 +1,6 @@
 package com.manikandareas.codileap.courses.presentation
 
+import android.annotation.SuppressLint
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
@@ -12,8 +13,10 @@ import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableIntStateOf
+import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
@@ -25,10 +28,33 @@ import com.manikandareas.codileap.courses.presentation.component.QuizAppBar
 import com.manikandareas.codileap.courses.presentation.component.QuizBottomAppBar
 import com.manikandareas.codileap.screening.presentation.component.CodiButton
 import com.manikandareas.codileap.ui.theme.CodiLeapTheme
+import kotlinx.coroutines.delay
 
+@SuppressLint("DefaultLocale")
 @Composable
 fun QuizSession(modifier: Modifier = Modifier) {
+    val totalTimeInSeconds = 60 * 10
     var selectedButton by remember { mutableIntStateOf(0) }
+
+    var timeLeft by remember { mutableStateOf(totalTimeInSeconds) }
+
+    // Menghitung waktu setiap detik
+    LaunchedEffect(key1 = timeLeft) {
+        if (timeLeft > 0) {
+            delay(1000L) // Tunggu 1 detik
+            timeLeft -= 1 // Kurangi waktu
+        }
+    }
+
+    // Konversi waktu dalam detik ke format menit:detik
+    val minutes = timeLeft / 60
+    val seconds = timeLeft % 60
+
+    // Tampilan Timer
+//    Text(
+//        text = String.format("%02d:%02d", minutes, seconds),
+//        style = MaterialTheme.typography.h4
+//    )
     Scaffold(
         modifier = modifier
             .fillMaxSize()
@@ -37,7 +63,9 @@ fun QuizSession(modifier: Modifier = Modifier) {
             QuizAppBar()
         },
         bottomBar = {
-            QuizBottomAppBar()
+            QuizBottomAppBar(
+                title = String.format("%02d:%02d", minutes, seconds),
+            )
         }
     ) { innerPadding ->
         Column(
