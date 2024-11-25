@@ -26,6 +26,7 @@ import com.manikandareas.codileap.courses.data.dummy.learningPathsDummy
 import com.manikandareas.codileap.courses.presentation.CoursesAction
 import com.manikandareas.codileap.courses.presentation.CoursesScreen
 import com.manikandareas.codileap.courses.presentation.CoursesState
+import com.manikandareas.codileap.courses.presentation.ModuleAction
 import com.manikandareas.codileap.courses.presentation.ModuleSession
 import com.manikandareas.codileap.courses.presentation.ModuleState
 import com.manikandareas.codileap.courses.presentation.model.ModuleUi
@@ -164,7 +165,15 @@ fun CodiLeapNavigation(
                         isLoading = false,
                         moduleUi = arg.moduleUi
                     )
-                    ModuleSession(state = state)
+                    ModuleSession(state = state, onAction = {action ->
+                        when (action) {
+                            is ModuleAction.NavigateBack -> {
+                                navController.navigateUp()
+                            }
+
+                            is ModuleAction.OnContinueClicked -> {}
+                        }
+                    })
                 }
 
                 composable<Destination.AnalyticsScreen> {
