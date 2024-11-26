@@ -15,9 +15,13 @@ import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Scaffold
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableIntStateOf
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.platform.LocalDensity
 import androidx.compose.ui.tooling.preview.PreviewLightDark
 import androidx.compose.ui.unit.dp
 import com.manikandareas.codileap.core.navigation.Destination
@@ -31,14 +35,10 @@ import com.manikandareas.codileap.home.presentation.component.HomeQuizAction
 import com.manikandareas.codileap.home.presentation.component.userUi
 import com.manikandareas.codileap.home.presentation.model.DummyCarouselUi
 import com.manikandareas.codileap.ui.theme.CodiLeapTheme
-import androidx.compose.runtime.getValue
-import androidx.compose.runtime.mutableIntStateOf
-import androidx.compose.runtime.setValue
-import androidx.compose.ui.platform.LocalDensity
 import kotlin.math.roundToInt
 
 @Composable
-fun HomeScreen(onAction:(HomeAction)-> Unit, modifier: Modifier = Modifier) {
+fun HomeScreen(onAction: (HomeAction) -> Unit, modifier: Modifier = Modifier) {
     val scrollState = rememberScrollState()
     var isBottomBarVisible by remember { mutableStateOf(true) }
     var previousScrollOffset by remember { mutableIntStateOf(0) }
@@ -74,7 +74,10 @@ fun HomeScreen(onAction:(HomeAction)-> Unit, modifier: Modifier = Modifier) {
         topBar = {
             HomeAppBar(
                 data = userUi,
-                modifier = Modifier.fillMaxWidth()
+                modifier = Modifier.fillMaxWidth(),
+                onProfileClick = {
+                    onAction(HomeAction.NavigateTo(Destination.ProfileScreen))
+                }
             )
         },
         bottomBar = {
@@ -83,11 +86,15 @@ fun HomeScreen(onAction:(HomeAction)-> Unit, modifier: Modifier = Modifier) {
                 onNavigate = {
                     onAction(HomeAction.NavigateTo(it))
                 },
-                modifier = Modifier.fillMaxWidth().offset(y = bottomBarTranslation.roundToInt().dp)
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .offset(y = bottomBarTranslation.roundToInt().dp)
             )
         },
         floatingActionButton = {
-            HomeChatBotFab()
+            HomeChatBotFab(onClick = {
+                onAction(HomeAction.NavigateTo(Destination.ChatBotScreen))
+            })
         }
 
     ) { innerPadding ->
@@ -102,7 +109,7 @@ fun HomeScreen(onAction:(HomeAction)-> Unit, modifier: Modifier = Modifier) {
             Spacer(modifier = Modifier.height(16.dp))
             HomeCourseProgress(modifier = Modifier.fillMaxWidth())
             Spacer(modifier = Modifier.height(16.dp))
-            HomeQuizAction(modifier = Modifier.fillMaxWidth())
+            HomeQuizAction(onClick = {onAction(HomeAction.NavigateTo(Destination.QuizScreen))}, modifier = Modifier.fillMaxWidth())
             Spacer(modifier = Modifier.height(16.dp))
             HomeCarousel(modifier = Modifier.fillMaxWidth(), carouselUi = DummyCarouselUi)
         }

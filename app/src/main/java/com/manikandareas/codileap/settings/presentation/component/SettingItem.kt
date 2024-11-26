@@ -15,17 +15,18 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.tooling.preview.PreviewLightDark
 import androidx.compose.ui.unit.dp
+import com.manikandareas.codileap.core.navigation.Destination
 import com.manikandareas.codileap.settings.presentation.model.SettingItemUi
 import com.manikandareas.codileap.ui.theme.CodiLeapTheme
 
 
 @Composable
-fun SettingItem(settingUi: SettingItemUi, modifier: Modifier = Modifier) {
-    TextButton  (
+fun SettingItem(onClick: () -> Unit, settingUi: SettingItemUi, modifier: Modifier = Modifier) {
+    TextButton(
         modifier = modifier,
-        onClick = settingUi.onClick,
+        onClick = { onClick() },
         shape = MaterialTheme.shapes.medium,
-        contentPadding = PaddingValues(vertical = 12.dp, horizontal = 16.dp)
+        contentPadding = PaddingValues(vertical = 12.dp, horizontal = 16.dp),
     ) {
         Row(
             verticalAlignment = Alignment.CenterVertically,
@@ -56,9 +57,10 @@ fun PreviewSettingItem(modifier: Modifier = Modifier) {
             settingUi = SettingItemUi(
                 icon = Icons.Default.Person,
                 title = "Personal Data",
-                onClick = {}
+                des = Destination.FAQsScreen
             ),
-            modifier = modifier
+            modifier = modifier,
+            onClick = {}
         )
     }
 }

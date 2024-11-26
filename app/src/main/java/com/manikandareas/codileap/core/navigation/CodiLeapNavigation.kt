@@ -19,6 +19,7 @@ import com.manikandareas.codileap.auth.presentation.auth_register.AuthRegisterSc
 import com.manikandareas.codileap.auth.presentation.auth_register.AuthRegisterViewModel
 import com.manikandareas.codileap.auth.presentation.auth_signIn.AuthSignInScreen
 import com.manikandareas.codileap.auth.presentation.auth_signIn.AuthSignInViewModel
+import com.manikandareas.codileap.chatbot.presentation.ChatBotScreen
 import com.manikandareas.codileap.core.presentation.util.ObserveAsEvents
 import com.manikandareas.codileap.core.presentation.util.parcelableType
 import com.manikandareas.codileap.courses.data.dummy.createCoursesForLearningPath
@@ -29,13 +30,16 @@ import com.manikandareas.codileap.courses.presentation.CoursesState
 import com.manikandareas.codileap.courses.presentation.ModuleAction
 import com.manikandareas.codileap.courses.presentation.ModuleSession
 import com.manikandareas.codileap.courses.presentation.ModuleState
+import com.manikandareas.codileap.courses.presentation.QuizSession
 import com.manikandareas.codileap.courses.presentation.model.ModuleUi
 import com.manikandareas.codileap.courses.presentation.model.toUiModel
 import com.manikandareas.codileap.home.presentation.HomeAction
 import com.manikandareas.codileap.home.presentation.HomeScreen
 import com.manikandareas.codileap.intro.presentation.IntroScreen
+import com.manikandareas.codileap.profile.presentation.ProfileScreen
 import com.manikandareas.codileap.screening.presentation.ScreeningAction
 import com.manikandareas.codileap.screening.presentation.ScreeningScreen
+import com.manikandareas.codileap.settings.presentation.FAQsScreen
 import com.manikandareas.codileap.settings.presentation.SettingsAction
 import com.manikandareas.codileap.settings.presentation.SettingsScreen
 import org.koin.androidx.compose.koinViewModel
@@ -63,8 +67,7 @@ fun CodiLeapNavigation(
     }
     SharedTransitionLayout {
         NavHost(
-            navController = navController,
-            startDestination = startDestination
+            navController = navController, startDestination = startDestination
         ) {
             navigation<Destination.IntroGraph>(
                 startDestination = Destination.IntroScreen
@@ -100,15 +103,13 @@ fun CodiLeapNavigation(
                 startDestination = Destination.ScreeningScreen
             ) {
                 composable<Destination.ScreeningScreen> {
-                    ScreeningScreen(
-                        onAction = {
-                            when (it) {
-                                is ScreeningAction.NavigateTo -> navController.navigate(it.des) {
-                                    popUpTo(it.des) { inclusive = true }
-                                }
+                    ScreeningScreen(onAction = {
+                        when (it) {
+                            is ScreeningAction.NavigateTo -> navController.navigate(it.des) {
+                                popUpTo(it.des) { inclusive = true }
                             }
                         }
-                    )
+                    })
                 }
             }
 
@@ -132,29 +133,25 @@ fun CodiLeapNavigation(
                         learningPathId = selectedLearningPath.id,
                         pathName = selectedLearningPath.name
                     ).first().toUiModel()
-                    val state = CoursesState(
-                        isLoading = false,
+                    val state = CoursesState(isLoading = false,
                         selectedLearningPath = selectedLearningPath,
                         learningPaths = learningPathsDummy.map { it.toUiModel() },
                         selectedCourse = selectedCourse,
                         courses = createCoursesForLearningPath(
                             learningPathId = selectedLearningPath.id,
                             pathName = selectedLearningPath.name
-                        ).map { it.toUiModel() }
-                    )
-                    CoursesScreen(
-                        state = state,
-                        onAction = {
-                            when (it) {
-                                is CoursesAction.NavigateTo -> navController.navigate(it.des) {
-                                    popUpTo(it.des) { inclusive = true }
-                                }
-
-                                is CoursesAction.OnModuleClicked -> {
-                                    navController.navigate(Destination.ModuleScreen(it.module))
-                                }
+                        ).map { it.toUiModel() })
+                    CoursesScreen(state = state, onAction = {
+                        when (it) {
+                            is CoursesAction.NavigateTo -> navController.navigate(it.des) {
+                                popUpTo(it.des) { inclusive = true }
                             }
-                        })
+
+                            is CoursesAction.OnModuleClicked -> {
+                                navController.navigate(Destination.ModuleScreen(it.module))
+                            }
+                        }
+                    })
                 }
 
                 composable<Destination.ModuleScreen>(
@@ -162,10 +159,9 @@ fun CodiLeapNavigation(
                 ) {
                     val arg = it.toRoute<Destination.ModuleScreen>()
                     val state = ModuleState(
-                        isLoading = false,
-                        moduleUi = arg.moduleUi
+                        isLoading = false, moduleUi = arg.moduleUi
                     )
-                    ModuleSession(state = state, onAction = {action ->
+                    ModuleSession(state = state, onAction = { action ->
                         when (action) {
                             is ModuleAction.NavigateBack -> {
                                 navController.navigateUp()
@@ -174,6 +170,10 @@ fun CodiLeapNavigation(
                             is ModuleAction.OnContinueClicked -> {}
                         }
                     })
+                }
+
+                composable<Destination.QuizScreen> {
+                    QuizSession()
                 }
 
                 composable<Destination.AnalyticsScreen> {
@@ -185,6 +185,17 @@ fun CodiLeapNavigation(
                         }
                     })
                 }
+
+                composable<Destination.ChatBotScreen> {
+                    ChatBotScreen()
+                }
+
+            }
+
+
+            navigation<Destination.SettingsGraph>(
+                startDestination = Destination.SettingsScreen
+            ) {
                 composable<Destination.SettingsScreen> {
                     SettingsScreen(onAction = {
                         when (it) {
@@ -194,9 +205,15 @@ fun CodiLeapNavigation(
                         }
                     })
                 }
+
+                composable<Destination.ProfileScreen> {
+                    ProfileScreen()
+                }
+
+                composable<Destination.FAQsScreen> {
+                    FAQsScreen()
+                }
             }
-
-
         }
     }
 }
