@@ -19,6 +19,7 @@ import androidx.compose.foundation.layout.size
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.ArrowBackIosNew
 import androidx.compose.material3.Button
+import androidx.compose.material3.ButtonDefaults
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
@@ -31,6 +32,7 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
+import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
@@ -39,6 +41,7 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.manikandareas.codileap.auth.presentation.auth_signIn.AuthSignInAction
 import com.manikandareas.codileap.auth.presentation.model.AuthUi
+import com.manikandareas.codileap.ui.compositions.CodiButton
 import com.manikandareas.codileap.ui.theme.CodiLeapTheme
 
 @Composable
@@ -50,7 +53,7 @@ fun AuthScreen(modifier: Modifier = Modifier, onAction: (AuthAction) -> Unit) {
             TopAppBar(
                 title = { },
                 navigationIcon = {
-                    IconButton(onClick = {onAction(AuthAction.OnBackClicked)}) {
+                    IconButton(onClick = { onAction(AuthAction.OnBackClicked) }) {
                         Icon(
                             imageVector = Icons.Default.ArrowBackIosNew,
                             contentDescription = "Back",
@@ -67,26 +70,28 @@ fun AuthScreen(modifier: Modifier = Modifier, onAction: (AuthAction) -> Unit) {
                 modifier = Modifier
                     .padding(16.dp)
                     .clip(MaterialTheme.shapes.medium)
-                    .background(MaterialTheme.colorScheme.primaryContainer)
+                    .background(MaterialTheme.colorScheme.primaryContainer.copy(alpha = 0.3f))
                     .fillMaxWidth()
                     .height(IntrinsicSize.Min)
             ) {
-                Button(
-                    onClick = {onAction(AuthAction.OnRegisterClicked)},
+                CodiButton(
+                    onClick = { onAction(AuthAction.OnRegisterClicked) },
                     modifier = Modifier
-                        .weight(1f).fillMaxHeight(),
+                        .weight(1f)
+                        .fillMaxHeight(),
 
-                    shape = MaterialTheme.shapes.medium,
-                    contentPadding = PaddingValues(0.dp),
-                ) {
+                    ) {
                     Text(text = "Register")
                 }
-                TextButton(
-                    onClick = {onAction(AuthAction.OnSignInClicked)},
+                CodiButton(
+                    onClick = { onAction(AuthAction.OnSignInClicked) },
                     modifier = Modifier.weight(1f),
-                    contentPadding = PaddingValues(0.dp),
+                    colors = ButtonDefaults.buttonColors(
+                        containerColor = Color.Transparent,
+                        contentColor = MaterialTheme.colorScheme.onSurface
+                    )
                 ) {
-                    Text(text = "Sign In", color = MaterialTheme.colorScheme.onPrimaryContainer)
+                    Text(text = "Sign In", color = MaterialTheme.colorScheme.onSurface)
                 }
             }
         }

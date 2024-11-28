@@ -22,6 +22,8 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.tooling.preview.PreviewLightDark
 import androidx.compose.ui.unit.dp
+import com.manikandareas.codileap.ui.compositions.CodiButton
+import com.manikandareas.codileap.ui.theme.ButtonSuccessColor
 
 @Composable
 fun HomeQuizAction(
@@ -59,7 +61,7 @@ fun HomeQuizAction(
 
         Spacer(modifier = Modifier.width(8.dp))
 
-        Button(
+        CodiButton (
             onClick = { onClick() },
             modifier = Modifier.weight(.2f),
             contentPadding = PaddingValues(0.dp),

@@ -5,13 +5,16 @@ import androidx.compose.foundation.border
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.IntrinsicSize
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
+import androidx.compose.foundation.layout.heightIn
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
+import androidx.compose.foundation.layout.width
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Close
 import androidx.compose.material3.AlertDialogDefaults
@@ -51,7 +54,8 @@ fun CodiDialog(
     description: String = "",
     onConfirmRequest: () -> Unit,
     dismissTitle: String = "Cancel",
-    confirmTitle: String = "Continue"
+    confirmTitle: String = "Continue",
+    onDismiss: (() -> Unit)? = null
 ) {
     Dialog(
         onDismissRequest = onDismissRequest,
@@ -60,8 +64,8 @@ fun CodiDialog(
             Card(
                 modifier = Modifier
                     .fillMaxWidth()
-                    .height(250.dp)
-                    .padding(16.dp),
+                    .height(intrinsicSize = IntrinsicSize.Min)
+                    .padding(8.dp),
 
                 shape = MaterialTheme.shapes.medium,
                 colors = CardDefaults.cardColors(
@@ -76,7 +80,13 @@ fun CodiDialog(
 
                 ) {
                     IconButton(
-                        onClick = onDismissRequest,
+                        onClick = {
+                            if (onDismiss != null) {
+                                onDismiss()
+                            } else {
+                                onDismissRequest()
+                            }
+                        },
                         modifier = Modifier
                             .align(Alignment.TopEnd)
                             .border(
@@ -132,18 +142,19 @@ fun CodiDialog(
                         )
                         Spacer(modifier = Modifier.height(16.dp))
                         Row {
-                            TextButton(
+                            CodiButton (
                                 onClick = onDismissRequest,
                                 modifier = Modifier.weight(1f),
                                 colors = ButtonColors(
-                                    contentColor = MaterialTheme.colorScheme.onSurface,
-                                    containerColor = Color.Transparent,
+                                    contentColor = MaterialTheme.colorScheme.onBackground,
+                                    containerColor = MaterialTheme.colorScheme.surfaceDim,
                                     disabledContentColor = style.iconContentColor.copy(alpha = .6f),
                                     disabledContainerColor = style.containerColor.copy(alpha = .6f)
                                 )
                             ) {
-                                Text(text = dismissTitle, color = MaterialTheme.colorScheme.outline)
+                                Text(text = dismissTitle, color = MaterialTheme.colorScheme.onSurface)
                             }
+                            Spacer(modifier = Modifier.width(8.dp))
                             CodiButton(
                                 onClick = onConfirmRequest,
                                 colors = ButtonDefaults.buttonColors(
@@ -154,7 +165,7 @@ fun CodiDialog(
                                 ),
                                 modifier = Modifier.weight(1f)
                             ) {
-                                Text(text = confirmTitle)
+                                Text(text = confirmTitle, color = style.titleContentColor)
                             }
                         }
                     }

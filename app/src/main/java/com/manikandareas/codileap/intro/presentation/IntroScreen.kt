@@ -9,6 +9,7 @@ import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.pager.HorizontalPager
 import androidx.compose.foundation.pager.rememberPagerState
+import androidx.compose.material3.ButtonDefaults
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Scaffold
 import androidx.compose.runtime.Composable
@@ -59,29 +60,47 @@ fun IntroScreen(onFinished: () -> Unit) {
             verticalAlignment = Alignment.CenterVertically
         ) {
 
-            Box(modifier = Modifier.weight(1f),
-                contentAlignment = Alignment.CenterStart) { if (buttonState.value[0].isNotEmpty()) {
-                ButtonUi (text = buttonState.value[0],
-                    backgroundColor = Color.Transparent,
-                    textColor = Color.Gray) {
-                    scope.launch {
-                        if (pagerState.currentPage > 0) {
-                            pagerState.animateScrollToPage(pagerState.currentPage - 1)
+            Box(
+                modifier = Modifier.weight(1f),
+                contentAlignment = Alignment.CenterStart
+            ) {
+                if (buttonState.value[0].isNotEmpty()) {
+                    ButtonUi(
+                        text = buttonState.value[0], colors = ButtonDefaults.buttonColors(
+                            containerColor = Color.Transparent,
+                            contentColor = MaterialTheme.colorScheme.primary,
+                            disabledContentColor = MaterialTheme.colorScheme.primary.copy(alpha = .6f),
+                            disabledContainerColor = Color.Transparent
+                        )
+                    ) {
+                        scope.launch {
+                            if (pagerState.currentPage > 0) {
+                                pagerState.animateScrollToPage(pagerState.currentPage - 1)
+                            }
                         }
                     }
                 }
             }
-            }
-            Box(modifier = Modifier.weight(1f),
-                contentAlignment = Alignment.Center) {
+            Box(
+                modifier = Modifier.weight(1f),
+                contentAlignment = Alignment.Center
+            ) {
                 IndicatorUI(pageSize = pages.size, currentPage = pagerState.currentPage)
             }
 
-            Box(modifier = Modifier.weight(1f),
-                contentAlignment = Alignment.CenterEnd) {
-                ButtonUi (text = buttonState.value[1],
-                    backgroundColor = MaterialTheme.colorScheme.primary,
-                    textColor = MaterialTheme.colorScheme.onPrimary) {
+            Box(
+                modifier = Modifier.weight(1f),
+                contentAlignment = Alignment.CenterEnd
+            ) {
+                ButtonUi(
+                    text = buttonState.value[1],
+                    colors = ButtonDefaults.buttonColors(
+                        containerColor = Color.Transparent,
+                        contentColor = MaterialTheme.colorScheme.primary,
+                        disabledContentColor = MaterialTheme.colorScheme.primary.copy(alpha = .6f),
+                        disabledContainerColor = Color.Transparent
+                    )
+                ) {
                     scope.launch {
                         if (pagerState.currentPage < pages.size - 1) {
                             pagerState.animateScrollToPage(pagerState.currentPage + 1)

@@ -35,6 +35,7 @@ import androidx.compose.ui.tooling.preview.PreviewLightDark
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.manikandareas.codileap.auth.presentation.model.AuthUi
+import com.manikandareas.codileap.ui.compositions.CodiButton
 import com.manikandareas.codileap.ui.theme.CodiLeapTheme
 
 @Composable
@@ -74,18 +75,15 @@ fun AuthSignInScreen(modifier: Modifier = Modifier, onAction: (AuthSignInAction)
                         text = "Don't have an account?",
                         style = MaterialTheme.typography.bodyMedium
                     )
-                    TextButton(onClick = {onAction(AuthSignInAction.OnRegisterClicked)}) {
+                    TextButton(onClick = { onAction(AuthSignInAction.OnRegisterClicked) }) {
                         Text("Register")
                     }
                 }
 
-                Button(
-                    onClick = {onAction(AuthSignInAction.OnSignInClicked)},
+                CodiButton(
+                    onClick = { onAction(AuthSignInAction.OnSignInClicked) },
                     modifier = Modifier
-                        .fillMaxWidth()
-                        .height(48.dp),
-                    shape = MaterialTheme.shapes.medium,
-                    contentPadding = PaddingValues(0.dp),
+                        .fillMaxWidth(),
                 ) {
                     Text(text = "Sign in")
                 }
@@ -95,7 +93,7 @@ fun AuthSignInScreen(modifier: Modifier = Modifier, onAction: (AuthSignInAction)
             modifier = Modifier
                 .padding(innerPadding)
                 .padding(horizontal = 16.dp),
-            ) {
+        ) {
             Text(
                 text = AuthUi.SignInData.title,
                 modifier = Modifier.fillMaxWidth(),
@@ -150,6 +148,6 @@ fun AuthSignInScreen(modifier: Modifier = Modifier, onAction: (AuthSignInAction)
 @Composable
 fun PreviewAuthSignInScreen(modifier: Modifier = Modifier) {
     CodiLeapTheme {
-        AuthSignInScreen (modifier = modifier, onAction = {})
+        AuthSignInScreen(modifier = modifier, onAction = {})
     }
 }

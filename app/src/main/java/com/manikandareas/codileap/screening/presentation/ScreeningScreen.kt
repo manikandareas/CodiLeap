@@ -28,6 +28,7 @@ import com.manikandareas.codileap.screening.presentation.component.ScreeningExpe
 import com.manikandareas.codileap.screening.presentation.component.ScreeningMotive
 import com.manikandareas.codileap.screening.presentation.component.ScreeningName
 import com.manikandareas.codileap.screening.presentation.component.ScreeningWelcome
+import com.manikandareas.codileap.ui.compositions.CodiButton
 import com.manikandareas.codileap.ui.theme.CodiLeapTheme
 
 
@@ -80,11 +81,9 @@ fun ScreeningScreen(onAction: (ScreeningAction) -> Unit, modifier: Modifier = Mo
         },
         bottomBar = {
             Box(modifier = Modifier.padding(16.dp)) {
-                Button(
+                CodiButton(
                     onClick = { onAction(ScreeningAction.NavigateTo(Destination.HomeGraph)) },
                     modifier = Modifier.fillMaxWidth(),
-                    shape = MaterialTheme.shapes.medium,
-                    contentPadding = PaddingValues(16.dp)
                 ) {
                     Text("Let's Go")
                 }

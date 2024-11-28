@@ -37,17 +37,18 @@ import androidx.compose.ui.tooling.preview.PreviewLightDark
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.manikandareas.codileap.auth.presentation.model.AuthUi
+import com.manikandareas.codileap.ui.compositions.CodiButton
 import com.manikandareas.codileap.ui.theme.CodiLeapTheme
 
 @Composable
-fun AuthRegisterScreen(modifier: Modifier = Modifier, onAction: (AuthRegisterAction)-> Unit) {
+fun AuthRegisterScreen(modifier: Modifier = Modifier, onAction: (AuthRegisterAction) -> Unit) {
     Scaffold(modifier = modifier
         .background(MaterialTheme.colorScheme.background)
         .fillMaxSize(), topBar = {
         TopAppBar(
             title = { },
             navigationIcon = {
-                IconButton(onClick = {onAction(AuthRegisterAction.OnBackClicked)}) {
+                IconButton(onClick = { onAction(AuthRegisterAction.OnBackClicked) }) {
                     Icon(
                         imageVector = Icons.Default.ArrowBackIosNew,
                         contentDescription = "Back",
@@ -76,18 +77,14 @@ fun AuthRegisterScreen(modifier: Modifier = Modifier, onAction: (AuthRegisterAct
                         text = "Already have an account? ",
                         style = MaterialTheme.typography.bodyMedium
                     )
-                    TextButton(onClick = {onAction(AuthRegisterAction.OnSignInClicked)}) {
+                    TextButton(onClick = { onAction(AuthRegisterAction.OnSignInClicked) }) {
                         Text("Sign in")
                     }
                 }
 
-                Button(
+                CodiButton(
                     onClick = {},
-                    modifier = Modifier
-                        .fillMaxWidth()
-                        .height(48.dp),
-                    shape = MaterialTheme.shapes.medium,
-                    contentPadding = PaddingValues(0.dp),
+                    modifier = Modifier.fillMaxWidth()
                 ) {
                     Text(text = "Register")
                 }
@@ -97,7 +94,7 @@ fun AuthRegisterScreen(modifier: Modifier = Modifier, onAction: (AuthRegisterAct
             modifier = Modifier
                 .padding(innerPadding)
                 .padding(horizontal = 16.dp),
-            ) {
+        ) {
             Text(
                 text = AuthUi.RegisterData.title,
                 modifier = Modifier.fillMaxWidth(),

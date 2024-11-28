@@ -43,7 +43,10 @@ import com.manikandareas.codileap.courses.presentation.component.ModuleAppBar
 import com.manikandareas.codileap.courses.presentation.component.ModuleBottomAppBar
 import com.manikandareas.codileap.courses.presentation.component.ModuleDialog
 import com.manikandareas.codileap.courses.presentation.model.toUiModel
+import com.manikandareas.codileap.ui.compositions.CodiDialog
 import com.manikandareas.codileap.ui.theme.CodiLeapTheme
+import com.manikandareas.codileap.ui.theme.ErrorAlertDialogStyle
+import com.manikandareas.codileap.ui.theme.SuccessAlertDialogStyle
 
 @Composable
 fun ModuleSession(
@@ -158,35 +161,40 @@ fun ModuleSession(
         if (isAlertDialogOpen.value) {
             when (moduleActionType) {
                 DialogType.SUCCESS -> {
-                    ModuleDialog(
-                        onConfirmation = {
-                            onAction(ModuleAction.NavigateBack)
-                        },
+                    CodiDialog(
                         onDismissRequest = {
                             isAlertDialogOpen.value = false
                             onAction(ModuleAction.NavigateBack)
                         },
-                        dialogTitle = "Yeay, you have completed the lesson!",
-                        dialogText = "You have completed the lesson, you can now move to the next lesson",
-                        dialogType = DialogType.SUCCESS
+                        onDismiss = {
+                            isAlertDialogOpen.value = false
+                        },
+                        onConfirmRequest = {
+                            isAlertDialogOpen.value = false
+                            onAction(ModuleAction.NavigateBack)
+                        },
+                        title = "Yeay, you have completed the lesson!",
+                        description = "You have completed the lesson, you can now move to the next lesson",
+                        style = SuccessAlertDialogStyle(),
+                        confirmTitle = "Continue",
                     )
+
                 }
 
                 DialogType.ERROR -> {
-                    ModuleDialog(
-                        onConfirmation = {
-                            isAlertDialogOpen.value = false
-                            onAction(ModuleAction.NavigateBack)
-                        },
+                    CodiDialog(
                         onDismissRequest = {
                             isAlertDialogOpen.value = false
                         },
-                        icon = Icons.Default.Warning,
-                        dialogTitle = "Are you sure you want to exit?",
-                        dialogText = "If you exit now, your progress will not be saved",
-                        dialogType = DialogType.ERROR,
+                        onConfirmRequest = {
+                            isAlertDialogOpen.value = false
+                            onAction(ModuleAction.NavigateBack)
+                        },
                         dismissTitle = "Cancel",
-                        confirmTitle = "Exit"
+                        confirmTitle = "Yes, Exit",
+                        title = "Are you sure!",
+                        description = "If you exit now, your progress will not be saved",
+                        style = ErrorAlertDialogStyle()
                     )
                 }
             }

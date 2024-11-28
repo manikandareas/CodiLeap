@@ -23,6 +23,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.tooling.preview.PreviewLightDark
 import androidx.compose.ui.unit.dp
+import com.manikandareas.codileap.ui.compositions.CodiButton
 import com.manikandareas.codileap.ui.theme.CodiLeapTheme
 
 @Composable
@@ -42,11 +43,11 @@ fun HomeCourseProgress(modifier: Modifier = Modifier) {
                 text = "Variables - Course 2, module 9!",
                 style = MaterialTheme.typography.labelMedium
             )
-            LinearProgressIndicator(progress = { 0.5f }, modifier = Modifier.height(8.dp))
+            LinearProgressIndicator(progress = { 0.5f }, modifier = Modifier.height(12.dp), color = MaterialTheme.colorScheme.primaryContainer, trackColor = MaterialTheme.colorScheme.onPrimaryContainer)
         }
         Spacer(modifier = Modifier.width(4.dp))
 
-        Button(
+        CodiButton (
             onClick = {},
             modifier = Modifier.weight(.2f),
             contentPadding = PaddingValues(0.dp),
