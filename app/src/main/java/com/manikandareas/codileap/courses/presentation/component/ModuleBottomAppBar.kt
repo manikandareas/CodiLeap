@@ -23,6 +23,7 @@ fun ModuleBottomAppBar(
     modifier: Modifier = Modifier,
     enabled: Boolean = true,
     onContinue: () -> Unit = {},
+    text: String = "Continue"
 ) {
     Row(modifier = modifier.padding(16.dp)) {
         CodiButton (
@@ -33,7 +34,7 @@ fun ModuleBottomAppBar(
             enabled = enabled
         ) {
             Row(verticalAlignment = Alignment.CenterVertically) {
-                Text("Continue")
+                Text(text)
                 Icon(
                     imageVector = Icons.AutoMirrored.Default.NavigateNext,
                     contentDescription = "Next Unit"
