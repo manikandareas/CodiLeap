@@ -20,6 +20,12 @@ import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.window.DialogProperties
 
+ enum class AlertDialogType {
+    ERROR,
+    SUCCESS,
+    WARNING
+}
+
 
 data class AlertDialogStyle(
     val containerColor: Color,

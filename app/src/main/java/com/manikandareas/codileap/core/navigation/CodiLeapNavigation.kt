@@ -30,7 +30,10 @@ import com.manikandareas.codileap.courses.presentation.CoursesState
 import com.manikandareas.codileap.courses.presentation.ModuleAction
 import com.manikandareas.codileap.courses.presentation.ModuleSession
 import com.manikandareas.codileap.courses.presentation.ModuleState
+import com.manikandareas.codileap.courses.presentation.QuizAction
 import com.manikandareas.codileap.courses.presentation.QuizSession
+import com.manikandareas.codileap.courses.presentation.QuizState
+import com.manikandareas.codileap.courses.presentation.dummyQuiz
 import com.manikandareas.codileap.courses.presentation.model.ModuleUi
 import com.manikandareas.codileap.courses.presentation.model.toUiModel
 import com.manikandareas.codileap.home.presentation.HomeAction
@@ -173,7 +176,23 @@ fun CodiLeapNavigation(
                 }
 
                 composable<Destination.QuizScreen> {
-                    QuizSession()
+                    QuizSession(
+                        state = QuizState(
+                            quiz = dummyQuiz.toUiModel(),
+                            isLoading = false
+                        ),
+                        onAction = {
+                            when (it) {
+
+                                QuizAction.NavigateBack -> {
+                                    navController.navigateUp()
+                                }
+                                QuizAction.OnSubmitClick -> {
+                                    navController.navigateUp()
+                                }
+                            }
+                        }
+                    )
                 }
 
                 composable<Destination.AnalyticsScreen> {

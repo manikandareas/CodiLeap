@@ -1,36 +1,32 @@
 package com.manikandareas.codileap.courses.presentation.model
 
 import com.manikandareas.codileap.courses.domain.Course
-import com.manikandareas.codileap.courses.domain.LearningPath
-import com.manikandareas.codileap.courses.domain.Progress
+import com.manikandareas.codileap.courses.domain.Module
 import java.time.ZonedDateTime
 
 
 data class CourseUi(
     override val id: Int,
     override val name: String,
-    override val description: String,
+    val learningPathId: Int,
     override val totalModules: Int,
-    val progress: ProgressUi
-): HasBasicCourse
+    override val description: String,
+    val createdAt: ZonedDateTime,
+    val updatedAt: ZonedDateTime,
+    val orderIndex: Int,
 
-data class ProgressUi(
-    val completed: Int,
-    val total: Int,
-    val percentage: Float
-)
+    val modules: List<ModuleUi>
+) : HasBasicCourse
+
 
 fun Course.toUiModel() = CourseUi(
     id = id,
     name = name,
     description = description,
     totalModules = totalModules,
-    progress = progress.toUiModel()
-
-)
-
-fun Progress.toUiModel() = ProgressUi(
-    completed = completed,
-    total = total,
-    percentage = percentage
+    learningPathId = learningPathId,
+    createdAt = ZonedDateTime.parse(createdAt),
+    updatedAt = ZonedDateTime.parse(updatedAt),
+    orderIndex = orderIndex,
+    modules = modules.map { it.toUiModel() }
 )

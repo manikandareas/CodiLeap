@@ -38,12 +38,13 @@ import com.manikandareas.codileap.core.presentation.util.HtmlParser
 import com.manikandareas.codileap.core.presentation.util.HtmlRenderer
 import com.manikandareas.codileap.core.presentation.util.kotlinModule
 import com.manikandareas.codileap.courses.data.dummy.createModulesForCourse
-import com.manikandareas.codileap.courses.presentation.component.DialogType
+
 import com.manikandareas.codileap.courses.presentation.component.ModuleAppBar
 import com.manikandareas.codileap.courses.presentation.component.ModuleBottomAppBar
-import com.manikandareas.codileap.courses.presentation.component.ModuleDialog
+
 import com.manikandareas.codileap.courses.presentation.model.toUiModel
 import com.manikandareas.codileap.ui.compositions.CodiDialog
+import com.manikandareas.codileap.ui.theme.AlertDialogType
 import com.manikandareas.codileap.ui.theme.CodiLeapTheme
 import com.manikandareas.codileap.ui.theme.ErrorAlertDialogStyle
 import com.manikandareas.codileap.ui.theme.SuccessAlertDialogStyle
@@ -59,7 +60,7 @@ fun ModuleSession(
     val units = state.moduleUi.units
 
     val isAlertDialogOpen = remember { mutableStateOf(false) }
-    var moduleActionType by remember { mutableStateOf(DialogType.ERROR) }
+    var moduleActionType by remember { mutableStateOf(AlertDialogType.ERROR) }
 
 
     var currentUnitIndex by remember { mutableIntStateOf(0) }
@@ -110,7 +111,7 @@ fun ModuleSession(
 
     BackHandler(enabled = true) {
         if (currentUnitIndex == 0) {
-            moduleActionType = DialogType.ERROR
+            moduleActionType = AlertDialogType.ERROR
             isAlertDialogOpen.value = true
         } else {
             currentUnitIndex--
@@ -129,7 +130,7 @@ fun ModuleSession(
                 },
                 enabled = currentUnitIndex > 0,
                 onExit = {
-                    moduleActionType = DialogType.ERROR
+                    moduleActionType = AlertDialogType.ERROR
                     isAlertDialogOpen.value = true
                 }
             )
@@ -146,12 +147,13 @@ fun ModuleSession(
                         if (currentUnitIndex < units.size - 1) {
                             currentUnitIndex++
                         } else {
-                            moduleActionType = DialogType.SUCCESS
+                            moduleActionType = AlertDialogType.SUCCESS
                             isAlertDialogOpen.value = true
                             Toast.makeText(context, "Module Completed", Toast.LENGTH_SHORT)
                                 .show()
                         }
-                    }
+                    },
+                    text = if (currentUnitIndex < units.size - 1) "Continue" else "Complete"
                 )
             }
         },
@@ -160,7 +162,7 @@ fun ModuleSession(
 
         if (isAlertDialogOpen.value) {
             when (moduleActionType) {
-                DialogType.SUCCESS -> {
+                AlertDialogType.SUCCESS -> {
                     CodiDialog(
                         onDismissRequest = {
                             isAlertDialogOpen.value = false
@@ -181,7 +183,7 @@ fun ModuleSession(
 
                 }
 
-                DialogType.ERROR -> {
+                AlertDialogType.ERROR -> {
                     CodiDialog(
                         onDismissRequest = {
                             isAlertDialogOpen.value = false
@@ -197,6 +199,8 @@ fun ModuleSession(
                         style = ErrorAlertDialogStyle()
                     )
                 }
+
+                AlertDialogType.WARNING -> {}
             }
         }
 

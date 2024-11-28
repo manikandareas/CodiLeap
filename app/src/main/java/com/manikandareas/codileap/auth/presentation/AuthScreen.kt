@@ -7,7 +7,6 @@ import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.IntrinsicSize
-import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxHeight
@@ -18,7 +17,6 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.ArrowBackIosNew
-import androidx.compose.material3.Button
 import androidx.compose.material3.ButtonDefaults
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Icon
@@ -26,7 +24,6 @@ import androidx.compose.material3.IconButton
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
-import androidx.compose.material3.TextButton
 import androidx.compose.material3.TopAppBar
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
@@ -39,7 +36,6 @@ import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.PreviewLightDark
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
-import com.manikandareas.codileap.auth.presentation.auth_signIn.AuthSignInAction
 import com.manikandareas.codileap.auth.presentation.model.AuthUi
 import com.manikandareas.codileap.ui.compositions.CodiButton
 import com.manikandareas.codileap.ui.theme.CodiLeapTheme
@@ -79,8 +75,7 @@ fun AuthScreen(modifier: Modifier = Modifier, onAction: (AuthAction) -> Unit) {
                     modifier = Modifier
                         .weight(1f)
                         .fillMaxHeight(),
-
-                    ) {
+                ) {
                     Text(text = "Register")
                 }
                 CodiButton(
@@ -140,7 +135,6 @@ fun AuthScreen(modifier: Modifier = Modifier, onAction: (AuthAction) -> Unit) {
                 color = MaterialTheme.colorScheme.secondary,
                 textAlign = TextAlign.Center
             )
-
         }
     }
 }
