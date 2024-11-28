@@ -29,12 +29,7 @@ fun CodiButton(
     modifier: Modifier = Modifier,
     enabled: Boolean = true,
     shape: Shape = MaterialTheme.shapes.medium,
-    colors: ButtonColors = ButtonDefaults.buttonColors(
-        contentColor = MaterialTheme.colorScheme.primary,
-        containerColor = MaterialTheme.colorScheme.onPrimary,
-        disabledContentColor = MaterialTheme.colorScheme.onPrimary.copy(alpha = 0.6f),
-        disabledContainerColor = MaterialTheme.colorScheme.primary.copy(alpha = 0.6f)
-    ),
+    colors: ButtonColors = ButtonPrimaryColor(),
     elevation: ButtonElevation? = ButtonDefaults.buttonElevation(),
     border: BorderStroke? = null,
     contentPadding: PaddingValues = PaddingValues(vertical = 14.dp, horizontal = 16.dp),
