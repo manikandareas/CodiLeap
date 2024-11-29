@@ -28,6 +28,7 @@ import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.platform.LocalInspectionMode
 import androidx.compose.ui.res.painterResource
+import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.tooling.preview.PreviewLightDark
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.lerp
@@ -55,7 +56,7 @@ fun HomeCarousel(carouselUi: CarouselUi, modifier: Modifier = Modifier) {
     HorizontalPager(
         state = pagerState,
         modifier = modifier,
-        contentPadding= contentPadding,
+        contentPadding = contentPadding,
         snapPosition = SnapPosition.Center
     ) { index ->
         CardContent(carouselUi.items[index], index, pagerState)
@@ -92,26 +93,20 @@ fun CardContent(itemUi: CarouselItemUi, index: Int, pagerState: PagerState) {
         ),
     ) {
         Column {
-            SubcomposeAsyncImage(
-                modifier = Modifier
-                    .height(122.dp)
-                    .fillMaxWidth(),
-                model = ImageRequest.Builder(LocalContext.current)
-                    .data(itemUi.imageUrl)
-                    .crossfade(true)
-                    .scale(Scale.FILL)
-                    .build(),
+            SubcomposeAsyncImage(modifier = Modifier
+                .height(122.dp)
+                .fillMaxWidth(),
+                model = ImageRequest.Builder(LocalContext.current).data(itemUi.imageUrl)
+                    .crossfade(true).scale(Scale.FILL).build(),
                 contentDescription = null,
                 contentScale = ContentScale.Crop,
                 error = {
                     if (LocalInspectionMode.current) {
                         Image(
-                            painter = painterResource(R.drawable.ic_placeholder),
-                            contentDescription
+                            painter = painterResource(R.drawable.ic_placeholder), contentDescription
                         )
                     }
-                }
-            )
+                })
             Column(
                 modifier = Modifier
                     .fillMaxWidth()
@@ -119,18 +114,20 @@ fun CardContent(itemUi: CarouselItemUi, index: Int, pagerState: PagerState) {
                 verticalArrangement = Arrangement.spacedBy(8.dp)
             ) {
                 Text(
-                    text = itemUi.title?.truncateWithEllipsis(30) ?: "No Title",
+                    text = itemUi.title ?: "No Title",
                     style = MaterialTheme.typography.titleMedium,
-                    modifier = Modifier
-                        .fillMaxWidth()
+                    modifier = Modifier.fillMaxWidth(),
+                    maxLines = 1,
+                    overflow = TextOverflow.Ellipsis
                 )
 
                 Text(
-                    text = itemUi.subtitle?.truncateWithEllipsis(24) ?: "No Description",
+                    text = itemUi.subtitle ?: "No Description",
                     style = MaterialTheme.typography.bodyMedium,
                     color = MaterialTheme.colorScheme.onSurface.copy(alpha = 0.6f),
-                    modifier = Modifier
-                        .fillMaxWidth()
+                    modifier = Modifier.fillMaxWidth(),
+                    maxLines = 1,
+                    overflow = TextOverflow.Ellipsis
                 )
 
                 Row(

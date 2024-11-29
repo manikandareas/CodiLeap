@@ -38,12 +38,16 @@ import com.manikandareas.codileap.core.presentation.util.HtmlParser
 import com.manikandareas.codileap.core.presentation.util.HtmlRenderer
 import com.manikandareas.codileap.core.presentation.util.kotlinModule
 import com.manikandareas.codileap.courses.data.dummy.createModulesForCourse
-import com.manikandareas.codileap.courses.presentation.component.DialogType
+
 import com.manikandareas.codileap.courses.presentation.component.ModuleAppBar
 import com.manikandareas.codileap.courses.presentation.component.ModuleBottomAppBar
-import com.manikandareas.codileap.courses.presentation.component.ModuleDialog
+
 import com.manikandareas.codileap.courses.presentation.model.toUiModel
+import com.manikandareas.codileap.ui.compositions.CodiDialog
+import com.manikandareas.codileap.ui.theme.AlertDialogType
 import com.manikandareas.codileap.ui.theme.CodiLeapTheme
+import com.manikandareas.codileap.ui.theme.ErrorAlertDialogStyle
+import com.manikandareas.codileap.ui.theme.SuccessAlertDialogStyle
 
 @Composable
 fun ModuleSession(
@@ -56,7 +60,7 @@ fun ModuleSession(
     val units = state.moduleUi.units
 
     val isAlertDialogOpen = remember { mutableStateOf(false) }
-    var moduleActionType by remember { mutableStateOf(DialogType.ERROR) }
+    var moduleActionType by remember { mutableStateOf(AlertDialogType.ERROR) }
 
 
     var currentUnitIndex by remember { mutableIntStateOf(0) }
@@ -107,7 +111,7 @@ fun ModuleSession(
 
     BackHandler(enabled = true) {
         if (currentUnitIndex == 0) {
-            moduleActionType = DialogType.ERROR
+            moduleActionType = AlertDialogType.ERROR
             isAlertDialogOpen.value = true
         } else {
             currentUnitIndex--
@@ -126,7 +130,7 @@ fun ModuleSession(
                 },
                 enabled = currentUnitIndex > 0,
                 onExit = {
-                    moduleActionType = DialogType.ERROR
+                    moduleActionType = AlertDialogType.ERROR
                     isAlertDialogOpen.value = true
                 }
             )
@@ -143,12 +147,13 @@ fun ModuleSession(
                         if (currentUnitIndex < units.size - 1) {
                             currentUnitIndex++
                         } else {
-                            moduleActionType = DialogType.SUCCESS
+                            moduleActionType = AlertDialogType.SUCCESS
                             isAlertDialogOpen.value = true
                             Toast.makeText(context, "Module Completed", Toast.LENGTH_SHORT)
                                 .show()
                         }
-                    }
+                    },
+                    text = if (currentUnitIndex < units.size - 1) "Continue" else "Complete"
                 )
             }
         },
@@ -157,38 +162,45 @@ fun ModuleSession(
 
         if (isAlertDialogOpen.value) {
             when (moduleActionType) {
-                DialogType.SUCCESS -> {
-                    ModuleDialog(
-                        onConfirmation = {
-                            onAction(ModuleAction.NavigateBack)
-                        },
+                AlertDialogType.SUCCESS -> {
+                    CodiDialog(
                         onDismissRequest = {
                             isAlertDialogOpen.value = false
                             onAction(ModuleAction.NavigateBack)
                         },
-                        dialogTitle = "Yeay, you have completed the lesson!",
-                        dialogText = "You have completed the lesson, you can now move to the next lesson",
-                        dialogType = DialogType.SUCCESS
+                        onDismiss = {
+                            isAlertDialogOpen.value = false
+                        },
+                        onConfirmRequest = {
+                            isAlertDialogOpen.value = false
+                            onAction(ModuleAction.NavigateBack)
+                        },
+                        title = "Yeay, you have completed the lesson!",
+                        description = "You have completed the lesson, you can now move to the next lesson",
+                        style = SuccessAlertDialogStyle(),
+                        confirmTitle = "Continue",
+                    )
+
+                }
+
+                AlertDialogType.ERROR -> {
+                    CodiDialog(
+                        onDismissRequest = {
+                            isAlertDialogOpen.value = false
+                        },
+                        onConfirmRequest = {
+                            isAlertDialogOpen.value = false
+                            onAction(ModuleAction.NavigateBack)
+                        },
+                        dismissTitle = "Cancel",
+                        confirmTitle = "Yes, Exit",
+                        title = "Are you sure!",
+                        description = "If you exit now, your progress will not be saved",
+                        style = ErrorAlertDialogStyle()
                     )
                 }
 
-                DialogType.ERROR -> {
-                    ModuleDialog(
-                        onConfirmation = {
-                            isAlertDialogOpen.value = false
-                            onAction(ModuleAction.NavigateBack)
-                        },
-                        onDismissRequest = {
-                            isAlertDialogOpen.value = false
-                        },
-                        icon = Icons.Default.Warning,
-                        dialogTitle = "Are you sure you want to exit?",
-                        dialogText = "If you exit now, your progress will not be saved",
-                        dialogType = DialogType.ERROR,
-                        dismissTitle = "Cancel",
-                        confirmTitle = "Exit"
-                    )
-                }
+                AlertDialogType.WARNING -> {}
             }
         }
 

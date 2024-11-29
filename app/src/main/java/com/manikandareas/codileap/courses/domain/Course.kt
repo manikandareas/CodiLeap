@@ -1,16 +1,14 @@
 package com.manikandareas.codileap.courses.domain
 
-data class Course (
+data class Course(
     val id: Int,
     val name: String,
-    val description: String,
+    val learningPathId: Int,
     val totalModules: Int,
-    val progress: Progress
-)
+    val description: String,
+    val createdAt: String,
+    val updatedAt: String,
+    val orderIndex: Int,
 
-data class Progress (
-    val completed: Int,
-    val total: Int,
-    val percentage: Float
+    val modules: List<Module>
 )
-

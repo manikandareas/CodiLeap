@@ -57,12 +57,12 @@ fun HomeBottomAppBar(
                     onClick = { onNavigate(item.route) },
                     colors = ButtonDefaults.buttonColors(
                         containerColor = if (selected)
-                            MaterialTheme.colorScheme.secondaryContainer
+                            MaterialTheme.colorScheme.primaryContainer
                         else
                             Color.Transparent
                     ),
                     contentPadding = PaddingValues(horizontal = 12.dp, vertical = 8.dp),
-                    shape = RoundedCornerShape(16.dp),
+                    shape = MaterialTheme.shapes.medium,
                     modifier = Modifier.padding(horizontal = 4.dp)
                 ) {
                     Row(
@@ -73,7 +73,7 @@ fun HomeBottomAppBar(
                             imageVector = item.icon,
                             contentDescription = item.title,
                             tint = if (selected)
-                                MaterialTheme.colorScheme.primary
+                                MaterialTheme.colorScheme.onPrimaryContainer
                             else
                                 MaterialTheme.colorScheme.onSurface.copy(alpha = 0.6f),
                             modifier = Modifier.size(24.dp)
@@ -82,7 +82,7 @@ fun HomeBottomAppBar(
                             Text(
                                 text = item.title,
                                 style = MaterialTheme.typography.labelMedium,
-                                color = MaterialTheme.colorScheme.primary
+                                color = MaterialTheme.colorScheme.onPrimaryContainer
                             )
                         }
                     }

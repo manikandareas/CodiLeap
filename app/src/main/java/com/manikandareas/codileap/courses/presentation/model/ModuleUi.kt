@@ -8,33 +8,47 @@ import kotlinx.serialization.Serializable
 
 @Serializable
 @Parcelize
-data class ModuleUi (
+data class ModuleUi(
     val id: Int,
+    val courseId: Int,
     val name: String,
-    val status: String,
+    val description: String,
+    val orderIndex: Int,
+    val createdAt: String,
+    val updatedAt: String,
     val units: List<UnitUi>
 ) : Parcelable
 
 @Serializable
 @Parcelize
-data class UnitUi (
+data class UnitUi(
     val id: Int,
-    val order: Int,
+    val moduleId: Int,
+    val name: String,
+    val orderIndex: Int,
     val content: String,
-    val type: String
+    val createdAt: String,
+    val updatedAt: String
 ) : Parcelable
 
 
 fun Module.toUiModel() = ModuleUi(
     id = id,
+    courseId = courseId,
     name = name,
-    status = status,
+    description = description,
+    orderIndex = orderIndex,
+    createdAt = createdAt,
+    updatedAt = updatedAt,
     units = units.map { it.toUiModel() }
 )
 
 fun Unit.toUiModel() = UnitUi(
     id = id,
-    order = order,
+    moduleId = moduleId,
+    name = name,
+    orderIndex = orderIndex,
     content = content,
-    type = type
+    createdAt = createdAt,
+    updatedAt = updatedAt
 )

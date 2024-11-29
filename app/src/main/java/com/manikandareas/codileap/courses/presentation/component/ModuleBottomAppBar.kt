@@ -15,6 +15,7 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.tooling.preview.PreviewLightDark
 import androidx.compose.ui.unit.dp
+import com.manikandareas.codileap.ui.compositions.CodiButton
 import com.manikandareas.codileap.ui.theme.CodiLeapTheme
 
 @Composable
@@ -22,9 +23,10 @@ fun ModuleBottomAppBar(
     modifier: Modifier = Modifier,
     enabled: Boolean = true,
     onContinue: () -> Unit = {},
+    text: String = "Continue"
 ) {
     Row(modifier = modifier.padding(16.dp)) {
-        Button(
+        CodiButton (
             onClick = {onContinue()},
             modifier = Modifier.fillMaxWidth(),
             shape = MaterialTheme.shapes.medium,
@@ -32,7 +34,7 @@ fun ModuleBottomAppBar(
             enabled = enabled
         ) {
             Row(verticalAlignment = Alignment.CenterVertically) {
-                Text("Continue")
+                Text(text)
                 Icon(
                     imageVector = Icons.AutoMirrored.Default.NavigateNext,
                     contentDescription = "Next Unit"

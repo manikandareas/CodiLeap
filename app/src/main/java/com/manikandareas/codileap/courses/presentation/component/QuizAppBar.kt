@@ -2,7 +2,6 @@
 
 package com.manikandareas.codileap.courses.presentation.component
 
-import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.automirrored.filled.ArrowBackIos
@@ -12,6 +11,7 @@ import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
 import androidx.compose.material3.LinearProgressIndicator
+import androidx.compose.material3.MaterialTheme
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.tooling.preview.Preview
@@ -19,12 +19,19 @@ import androidx.compose.ui.unit.dp
 import com.manikandareas.codileap.ui.theme.CodiLeapTheme
 
 @Composable
-fun QuizAppBar(modifier: Modifier = Modifier) {
+fun QuizAppBar(
+    onBack: () -> Unit,
+    onExit: () -> Unit,
+    enabled: Boolean = true,
+    quizProgress: Float,
+    modifier: Modifier = Modifier
+) {
     CenterAlignedTopAppBar(
         modifier = modifier,
         navigationIcon = {
             IconButton(
-                onClick = {}
+                onClick = { onBack() },
+                enabled = enabled,
             ) {
                 Icon(
                     imageVector = Icons.AutoMirrored.Default.ArrowBackIos,
@@ -35,15 +42,15 @@ fun QuizAppBar(modifier: Modifier = Modifier) {
         },
         title = {
             LinearProgressIndicator(
-                progress = { 0.3f },
-                modifier = Modifier
-                    .fillMaxWidth()
-                    .height(12.dp)
+                progress = { quizProgress },
+                modifier = Modifier.height(12.dp),
+                color = MaterialTheme.colorScheme.primaryContainer,
+                trackColor = MaterialTheme.colorScheme.onPrimaryContainer
             )
         },
         actions = {
             IconButton(
-                onClick = {}
+                onClick = { onExit() }
             ) {
                 Icon(
                     imageVector = Icons.Default.Close,
@@ -58,6 +65,6 @@ fun QuizAppBar(modifier: Modifier = Modifier) {
 @Composable
 private fun PreviewQuizAppBar() {
     CodiLeapTheme {
-        QuizAppBar()
+        QuizAppBar(onBack = {}, onExit = {}, quizProgress = 0.5f)
     }
 }
