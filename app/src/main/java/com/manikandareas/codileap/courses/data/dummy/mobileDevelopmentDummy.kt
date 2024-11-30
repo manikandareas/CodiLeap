@@ -2396,7 +2396,195 @@ val mobileDevelopmentDummy = listOf(
                                 moduleId = 6,
                                 name = "Adapting to Screen Orientations",
                                 orderIndex = 3,
-                                content = "Handling portrait and landscape modes",
+                                content = "<h1>1. Understanding Screen Orientations</h1>\n" +
+                                        "<p>Android devices can operate in two primary orientations:</p>\n" +
+                                        "<ul>\n" +
+                                        "    <li><strong>Portrait Mode:</strong> The device is held upright (vertical orientation). This is typically the default orientation.</li>\n" +
+                                        "    <li><strong>Landscape Mode:</strong> The device is rotated 90 degrees, making the screen wider than it is tall.</li>\n" +
+                                        "</ul>\n" +
+                                        "\n" +
+                                        "<h2>Why Orientation Matters</h2>\n" +
+                                        "<p>The layout, content, and user interface (UI) elements often need to adapt when switching between orientations to provide an optimal experience.</p>\n" +
+                                        "<ul>\n" +
+                                        "    <li>In portrait mode, content is generally presented in a narrow vertical layout.</li>\n" +
+                                        "    <li>In landscape mode, the device offers more horizontal space, allowing more content to fit or rearrange UI elements for a better experience.</li>\n" +
+                                        "</ul>\n" +
+                                        "\n" +
+                                        "<h1>2. Handling Configuration Changes</h1>\n" +
+                                        "<p>When a user switches between portrait and landscape modes, Android triggers a configuration change, causing the activity to be recreated by default. This can lead to performance issues or loss of data if not handled properly.</p>\n" +
+                                        "\n" +
+                                        "<h2>Default Behavior</h2>\n" +
+                                        "<ul>\n" +
+                                        "    <li>Android will automatically recreate the activity when the orientation changes.</li>\n" +
+                                        "    <li>All resources, including layout files, images, and other configuration-specific data, will need to be reloaded.</li>\n" +
+                                        "</ul>\n" +
+                                        "\n" +
+                                        "<h3>Configuration Change Example:</h3>\n" +
+                                        "<p>For instance, when the device rotates from portrait to landscape, the activity is recreated, and the layout is replaced with one designed specifically for landscape mode (if provided).</p>\n" +
+                                        "\n" +
+                                        "<h1>3. Preventing Activity Recreation (Optional)</h1>\n" +
+                                        "<p>In certain cases, you might want to retain the current state and prevent the activity from being recreated on orientation changes. This can be achieved by handling the configuration changes explicitly in the manifest file.</p>\n" +
+                                        "\n" +
+                                        "<h3>Example: Configuring to Prevent Recreation</h3>\n" +
+                                        "<pre><code class=\"language-xml\">\n" +
+                                        "<activity\n" +
+                                        "    android:name=\".MainActivity\"\n" +
+                                        "    android:configChanges=\"orientation|keyboardHidden|screenSize\"\n" +
+                                        "    android:screenOrientation=\"unspecified\">\n" +
+                                        "</activity>\n" +
+                                        "</code></pre>\n" +
+                                        "<h4>Explanation:</h4>\n" +
+                                        "<ul>\n" +
+                                        "    <li>The <code>android:configChanges</code> attribute tells Android that the activity will handle configuration changes like orientation, keyboard visibility, and screen size changes manually.</li>\n" +
+                                        "    <li>This means Android will not recreate the activity but will instead call <code>onConfigurationChanged()</code> in your activity.</li>\n" +
+                                        "</ul>\n" +
+                                        "\n" +
+                                        "<h3>Handling the Configuration Change in Code</h3>\n" +
+                                        "<p>If you choose to handle configuration changes manually, override the <code>onConfigurationChanged()</code> method in your activity:</p>\n" +
+                                        "<pre><code class=\"language-kotlin\">\n" +
+                                        "override fun onConfigurationChanged(newConfig: Configuration) {\n" +
+                                        "    super.onConfigurationChanged(newConfig)\n" +
+                                        "    if (newConfig.orientation == Configuration.ORIENTATION_LANDSCAPE) {\n" +
+                                        "        // Handle landscape mode\n" +
+                                        "    } else if (newConfig.orientation == Configuration.ORIENTATION_PORTRAIT) {\n" +
+                                        "        // Handle portrait mode\n" +
+                                        "    }\n" +
+                                        "}\n" +
+                                        "</code></pre>\n" +
+                                        "<p><strong>Note:</strong> While this prevents the activity from being recreated, it’s generally recommended to let Android handle orientation changes unless there's a specific reason to avoid recreation (e.g., to maintain a complex UI state or perform intensive background tasks).</p>\n" +
+                                        "\n" +
+                                        "<h1>4. Using Resource Directories for Different Orientations</h1>\n" +
+                                        "<p>Android allows you to provide separate resources (layouts, images, etc.) for different screen orientations. You can define orientation-specific layouts in the <code>res/</code> directory using qualifiers like <code>layout-land</code> for landscape mode.</p>\n" +
+                                        "\n" +
+                                        "<h3>Creating Layouts for Portrait and Landscape</h3>\n" +
+                                        "<p><strong>Portrait Layout</strong> (<code>res/layout/</code>): This layout will be used when the device is in portrait mode.</p>\n" +
+                                        "<pre><code class=\"language-xml\">\n" +
+                                        "<!-- res/layout/activity_main.xml -->\n" +
+                                        "<LinearLayout\n" +
+                                        "    android:layout_width=\"match_parent\"\n" +
+                                        "    android:layout_height=\"match_parent\"\n" +
+                                        "    android:orientation=\"vertical\">\n" +
+                                        "    <TextView\n" +
+                                        "        android:id=\"@+id/textView\"\n" +
+                                        "        android:layout_width=\"wrap_content\"\n" +
+                                        "        android:layout_height=\"wrap_content\"\n" +
+                                        "        android:text=\"Portrait Mode\" />\n" +
+                                        "</LinearLayout>\n" +
+                                        "</code></pre>\n" +
+                                        "\n" +
+                                        "<p><strong>Landscape Layout</strong> (<code>res/layout-land/</code>): This layout will be used when the device is in landscape mode.</p>\n" +
+                                        "<pre><code class=\"language-xml\">\n" +
+                                        "<!-- res/layout-land/activity_main.xml -->\n" +
+                                        "<LinearLayout\n" +
+                                        "    android:layout_width=\"match_parent\"\n" +
+                                        "    android:layout_height=\"match_parent\"\n" +
+                                        "    android:orientation=\"horizontal\">\n" +
+                                        "    <TextView\n" +
+                                        "        android:id=\"@+id/textView\"\n" +
+                                        "        android:layout_width=\"wrap_content\"\n" +
+                                        "        android:layout_height=\"wrap_content\"\n" +
+                                        "        android:text=\"Landscape Mode\" />\n" +
+                                        "</LinearLayout>\n" +
+                                        "</code></pre>\n" +
+                                        "\n" +
+                                        "<h4>Explanation:</h4>\n" +
+                                        "<ul>\n" +
+                                        "    <li>Android will automatically select the appropriate layout based on the device's current orientation.</li>\n" +
+                                        "    <li>The <code>layout-land</code> directory contains layout files that will be used when the device is in landscape mode, while the <code>layout</code> directory contains the default layout for portrait mode.</li>\n" +
+                                        "</ul>\n" +
+                                        "\n" +
+                                        "<h1>5. Designing Flexible Layouts</h1>\n" +
+                                        "<p>To ensure your app adapts well to both orientations, it is essential to design flexible layouts that make use of ConstraintLayout, LinearLayout, and RelativeLayout to arrange UI elements dynamically.</p>\n" +
+                                        "\n" +
+                                        "<h2>Using ConstraintLayout for Responsive Layouts</h2>\n" +
+                                        "<p>You can use ConstraintLayout to design layouts that adjust to both portrait and landscape orientations without the need for completely separate XML files.</p>\n" +
+                                        "\n" +
+                                        "<h3>XML Example (Flexible Layout with ConstraintLayout)</h3>\n" +
+                                        "<pre><code class=\"language-xml\">\n" +
+                                        "<androidx.constraintlayout.widget.ConstraintLayout\n" +
+                                        "    xmlns:android=\"http://schemas.android.com/apk/res/android\"\n" +
+                                        "    android:layout_width=\"match_parent\"\n" +
+                                        "    android:layout_height=\"match_parent\">\n" +
+                                        "\n" +
+                                        "    <TextView\n" +
+                                        "        android:id=\"@+id/textView\"\n" +
+                                        "        android:layout_width=\"wrap_content\"\n" +
+                                        "        android:layout_height=\"wrap_content\"\n" +
+                                        "        android:text=\"Responsive Text\"\n" +
+                                        "        app:layout_constraintTop_toTopOf=\"parent\"\n" +
+                                        "        app:layout_constraintStart_toStartOf=\"parent\"\n" +
+                                        "        app:layout_constraintEnd_toEndOf=\"parent\" />\n" +
+                                        "\n" +
+                                        "    <Button\n" +
+                                        "        android:id=\"@+id/buttonSubmit\"\n" +
+                                        "        android:layout_width=\"wrap_content\"\n" +
+                                        "        android:layout_height=\"wrap_content\"\n" +
+                                        "        android:text=\"Submit\"\n" +
+                                        "        app:layout_constraintTop_toBottomOf=\"@id/textView\"\n" +
+                                        "        app:layout_constraintStart_toStartOf=\"parent\"\n" +
+                                        "        app:layout_constraintEnd_toEndOf=\"parent\" />\n" +
+                                        "    \n" +
+                                        "</androidx.constraintlayout.widget.ConstraintLayout>\n" +
+                                        "</code></pre>\n" +
+                                        "\n" +
+                                        "<h4>Explanation:</h4>\n" +
+                                        "<ul>\n" +
+                                        "    <li>The TextView and Button are constrained to the parent layout, ensuring they are centered on both portrait and landscape screens.</li>\n" +
+                                        "    <li>The use of ConstraintLayout ensures the UI components will dynamically adjust their positions based on the screen size and orientation.</li>\n" +
+                                        "</ul>\n" +
+                                        "\n" +
+                                        "<h2>Using LinearLayout with weight for Flexibility</h2>\n" +
+                                        "<p>Another approach is to use a LinearLayout with <code>android:weightSum</code> and <code>layout_weight</code> to distribute space proportionally between UI components.</p>\n" +
+                                        "\n" +
+                                        "<h3>XML Example (Using LinearLayout for Flexible Layout)</h3>\n" +
+                                        "<pre><code class=\"language-xml\">\n" +
+                                        "<LinearLayout\n" +
+                                        "    android:layout_width=\"match_parent\"\n" +
+                                        "    android:layout_height=\"match_parent\"\n" +
+                                        "    android:orientation=\"vertical\">\n" +
+                                        "\n" +
+                                        "    <TextView\n" +
+                                        "        android:id=\"@+id/textView\"\n" +
+                                        "        android:layout_width=\"match_parent\"\n" +
+                                        "        android:layout_height=\"wrap_content\"\n" +
+                                        "        android:text=\"Text View\"\n" +
+                                        "        android:layout_weight=\"1\" />\n" +
+                                        "\n" +
+                                        "    <Button\n" +
+                                        "        android:id=\"@+id/buttonSubmit\"\n" +
+                                        "        android:layout_width=\"wrap_content\"\n" +
+                                        "        android:layout_height=\"wrap_content\"\n" +
+                                        "        android:text=\"Submit\" />\n" +
+                                        "\n" +
+                                        "</LinearLayout>\n" +
+                                        "</code></pre>\n" +
+                                        "\n" +
+                                        "<h4>Explanation:</h4>\n" +
+                                        "<ul>\n" +
+                                        "    <li>In portrait mode, the TextView takes up more space because of the <code>layout_weight=\"1\"</code>.</li>\n" +
+                                        "    <li>When switching to landscape mode, the layout remains flexible and adapts by resizing based on available space.</li>\n" +
+                                        "</ul>\n" +
+                                        "\n" +
+                                        "<h1>6. Managing View States Across Orientations</h1>\n" +
+                                        "<p>If your app maintains state (e.g., user input, scroll position, etc.), ensure that this state is preserved when switching orientations.</p>\n" +
+                                        "\n" +
+                                        "<h2>Saving Instance State</h2>\n" +
+                                        "<p>Override <code>onSaveInstanceState()</code>:</p>\n" +
+                                        "<pre><code class=\"language-kotlin\">\n" +
+                                        "override fun onSaveInstanceState(outState: Bundle) {\n" +
+                                        "    super.onSaveInstanceState(outState)\n" +
+                                        "    outState.putString(\"key_name\", \"some_value\")\n" +
+                                        "}\n" +
+                                        "</code></pre>\n" +
+                                        "\n" +
+                                        "<h2>Restore State in <code>onRestoreInstanceState()</code></h2>\n" +
+                                        "<p>Override <code>onRestoreInstanceState()</code>:</p>\n" +
+                                        "<pre><code class=\"language-kotlin\">\n" +
+                                        "override fun onRestoreInstanceState(savedInstanceState: Bundle) {\n" +
+                                        "    super.onRestoreInstanceState(savedInstanceState)\n" +
+                                        "    val savedValue = savedInstanceState.getString(\"key_name\")\n" +
+                                        "}\n" +
+                                        "</code></\n",
                                 createdAt = "2024-01-01",
                                 updatedAt = "2024-01-02"
                             )
