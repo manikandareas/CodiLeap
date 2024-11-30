@@ -761,7 +761,7 @@ val mobileDevelopmentDummy = listOf(
                                         "<pre><code class=\"language-kotlin\">\n" +
                                         "val editTextUsername = findViewById<EditText>(R.id.editTextUsername)\n" +
                                         "val username = editTextUsername.text.toString()\n" +
-                                        "Toast.makeText(this, \"Hello, $username\", Toast.LENGTH_SHORT).show()\n" +
+                                        "Toast.makeText(this, \"Hello, \$username\", Toast.LENGTH_SHORT).show()\n" +
                                         "</code></pre>\n" +
                                         "\n" +
                                         "<h3>Handling Input Validation:</h3>\n" +
@@ -953,7 +953,7 @@ val mobileDevelopmentDummy = listOf(
                                         "\n" +
                                         "buttonSubmit.setOnClickListener {\n" +
                                         "    val userName = editTextName.text.toString()\n" +
-                                        "    textViewGreeting.text = \"Hello, $userName!\"\n" +
+                                        "    textViewGreeting.text = \"Hello, \$userName!\"\n" +
                                         "}\n" +
                                         "</code></pre>\n" +
                                         "\n" +
@@ -1826,7 +1826,7 @@ val mobileDevelopmentDummy = listOf(
                                         "spinnerCountry.onItemSelectedListener = object : AdapterView.OnItemSelectedListener {\n" +
                                         "    override fun onItemSelected(parentView: AdapterView<*>?, view: View?, position: Int, id: Long) {\n" +
                                         "        val selectedCountry = parentView?.getItemAtPosition(position).toString()\n" +
-                                        "        Toast.makeText(applicationContext, \"Selected Country: $selectedCountry\", Toast.LENGTH_SHORT).show()\n" +
+                                        "        Toast.makeText(applicationContext, \"Selected Country: \$selectedCountry\", Toast.LENGTH_SHORT).show()\n" +
                                         "    }\n" +
                                         "\n" +
                                         "    override fun onNothingSelected(parentView: AdapterView<*>?) {}\n" +
@@ -1880,7 +1880,7 @@ val mobileDevelopmentDummy = listOf(
                                         "if (username.isEmpty()) {\n" +
                                         "    Toast.makeText(this, \"Please enter a username\", Toast.LENGTH_SHORT).show()\n" +
                                         "} else {\n" +
-                                        "    Toast.makeText(this, \"Hello, $username!\", Toast.LENGTH_SHORT).show()\n" +
+                                        "    Toast.makeText(this, \"Hello, \$username!\", Toast.LENGTH_SHORT).show()\n" +
                                         "}\n" +
                                         "</code></pre>\n" +
                                         "<h4>Explanation:</h4>\n" +
