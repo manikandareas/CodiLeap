@@ -1,0 +1,313 @@
+<html>
+<head>
+<title>HtmlParser.kt</title>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+<style type="text/css">
+.s0 { color: #cf8e6d;}
+.s1 { color: #bcbec4;}
+.s2 { color: #bcbec4;}
+.s3 { color: #2aacb8;}
+.s4 { color: #7a7e85;}
+.s5 { color: #6aab73;}
+</style>
+</head>
+<body bgcolor="#1e1f22">
+<table CELLSPACING=0 CELLPADDING=5 COLS=1 WIDTH="100%" BGCOLOR="#606060" >
+<tr><td><center>
+<font face="Arial, Helvetica" color="#000000">
+HtmlParser.kt</font>
+</center></td></tr></table>
+<pre><span class="s0">package </span><span class="s1">com</span><span class="s2">.</span><span class="s1">manikandareas</span><span class="s2">.</span><span class="s1">codileap</span><span class="s2">.</span><span class="s1">core</span><span class="s2">.</span><span class="s1">presentation</span><span class="s2">.</span><span class="s1">util</span>
+
+<span class="s1">import androidx</span><span class="s2">.</span><span class="s1">compose</span><span class="s2">.</span><span class="s1">ui</span><span class="s2">.</span><span class="s1">text</span><span class="s2">.</span><span class="s1">style</span><span class="s2">.</span><span class="s1">TextAlign</span>
+<span class="s1">import org</span><span class="s2">.</span><span class="s1">jsoup</span><span class="s2">.</span><span class="s1">Jsoup</span>
+<span class="s1">import org</span><span class="s2">.</span><span class="s1">jsoup</span><span class="s2">.</span><span class="s1">nodes</span><span class="s2">.</span><span class="s1">Element</span>
+
+<span class="s1">sealed </span><span class="s0">class </span><span class="s1">HtmlElement </span><span class="s2">{</span>
+    <span class="s1">data </span><span class="s0">class </span><span class="s1">Text</span><span class="s2">(</span>
+        <span class="s0">val </span><span class="s1">content: String</span><span class="s2">,</span>
+        <span class="s0">val </span><span class="s1">type: TextType </span><span class="s2">= </span><span class="s1">TextType</span><span class="s2">.</span><span class="s1">BODY</span><span class="s2">,</span>
+        <span class="s0">val </span><span class="s1">style: TextStyle </span><span class="s2">= </span><span class="s1">TextStyle</span><span class="s2">()</span>
+    <span class="s2">) </span><span class="s1">: HtmlElement</span><span class="s2">()</span>
+
+    <span class="s1">data </span><span class="s0">class </span><span class="s1">Code</span><span class="s2">(</span>
+        <span class="s0">val </span><span class="s1">content: String</span><span class="s2">,</span>
+        <span class="s0">val </span><span class="s1">language: String? </span><span class="s2">= </span><span class="s0">null</span><span class="s2">,</span>
+        <span class="s0">val </span><span class="s1">isInline: Boolean </span><span class="s2">= </span><span class="s0">false</span>
+    <span class="s2">) </span><span class="s1">: HtmlElement</span><span class="s2">()</span>
+
+    <span class="s1">data </span><span class="s0">class </span><span class="s1">Image</span><span class="s2">(</span>
+        <span class="s0">val </span><span class="s1">url: String</span><span class="s2">,</span>
+        <span class="s0">val </span><span class="s1">alt: String</span><span class="s2">,</span>
+        <span class="s0">val </span><span class="s1">width: Int? </span><span class="s2">= </span><span class="s0">null</span><span class="s2">,</span>
+        <span class="s0">val </span><span class="s1">height: Int? </span><span class="s2">= </span><span class="s0">null</span><span class="s2">,</span>
+        <span class="s0">val </span><span class="s1">caption: String? </span><span class="s2">= </span><span class="s0">null</span>
+    <span class="s2">) </span><span class="s1">: HtmlElement</span><span class="s2">()</span>
+
+    <span class="s1">data </span><span class="s0">class </span><span class="s1">Link</span><span class="s2">(</span>
+        <span class="s0">val </span><span class="s1">text: String</span><span class="s2">,</span>
+        <span class="s0">val </span><span class="s1">url: String</span><span class="s2">,</span>
+        <span class="s0">val </span><span class="s1">isExternal: Boolean </span><span class="s2">= </span><span class="s0">false</span>
+    <span class="s2">) </span><span class="s1">: HtmlElement</span><span class="s2">()</span>
+
+    <span class="s1">data </span><span class="s0">class </span><span class="s1">HtmlList</span><span class="s2">(</span>
+        <span class="s0">val </span><span class="s1">items: List</span><span class="s2">&lt;</span><span class="s1">ListItem</span><span class="s2">&gt;,</span>
+        <span class="s0">val </span><span class="s1">ordered: Boolean </span><span class="s2">= </span><span class="s0">false</span><span class="s2">,</span>
+        <span class="s0">val </span><span class="s1">level: Int </span><span class="s2">= </span><span class="s3">0</span><span class="s2">,</span>
+        <span class="s0">val </span><span class="s1">style: ListStyle? </span><span class="s2">= </span><span class="s0">null</span>
+    <span class="s2">) </span><span class="s1">: HtmlElement</span><span class="s2">()</span>
+
+    <span class="s1">data </span><span class="s0">class </span><span class="s1">Table</span><span class="s2">(</span>
+        <span class="s0">val </span><span class="s1">headers: List</span><span class="s2">&lt;</span><span class="s1">String</span><span class="s2">&gt;,</span>
+        <span class="s0">val </span><span class="s1">rows: List</span><span class="s2">&lt;</span><span class="s1">List</span><span class="s2">&lt;</span><span class="s1">String</span><span class="s2">&gt;&gt;,</span>
+        <span class="s0">val </span><span class="s1">caption: String? </span><span class="s2">= </span><span class="s0">null</span>
+    <span class="s2">) </span><span class="s1">: HtmlElement</span><span class="s2">()</span>
+
+    <span class="s1">data </span><span class="s0">class </span><span class="s1">Alert</span><span class="s2">(</span>
+        <span class="s0">val </span><span class="s1">content: String</span><span class="s2">,</span>
+        <span class="s0">val </span><span class="s1">type: AlertType</span><span class="s2">,</span>
+        <span class="s0">val </span><span class="s1">title: String? </span><span class="s2">= </span><span class="s0">null</span>
+    <span class="s2">) </span><span class="s1">: HtmlElement</span><span class="s2">()</span>
+
+    <span class="s1">data </span><span class="s0">class </span><span class="s1">Divider</span><span class="s2">(</span><span class="s0">val </span><span class="s1">any: Any? </span><span class="s2">= </span><span class="s0">null</span><span class="s2">) </span><span class="s1">: HtmlElement</span><span class="s2">()</span>
+
+    <span class="s1">data </span><span class="s0">class </span><span class="s1">Video</span><span class="s2">(</span>
+        <span class="s0">val </span><span class="s1">url: String</span><span class="s2">,</span>
+        <span class="s0">val </span><span class="s1">thumbnail: String? </span><span class="s2">= </span><span class="s0">null</span><span class="s2">,</span>
+        <span class="s0">val </span><span class="s1">title: String? </span><span class="s2">= </span><span class="s0">null</span>
+    <span class="s2">) </span><span class="s1">: HtmlElement</span><span class="s2">()</span>
+
+    <span class="s1">data </span><span class="s0">class </span><span class="s1">Interactive</span><span class="s2">(</span>
+        <span class="s0">val </span><span class="s1">type: InteractiveType</span><span class="s2">,</span>
+        <span class="s0">val </span><span class="s1">data: Map</span><span class="s2">&lt;</span><span class="s1">String</span><span class="s2">, </span><span class="s1">Any</span><span class="s2">&gt;</span>
+    <span class="s2">) </span><span class="s1">: HtmlElement</span><span class="s2">()</span>
+<span class="s2">}</span>
+
+<span class="s1">data </span><span class="s0">class </span><span class="s1">ListItem</span><span class="s2">(</span>
+    <span class="s0">val </span><span class="s1">content: String</span><span class="s2">,</span>
+    <span class="s0">val </span><span class="s1">subItems: List</span><span class="s2">&lt;</span><span class="s1">ListItem</span><span class="s2">&gt; = </span><span class="s1">emptyList</span><span class="s2">(),</span>
+    <span class="s0">val </span><span class="s1">isChecked: Boolean? </span><span class="s2">= </span><span class="s0">null </span><span class="s4">// untuk checkbox lists</span>
+<span class="s2">)</span>
+
+<span class="s1">data </span><span class="s0">class </span><span class="s1">TextStyle</span><span class="s2">(</span>
+    <span class="s0">val </span><span class="s1">isBold: Boolean </span><span class="s2">= </span><span class="s0">false</span><span class="s2">,</span>
+    <span class="s0">val </span><span class="s1">isItalic: Boolean </span><span class="s2">= </span><span class="s0">false</span><span class="s2">,</span>
+    <span class="s0">val </span><span class="s1">isUnderline: Boolean </span><span class="s2">= </span><span class="s0">false</span><span class="s2">,</span>
+    <span class="s0">val </span><span class="s1">isStrikethrough: Boolean </span><span class="s2">= </span><span class="s0">false</span><span class="s2">,</span>
+    <span class="s0">val </span><span class="s1">textAlign: TextAlign </span><span class="s2">= </span><span class="s1">TextAlign</span><span class="s2">.</span><span class="s1">Start</span><span class="s2">,</span>
+    <span class="s0">val </span><span class="s1">textColor: String? </span><span class="s2">= </span><span class="s0">null</span><span class="s2">,</span>
+    <span class="s0">val </span><span class="s1">backgroundColor: String? </span><span class="s2">= </span><span class="s0">null</span>
+<span class="s2">)</span>
+
+<span class="s1">enum </span><span class="s0">class </span><span class="s1">TextType </span><span class="s2">{</span>
+    <span class="s1">H1</span><span class="s2">, </span><span class="s1">H2</span><span class="s2">, </span><span class="s1">H3</span><span class="s2">, </span><span class="s1">H4</span><span class="s2">, </span><span class="s1">H5</span><span class="s2">, </span><span class="s1">H6</span><span class="s2">, </span><span class="s1">BODY</span><span class="s2">, </span><span class="s1">QUOTE</span><span class="s2">, </span><span class="s1">CAPTION</span><span class="s2">, </span><span class="s1">SUBTITLE</span>
+<span class="s2">}</span>
+
+<span class="s1">enum </span><span class="s0">class </span><span class="s1">TextAlign </span><span class="s2">{</span>
+    <span class="s1">LEFT</span><span class="s2">, </span><span class="s1">CENTER</span><span class="s2">, </span><span class="s1">RIGHT</span><span class="s2">, </span><span class="s1">JUSTIFY</span>
+<span class="s2">}</span>
+
+<span class="s1">enum </span><span class="s0">class </span><span class="s1">AlertType </span><span class="s2">{</span>
+    <span class="s1">INFO</span><span class="s2">, </span><span class="s1">SUCCESS</span><span class="s2">, </span><span class="s1">WARNING</span><span class="s2">, </span><span class="s1">ERROR</span>
+<span class="s2">}</span>
+
+<span class="s1">enum </span><span class="s0">class </span><span class="s1">ListStyle </span><span class="s2">{</span>
+    <span class="s1">BULLET</span><span class="s2">, </span><span class="s1">NUMBER</span><span class="s2">, </span><span class="s1">CHECKBOX</span><span class="s2">, </span><span class="s1">CUSTOM</span>
+<span class="s2">}</span>
+
+<span class="s1">enum </span><span class="s0">class </span><span class="s1">InteractiveType </span><span class="s2">{</span>
+    <span class="s1">QUIZ</span><span class="s2">,</span>
+    <span class="s1">CODE_PLAYGROUND</span><span class="s2">,</span>
+    <span class="s1">FLASHCARD</span><span class="s2">,</span>
+    <span class="s1">DRAG_AND_DROP</span><span class="s2">,</span>
+    <span class="s1">FILL_IN_BLANK</span>
+<span class="s2">}</span>
+
+<span class="s0">class </span><span class="s1">HtmlParser </span><span class="s2">{</span>
+    <span class="s0">fun </span><span class="s1">parseHtml</span><span class="s2">(</span><span class="s1">html: String</span><span class="s2">)</span><span class="s1">: List</span><span class="s2">&lt;</span><span class="s1">HtmlElement</span><span class="s2">&gt; {</span>
+        <span class="s0">val </span><span class="s1">document </span><span class="s2">= </span><span class="s1">Jsoup</span><span class="s2">.</span><span class="s1">parse</span><span class="s2">(</span><span class="s1">html</span><span class="s2">)</span>
+        <span class="s0">return </span><span class="s1">document</span><span class="s2">.</span><span class="s1">body</span><span class="s2">().</span><span class="s1">children</span><span class="s2">().</span><span class="s1">map </span><span class="s2">{ </span><span class="s1">parseElement</span><span class="s2">(</span><span class="s1">it</span><span class="s2">) }.</span><span class="s1">filterNotNull</span><span class="s2">()</span>
+    <span class="s2">}</span>
+
+    <span class="s1">private </span><span class="s0">fun </span><span class="s1">parseElement</span><span class="s2">(</span><span class="s1">element: Element</span><span class="s2">)</span><span class="s1">: HtmlElement? </span><span class="s2">{</span>
+        <span class="s0">return when </span><span class="s2">(</span><span class="s1">element</span><span class="s2">.</span><span class="s1">tagName</span><span class="s2">().</span><span class="s1">toLowerCase</span><span class="s2">()) {</span>
+            <span class="s4">// Headings</span>
+            <span class="s5">&quot;h1&quot; </span><span class="s2">-&gt; </span><span class="s1">HtmlElement</span><span class="s2">.</span><span class="s1">Text</span><span class="s2">(</span><span class="s1">element</span><span class="s2">.</span><span class="s1">text</span><span class="s2">(), </span><span class="s1">TextType</span><span class="s2">.</span><span class="s1">H1</span><span class="s2">)</span>
+            <span class="s5">&quot;h2&quot; </span><span class="s2">-&gt; </span><span class="s1">HtmlElement</span><span class="s2">.</span><span class="s1">Text</span><span class="s2">(</span><span class="s1">element</span><span class="s2">.</span><span class="s1">text</span><span class="s2">(), </span><span class="s1">TextType</span><span class="s2">.</span><span class="s1">H2</span><span class="s2">)</span>
+            <span class="s5">&quot;h3&quot; </span><span class="s2">-&gt; </span><span class="s1">HtmlElement</span><span class="s2">.</span><span class="s1">Text</span><span class="s2">(</span><span class="s1">element</span><span class="s2">.</span><span class="s1">text</span><span class="s2">(), </span><span class="s1">TextType</span><span class="s2">.</span><span class="s1">H3</span><span class="s2">)</span>
+            <span class="s5">&quot;h4&quot; </span><span class="s2">-&gt; </span><span class="s1">HtmlElement</span><span class="s2">.</span><span class="s1">Text</span><span class="s2">(</span><span class="s1">element</span><span class="s2">.</span><span class="s1">text</span><span class="s2">(), </span><span class="s1">TextType</span><span class="s2">.</span><span class="s1">H4</span><span class="s2">)</span>
+            <span class="s5">&quot;h5&quot; </span><span class="s2">-&gt; </span><span class="s1">HtmlElement</span><span class="s2">.</span><span class="s1">Text</span><span class="s2">(</span><span class="s1">element</span><span class="s2">.</span><span class="s1">text</span><span class="s2">(), </span><span class="s1">TextType</span><span class="s2">.</span><span class="s1">H5</span><span class="s2">)</span>
+            <span class="s5">&quot;h6&quot; </span><span class="s2">-&gt; </span><span class="s1">HtmlElement</span><span class="s2">.</span><span class="s1">Text</span><span class="s2">(</span><span class="s1">element</span><span class="s2">.</span><span class="s1">text</span><span class="s2">(), </span><span class="s1">TextType</span><span class="s2">.</span><span class="s1">H6</span><span class="s2">)</span>
+
+            <span class="s4">// Paragraphs and text formatting</span>
+            <span class="s5">&quot;p&quot; </span><span class="s2">-&gt; </span><span class="s1">parseTextWithStyles</span><span class="s2">(</span><span class="s1">element</span><span class="s2">)</span>
+            <span class="s5">&quot;strong&quot;</span><span class="s2">, </span><span class="s5">&quot;b&quot; </span><span class="s2">-&gt; </span><span class="s1">parseTextWithStyles</span><span class="s2">(</span><span class="s1">element</span><span class="s2">, </span><span class="s1">TextStyle</span><span class="s2">(</span><span class="s1">isBold </span><span class="s2">= </span><span class="s0">true</span><span class="s2">))</span>
+            <span class="s5">&quot;em&quot;</span><span class="s2">, </span><span class="s5">&quot;i&quot; </span><span class="s2">-&gt; </span><span class="s1">parseTextWithStyles</span><span class="s2">(</span><span class="s1">element</span><span class="s2">, </span><span class="s1">TextStyle</span><span class="s2">(</span><span class="s1">isItalic </span><span class="s2">= </span><span class="s0">true</span><span class="s2">))</span>
+            <span class="s5">&quot;u&quot; </span><span class="s2">-&gt; </span><span class="s1">parseTextWithStyles</span><span class="s2">(</span><span class="s1">element</span><span class="s2">, </span><span class="s1">TextStyle</span><span class="s2">(</span><span class="s1">isUnderline </span><span class="s2">= </span><span class="s0">true</span><span class="s2">))</span>
+            <span class="s5">&quot;strike&quot;</span><span class="s2">, </span><span class="s5">&quot;s&quot;</span><span class="s2">, </span><span class="s5">&quot;del&quot; </span><span class="s2">-&gt; </span><span class="s1">parseTextWithStyles</span><span class="s2">(</span><span class="s1">element</span><span class="s2">, </span><span class="s1">TextStyle</span><span class="s2">(</span><span class="s1">isStrikethrough </span><span class="s2">= </span><span class="s0">true</span><span class="s2">))</span>
+
+            <span class="s4">// Code blocks</span>
+            <span class="s5">&quot;pre&quot; </span><span class="s2">-&gt; {</span>
+                <span class="s0">val </span><span class="s1">code </span><span class="s2">= </span><span class="s1">element</span><span class="s2">.</span><span class="s1">getElementsByTag</span><span class="s2">(</span><span class="s5">&quot;code&quot;</span><span class="s2">).</span><span class="s1">firstOrNull</span><span class="s2">()</span>
+                <span class="s1">HtmlElement</span><span class="s2">.</span><span class="s1">Code</span><span class="s2">(</span>
+                    <span class="s1">content </span><span class="s2">= </span><span class="s1">code?</span><span class="s2">.</span><span class="s1">text</span><span class="s2">() </span><span class="s1">?: element</span><span class="s2">.</span><span class="s1">text</span><span class="s2">(),</span>
+                    <span class="s1">language </span><span class="s2">= </span><span class="s1">code?</span><span class="s2">.</span><span class="s1">attr</span><span class="s2">(</span><span class="s5">&quot;class&quot;</span><span class="s2">)</span><span class="s1">?</span><span class="s2">.</span><span class="s1">removePrefix</span><span class="s2">(</span><span class="s5">&quot;language-&quot;</span><span class="s2">),</span>
+                    <span class="s1">isInline </span><span class="s2">= </span><span class="s0">false</span>
+                <span class="s2">)</span>
+            <span class="s2">}</span>
+
+            <span class="s5">&quot;code&quot; </span><span class="s2">-&gt; </span><span class="s1">HtmlElement</span><span class="s2">.</span><span class="s1">Code</span><span class="s2">(</span>
+                <span class="s1">content </span><span class="s2">= </span><span class="s1">element</span><span class="s2">.</span><span class="s1">text</span><span class="s2">(),</span>
+                <span class="s1">isInline </span><span class="s2">= </span><span class="s0">true</span>
+            <span class="s2">)</span>
+
+            <span class="s4">// Lists</span>
+            <span class="s5">&quot;ul&quot;</span><span class="s2">, </span><span class="s5">&quot;ol&quot; </span><span class="s2">-&gt; </span><span class="s1">parseList</span><span class="s2">(</span><span class="s1">element</span><span class="s2">)</span>
+
+            <span class="s4">// Tables</span>
+            <span class="s5">&quot;table&quot; </span><span class="s2">-&gt; </span><span class="s1">parseTable</span><span class="s2">(</span><span class="s1">element</span><span class="s2">)</span>
+
+            <span class="s4">// Media</span>
+            <span class="s5">&quot;img&quot; </span><span class="s2">-&gt; </span><span class="s1">HtmlElement</span><span class="s2">.</span><span class="s1">Image</span><span class="s2">(</span>
+                <span class="s1">url </span><span class="s2">= </span><span class="s1">element</span><span class="s2">.</span><span class="s1">attr</span><span class="s2">(</span><span class="s5">&quot;src&quot;</span><span class="s2">),</span>
+                <span class="s1">alt </span><span class="s2">= </span><span class="s1">element</span><span class="s2">.</span><span class="s1">attr</span><span class="s2">(</span><span class="s5">&quot;alt&quot;</span><span class="s2">),</span>
+                <span class="s1">width </span><span class="s2">= </span><span class="s1">element</span><span class="s2">.</span><span class="s1">attr</span><span class="s2">(</span><span class="s5">&quot;width&quot;</span><span class="s2">).</span><span class="s1">toIntOrNull</span><span class="s2">(),</span>
+                <span class="s1">height </span><span class="s2">= </span><span class="s1">element</span><span class="s2">.</span><span class="s1">attr</span><span class="s2">(</span><span class="s5">&quot;height&quot;</span><span class="s2">).</span><span class="s1">toIntOrNull</span><span class="s2">(),</span>
+                <span class="s1">caption </span><span class="s2">= </span><span class="s1">element</span><span class="s2">.</span><span class="s1">parent</span><span class="s2">()</span><span class="s1">?</span><span class="s2">.</span><span class="s1">getElementsByTag</span><span class="s2">(</span><span class="s5">&quot;figcaption&quot;</span><span class="s2">)</span><span class="s1">?</span><span class="s2">.</span><span class="s1">text</span><span class="s2">()</span>
+            <span class="s2">)</span>
+
+            <span class="s5">&quot;video&quot; </span><span class="s2">-&gt; </span><span class="s1">HtmlElement</span><span class="s2">.</span><span class="s1">Video</span><span class="s2">(</span>
+                <span class="s1">url </span><span class="s2">= </span><span class="s1">element</span><span class="s2">.</span><span class="s1">attr</span><span class="s2">(</span><span class="s5">&quot;src&quot;</span><span class="s2">),</span>
+                <span class="s1">thumbnail </span><span class="s2">= </span><span class="s1">element</span><span class="s2">.</span><span class="s1">attr</span><span class="s2">(</span><span class="s5">&quot;poster&quot;</span><span class="s2">),</span>
+                <span class="s1">title </span><span class="s2">= </span><span class="s1">element</span><span class="s2">.</span><span class="s1">attr</span><span class="s2">(</span><span class="s5">&quot;title&quot;</span><span class="s2">)</span>
+            <span class="s2">)</span>
+
+            <span class="s4">// Links</span>
+            <span class="s5">&quot;a&quot; </span><span class="s2">-&gt; </span><span class="s1">HtmlElement</span><span class="s2">.</span><span class="s1">Link</span><span class="s2">(</span>
+                <span class="s1">text </span><span class="s2">= </span><span class="s1">element</span><span class="s2">.</span><span class="s1">text</span><span class="s2">(),</span>
+                <span class="s1">url </span><span class="s2">= </span><span class="s1">element</span><span class="s2">.</span><span class="s1">attr</span><span class="s2">(</span><span class="s5">&quot;href&quot;</span><span class="s2">),</span>
+                <span class="s1">isExternal </span><span class="s2">= </span><span class="s1">element</span><span class="s2">.</span><span class="s1">attr</span><span class="s2">(</span><span class="s5">&quot;href&quot;</span><span class="s2">).</span><span class="s1">startsWith</span><span class="s2">(</span><span class="s5">&quot;http&quot;</span><span class="s2">)</span>
+            <span class="s2">)</span>
+
+            <span class="s4">// Dividers</span>
+            <span class="s5">&quot;hr&quot; </span><span class="s2">-&gt; </span><span class="s1">HtmlElement</span><span class="s2">.</span><span class="s1">Divider</span><span class="s2">()</span>
+
+            <span class="s4">// Custom elements</span>
+            <span class="s5">&quot;div&quot; </span><span class="s2">-&gt; </span><span class="s0">when </span><span class="s2">{</span>
+                <span class="s1">element</span><span class="s2">.</span><span class="s1">hasClass</span><span class="s2">(</span><span class="s5">&quot;alert&quot;</span><span class="s2">) -&gt; </span><span class="s1">parseAlert</span><span class="s2">(</span><span class="s1">element</span><span class="s2">)</span>
+                <span class="s1">element</span><span class="s2">.</span><span class="s1">hasClass</span><span class="s2">(</span><span class="s5">&quot;interactive&quot;</span><span class="s2">) -&gt; </span><span class="s1">parseInteractive</span><span class="s2">(</span><span class="s1">element</span><span class="s2">)</span>
+                <span class="s0">else </span><span class="s2">-&gt; </span><span class="s1">parseTextWithStyles</span><span class="s2">(</span><span class="s1">element</span><span class="s2">)</span>
+            <span class="s2">}</span>
+
+            <span class="s4">// Blockquotes</span>
+            <span class="s5">&quot;blockquote&quot; </span><span class="s2">-&gt; </span><span class="s1">HtmlElement</span><span class="s2">.</span><span class="s1">Text</span><span class="s2">(</span>
+                <span class="s1">content </span><span class="s2">= </span><span class="s1">element</span><span class="s2">.</span><span class="s1">text</span><span class="s2">(),</span>
+                <span class="s1">type </span><span class="s2">= </span><span class="s1">TextType</span><span class="s2">.</span><span class="s1">QUOTE</span><span class="s2">,</span>
+                <span class="s1">style </span><span class="s2">= </span><span class="s1">TextStyle</span><span class="s2">(</span><span class="s1">isItalic </span><span class="s2">= </span><span class="s0">true</span><span class="s2">)</span>
+            <span class="s2">)</span>
+
+            <span class="s0">else </span><span class="s2">-&gt; </span><span class="s0">null</span>
+        <span class="s2">}</span>
+    <span class="s2">}</span>
+
+    <span class="s1">private </span><span class="s0">fun </span><span class="s1">parseTextWithStyles</span><span class="s2">(</span>
+        <span class="s1">element: Element</span><span class="s2">,</span>
+        <span class="s1">baseStyle: TextStyle </span><span class="s2">= </span><span class="s1">TextStyle</span><span class="s2">()</span>
+    <span class="s2">)</span><span class="s1">: HtmlElement</span><span class="s2">.</span><span class="s1">Text </span><span class="s2">{</span>
+        <span class="s0">val </span><span class="s1">style </span><span class="s2">= </span><span class="s1">baseStyle</span><span class="s2">.</span><span class="s1">copy</span><span class="s2">(</span>
+            <span class="s1">textAlign </span><span class="s2">= </span><span class="s0">when </span><span class="s2">{</span>
+                <span class="s1">element</span><span class="s2">.</span><span class="s1">hasClass</span><span class="s2">(</span><span class="s5">&quot;text-center&quot;</span><span class="s2">) -&gt; </span><span class="s1">TextAlign</span><span class="s2">.</span><span class="s1">Center</span>
+                <span class="s1">element</span><span class="s2">.</span><span class="s1">hasClass</span><span class="s2">(</span><span class="s5">&quot;text-right&quot;</span><span class="s2">) -&gt; </span><span class="s1">TextAlign</span><span class="s2">.</span><span class="s1">End</span>
+                <span class="s1">element</span><span class="s2">.</span><span class="s1">hasClass</span><span class="s2">(</span><span class="s5">&quot;text-justify&quot;</span><span class="s2">) -&gt; </span><span class="s1">TextAlign</span><span class="s2">.</span><span class="s1">Justify</span>
+                <span class="s0">else </span><span class="s2">-&gt; </span><span class="s1">TextAlign</span><span class="s2">.</span><span class="s1">Start</span>
+            <span class="s2">},</span>
+            <span class="s1">textColor </span><span class="s2">= </span><span class="s1">element</span><span class="s2">.</span><span class="s1">attr</span><span class="s2">(</span><span class="s5">&quot;color&quot;</span><span class="s2">).</span><span class="s1">takeIf </span><span class="s2">{ </span><span class="s1">it</span><span class="s2">.</span><span class="s1">isNotEmpty</span><span class="s2">() },</span>
+            <span class="s1">backgroundColor </span><span class="s2">= </span><span class="s1">element</span><span class="s2">.</span><span class="s1">attr</span><span class="s2">(</span><span class="s5">&quot;background-color&quot;</span><span class="s2">).</span><span class="s1">takeIf </span><span class="s2">{ </span><span class="s1">it</span><span class="s2">.</span><span class="s1">isNotEmpty</span><span class="s2">() }</span>
+        <span class="s2">)</span>
+
+        <span class="s0">return </span><span class="s1">HtmlElement</span><span class="s2">.</span><span class="s1">Text</span><span class="s2">(</span>
+            <span class="s1">content </span><span class="s2">= </span><span class="s1">element</span><span class="s2">.</span><span class="s1">text</span><span class="s2">(),</span>
+            <span class="s1">type </span><span class="s2">= </span><span class="s1">TextType</span><span class="s2">.</span><span class="s1">BODY</span><span class="s2">,</span>
+            <span class="s1">style </span><span class="s2">= </span><span class="s1">style</span>
+        <span class="s2">)</span>
+    <span class="s2">}</span>
+
+    <span class="s1">private </span><span class="s0">fun </span><span class="s1">parseList</span><span class="s2">(</span><span class="s1">element: Element</span><span class="s2">)</span><span class="s1">: HtmlElement</span><span class="s2">.</span><span class="s1">HtmlList </span><span class="s2">{</span>
+        <span class="s0">val </span><span class="s1">items </span><span class="s2">= </span><span class="s1">element</span><span class="s2">.</span><span class="s1">children</span><span class="s2">().</span><span class="s1">map </span><span class="s2">{ </span><span class="s1">listItem </span><span class="s2">-&gt;</span>
+            <span class="s1">ListItem</span><span class="s2">(</span>
+                <span class="s1">content </span><span class="s2">= </span><span class="s1">listItem</span><span class="s2">.</span><span class="s1">ownText</span><span class="s2">(),</span>
+                <span class="s1">subItems </span><span class="s2">= </span><span class="s1">listItem</span><span class="s2">.</span><span class="s1">getElementsByTag</span><span class="s2">(</span><span class="s5">&quot;ul&quot;</span><span class="s2">)</span>
+                    <span class="s2">.</span><span class="s1">firstOrNull</span><span class="s2">()</span>
+                    <span class="s1">?</span><span class="s2">.</span><span class="s1">children</span><span class="s2">()</span>
+                    <span class="s1">?</span><span class="s2">.</span><span class="s1">map </span><span class="s2">{ </span><span class="s1">ListItem</span><span class="s2">(</span><span class="s1">it</span><span class="s2">.</span><span class="s1">text</span><span class="s2">()) }</span>
+                    <span class="s1">?: emptyList</span><span class="s2">(),</span>
+                <span class="s1">isChecked </span><span class="s2">= </span><span class="s0">when </span><span class="s2">{</span>
+                    <span class="s1">listItem</span><span class="s2">.</span><span class="s1">hasClass</span><span class="s2">(</span><span class="s5">&quot;checked&quot;</span><span class="s2">) -&gt; </span><span class="s0">true</span>
+                    <span class="s1">listItem</span><span class="s2">.</span><span class="s1">hasClass</span><span class="s2">(</span><span class="s5">&quot;unchecked&quot;</span><span class="s2">) -&gt; </span><span class="s0">false</span>
+                    <span class="s0">else </span><span class="s2">-&gt; </span><span class="s0">null</span>
+                <span class="s2">}</span>
+            <span class="s2">)</span>
+        <span class="s2">}</span>
+
+        <span class="s0">return </span><span class="s1">HtmlElement</span><span class="s2">.</span><span class="s1">HtmlList</span><span class="s2">(</span>
+            <span class="s1">items </span><span class="s2">= </span><span class="s1">items</span><span class="s2">,</span>
+            <span class="s1">ordered </span><span class="s2">= </span><span class="s1">element</span><span class="s2">.</span><span class="s1">tagName</span><span class="s2">() == </span><span class="s5">&quot;ol&quot;</span><span class="s2">,</span>
+            <span class="s1">style </span><span class="s2">= </span><span class="s0">when </span><span class="s2">{</span>
+                <span class="s1">element</span><span class="s2">.</span><span class="s1">hasClass</span><span class="s2">(</span><span class="s5">&quot;checklist&quot;</span><span class="s2">) -&gt; </span><span class="s1">ListStyle</span><span class="s2">.</span><span class="s1">CHECKBOX</span>
+                <span class="s1">element</span><span class="s2">.</span><span class="s1">hasClass</span><span class="s2">(</span><span class="s5">&quot;custom&quot;</span><span class="s2">) -&gt; </span><span class="s1">ListStyle</span><span class="s2">.</span><span class="s1">CUSTOM</span>
+                <span class="s0">else </span><span class="s2">-&gt; </span><span class="s0">if </span><span class="s2">(</span><span class="s1">element</span><span class="s2">.</span><span class="s1">tagName</span><span class="s2">() == </span><span class="s5">&quot;ol&quot;</span><span class="s2">) </span><span class="s1">ListStyle</span><span class="s2">.</span><span class="s1">NUMBER </span><span class="s0">else </span><span class="s1">ListStyle</span><span class="s2">.</span><span class="s1">BULLET</span>
+            <span class="s2">}</span>
+        <span class="s2">)</span>
+    <span class="s2">}</span>
+
+    <span class="s1">private </span><span class="s0">fun </span><span class="s1">parseTable</span><span class="s2">(</span><span class="s1">element: Element</span><span class="s2">)</span><span class="s1">: HtmlElement</span><span class="s2">.</span><span class="s1">Table </span><span class="s2">{</span>
+        <span class="s0">val </span><span class="s1">headers </span><span class="s2">= </span><span class="s1">element</span><span class="s2">.</span><span class="s1">getElementsByTag</span><span class="s2">(</span><span class="s5">&quot;th&quot;</span><span class="s2">).</span><span class="s1">map </span><span class="s2">{ </span><span class="s1">it</span><span class="s2">.</span><span class="s1">text</span><span class="s2">() }</span>
+        <span class="s0">val </span><span class="s1">rows </span><span class="s2">= </span><span class="s1">element</span><span class="s2">.</span><span class="s1">getElementsByTag</span><span class="s2">(</span><span class="s5">&quot;tr&quot;</span><span class="s2">)</span>
+            <span class="s2">.</span><span class="s1">map </span><span class="s2">{ </span><span class="s1">row </span><span class="s2">-&gt;</span>
+                <span class="s1">row</span><span class="s2">.</span><span class="s1">getElementsByTag</span><span class="s2">(</span><span class="s5">&quot;td&quot;</span><span class="s2">).</span><span class="s1">map </span><span class="s2">{ </span><span class="s1">it</span><span class="s2">.</span><span class="s1">text</span><span class="s2">() }</span>
+            <span class="s2">}</span>
+            <span class="s2">.</span><span class="s1">filter </span><span class="s2">{ </span><span class="s1">it</span><span class="s2">.</span><span class="s1">isNotEmpty</span><span class="s2">() }</span>
+
+        <span class="s0">return </span><span class="s1">HtmlElement</span><span class="s2">.</span><span class="s1">Table</span><span class="s2">(</span>
+            <span class="s1">headers </span><span class="s2">= </span><span class="s1">headers</span><span class="s2">,</span>
+            <span class="s1">rows </span><span class="s2">= </span><span class="s1">rows</span><span class="s2">,</span>
+            <span class="s1">caption </span><span class="s2">= </span><span class="s1">element</span><span class="s2">.</span><span class="s1">getElementsByTag</span><span class="s2">(</span><span class="s5">&quot;caption&quot;</span><span class="s2">).</span><span class="s1">firstOrNull</span><span class="s2">()</span><span class="s1">?</span><span class="s2">.</span><span class="s1">text</span><span class="s2">()</span>
+        <span class="s2">)</span>
+    <span class="s2">}</span>
+
+    <span class="s1">private </span><span class="s0">fun </span><span class="s1">parseAlert</span><span class="s2">(</span><span class="s1">element: Element</span><span class="s2">)</span><span class="s1">: HtmlElement</span><span class="s2">.</span><span class="s1">Alert </span><span class="s2">{</span>
+        <span class="s0">val </span><span class="s1">type </span><span class="s2">= </span><span class="s0">when </span><span class="s2">{</span>
+            <span class="s1">element</span><span class="s2">.</span><span class="s1">hasClass</span><span class="s2">(</span><span class="s5">&quot;alert-info&quot;</span><span class="s2">) -&gt; </span><span class="s1">AlertType</span><span class="s2">.</span><span class="s1">INFO</span>
+            <span class="s1">element</span><span class="s2">.</span><span class="s1">hasClass</span><span class="s2">(</span><span class="s5">&quot;alert-success&quot;</span><span class="s2">) -&gt; </span><span class="s1">AlertType</span><span class="s2">.</span><span class="s1">SUCCESS</span>
+            <span class="s1">element</span><span class="s2">.</span><span class="s1">hasClass</span><span class="s2">(</span><span class="s5">&quot;alert-warning&quot;</span><span class="s2">) -&gt; </span><span class="s1">AlertType</span><span class="s2">.</span><span class="s1">WARNING</span>
+            <span class="s1">element</span><span class="s2">.</span><span class="s1">hasClass</span><span class="s2">(</span><span class="s5">&quot;alert-error&quot;</span><span class="s2">) -&gt; </span><span class="s1">AlertType</span><span class="s2">.</span><span class="s1">ERROR</span>
+            <span class="s0">else </span><span class="s2">-&gt; </span><span class="s1">AlertType</span><span class="s2">.</span><span class="s1">INFO</span>
+        <span class="s2">}</span>
+
+        <span class="s0">return </span><span class="s1">HtmlElement</span><span class="s2">.</span><span class="s1">Alert</span><span class="s2">(</span>
+            <span class="s1">content </span><span class="s2">= </span><span class="s1">element</span><span class="s2">.</span><span class="s1">text</span><span class="s2">(),</span>
+            <span class="s1">type </span><span class="s2">= </span><span class="s1">type</span><span class="s2">,</span>
+            <span class="s1">title </span><span class="s2">= </span><span class="s1">element</span><span class="s2">.</span><span class="s1">getElementsByClass</span><span class="s2">(</span><span class="s5">&quot;alert-title&quot;</span><span class="s2">).</span><span class="s1">firstOrNull</span><span class="s2">()</span><span class="s1">?</span><span class="s2">.</span><span class="s1">text</span><span class="s2">()</span>
+        <span class="s2">)</span>
+    <span class="s2">}</span>
+
+    <span class="s1">private </span><span class="s0">fun </span><span class="s1">parseInteractive</span><span class="s2">(</span><span class="s1">element: Element</span><span class="s2">)</span><span class="s1">: HtmlElement</span><span class="s2">.</span><span class="s1">Interactive </span><span class="s2">{</span>
+        <span class="s0">val </span><span class="s1">type </span><span class="s2">= </span><span class="s0">when </span><span class="s2">{</span>
+            <span class="s1">element</span><span class="s2">.</span><span class="s1">hasClass</span><span class="s2">(</span><span class="s5">&quot;quiz&quot;</span><span class="s2">) -&gt; </span><span class="s1">InteractiveType</span><span class="s2">.</span><span class="s1">QUIZ</span>
+            <span class="s1">element</span><span class="s2">.</span><span class="s1">hasClass</span><span class="s2">(</span><span class="s5">&quot;code-playground&quot;</span><span class="s2">) -&gt; </span><span class="s1">InteractiveType</span><span class="s2">.</span><span class="s1">CODE_PLAYGROUND</span>
+            <span class="s1">element</span><span class="s2">.</span><span class="s1">hasClass</span><span class="s2">(</span><span class="s5">&quot;flashcard&quot;</span><span class="s2">) -&gt; </span><span class="s1">InteractiveType</span><span class="s2">.</span><span class="s1">FLASHCARD</span>
+            <span class="s1">element</span><span class="s2">.</span><span class="s1">hasClass</span><span class="s2">(</span><span class="s5">&quot;drag-drop&quot;</span><span class="s2">) -&gt; </span><span class="s1">InteractiveType</span><span class="s2">.</span><span class="s1">DRAG_AND_DROP</span>
+            <span class="s1">element</span><span class="s2">.</span><span class="s1">hasClass</span><span class="s2">(</span><span class="s5">&quot;fill-blank&quot;</span><span class="s2">) -&gt; </span><span class="s1">InteractiveType</span><span class="s2">.</span><span class="s1">FILL_IN_BLANK</span>
+            <span class="s0">else </span><span class="s2">-&gt; </span><span class="s1">InteractiveType</span><span class="s2">.</span><span class="s1">QUIZ</span>
+        <span class="s2">}</span>
+
+        <span class="s0">val </span><span class="s1">data </span><span class="s2">= </span><span class="s1">mutableMapOf</span><span class="s2">&lt;</span><span class="s1">String</span><span class="s2">, </span><span class="s1">Any</span><span class="s2">&gt;()</span>
+        <span class="s1">element</span><span class="s2">.</span><span class="s1">attributes</span><span class="s2">().</span><span class="s1">forEach </span><span class="s2">{ </span><span class="s1">attr </span><span class="s2">-&gt;</span>
+            <span class="s1">data</span><span class="s2">[</span><span class="s1">attr</span><span class="s2">.</span><span class="s1">key</span><span class="s2">] = </span><span class="s1">attr</span><span class="s2">.</span><span class="s1">value</span>
+        <span class="s2">}</span>
+
+        <span class="s0">return </span><span class="s1">HtmlElement</span><span class="s2">.</span><span class="s1">Interactive</span><span class="s2">(</span><span class="s1">type</span><span class="s2">, </span><span class="s1">data</span><span class="s2">)</span>
+    <span class="s2">}</span>
+<span class="s2">}</span></pre>
+</body>
+</html>
