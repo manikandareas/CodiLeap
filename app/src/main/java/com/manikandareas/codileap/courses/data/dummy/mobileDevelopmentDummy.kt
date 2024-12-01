@@ -2616,7 +2616,23 @@ val mobileDevelopmentDummy = listOf(
                                 moduleId = 7,
                                 name = "What is an Activity?",
                                 orderIndex = 1,
-                                content = "Core concepts of Android activities",
+                                content = "<h1>1. What is an Activity in Android?</h1>\n" +
+                                        "<p>In Android, an Activity represents a single screen or UI (User Interface) that the user can interact with. Each Activity is an entry point for interacting with the user and usually represents a specific screen of the app. For example, the <strong>MainActivity</strong> could represent the app's home screen, while other activities may represent login screens, settings, or a photo gallery.</p>\n" +
+                                        "\n" +
+                                        "<p>An Activity is primarily concerned with the presentation of content and managing the user interface (UI). It communicates with other components, such as <strong>Fragments</strong>, <strong>Services</strong>, or <strong>Broadcast Receivers</strong>, to implement the app's functionality.</p>\n" +
+                                        "\n" +
+                                        "<h1>2. Core Concepts of Android Activities</h1>\n" +
+                                        "<h2>Activity Lifecycle:</h2>\n" +
+                                        "<p>The Activity Lifecycle governs how an activity transitions between different states. As the user interacts with the app, or the system needs to manage resources (like when switching between apps), the activity goes through various stages, from creation to destruction. Understanding this lifecycle is essential to manage app behavior efficiently.</p>\n" +
+                                        "\n" +
+                                        "<h2>Single Activity:</h2>\n" +
+                                        "<p>Most Android apps are built with a single activity that contains different fragments or screens. However, large apps might have multiple activities to handle different parts of the app. Each activity operates independently but can communicate with other activities via <strong>Intents</strong>.</p>\n" +
+                                        "\n" +
+                                        "<h2>Intents:</h2>\n" +
+                                        "<p><strong>Intents</strong> are used to launch activities and communicate between components (like opening a new activity from an existing one, passing data, etc.). Intents can also be used to invoke other app components, such as services or broadcast receivers.</p>\n" +
+                                        "\n" +
+                                        "<h2>UI Management:</h2>\n" +
+                                        "<p>Activities are responsible for managing and displaying the app's UI. The UI components are typically defined in XML layout files (e.g., <code>activity_main.xml</code>) and are inflated in the <code>onCreate()</code> method using <code>setContentView()</code>.</p>\n",
                                 createdAt = "2024-01-01",
                                 updatedAt = "2024-01-02"
                             ),
@@ -2625,7 +2641,79 @@ val mobileDevelopmentDummy = listOf(
                                 moduleId = 7,
                                 name = "Lifecycle Methods",
                                 orderIndex = 2,
-                                content = "Exploring activity lifecycle stages",
+                                content = "<h1>1. Introduction to Activity Lifecycle Methods</h1>\n" +
+                                        "<p>In Android, an Activity goes through various states during its lifespan, and these states are controlled by specific lifecycle methods. Each method in the lifecycle is called when the activity reaches a particular stage, allowing the developer to manage resources, data, and UI updates as the activity transitions from one state to another.</p>\n" +
+                                        "\n" +
+                                        "<p>Understanding how and when to use these lifecycle methods is critical to creating smooth and efficient Android applications.</p>\n" +
+                                        "\n" +
+                                        "<h1>2. Activity Lifecycle Stages</h1>\n" +
+                                        "<p>The Activity lifecycle consists of the following stages: Creation, Running, Paused, Stopped, and Destroyed. Each stage corresponds to a group of methods that Android calls at specific points during the activity’s life.</p>\n" +
+                                        "\n" +
+                                        "<h2>Here’s a breakdown of the key lifecycle methods:</h2>\n" +
+                                        "\n" +
+                                        "<h3>2.1. onCreate()</h3>\n" +
+                                        "<p><strong>Purpose:</strong> Called when the activity is first created.</p>\n" +
+                                        "<p><strong>Action:</strong> Use this method to initialize the activity, set up the UI, and perform any one-time setup tasks.</p>\n" +
+                                        "<p><strong>When to Use:</strong> Set up your UI components, initialize variables, and perform actions that should only happen once.</p>\n" +
+                                        "<pre><code>override fun onCreate(savedInstanceState: Bundle?) {\n" +
+                                        "    super.onCreate(savedInstanceState)\n" +
+                                        "    setContentView(R.layout.activity_main)\n" +
+                                        "    // Initialize UI components and data\n" +
+                                        "}</code></pre>\n" +
+                                        "\n" +
+                                        "<h3>2.2. onStart()</h3>\n" +
+                                        "<p><strong>Purpose:</strong> Called when the activity is becoming visible to the user. It is called right after onCreate() and whenever the activity is brought back to the foreground.</p>\n" +
+                                        "<p><strong>Action:</strong> The activity is now visible but not yet interactive. You can use this method to initialize animations, update UI elements, or start services.</p>\n" +
+                                        "<p><strong>When to Use:</strong> Start tasks that should begin when the activity is visible but not yet in the foreground.</p>\n" +
+                                        "<pre><code>override fun onStart() {\n" +
+                                        "    super.onStart()\n" +
+                                        "    // Perform tasks that need to start as the activity becomes visible\n" +
+                                        "}</code></pre>\n" +
+                                        "\n" +
+                                        "<h3>2.3. onResume()</h3>\n" +
+                                        "<p><strong>Purpose:</strong> Called when the activity is in the foreground and the user can interact with it.</p>\n" +
+                                        "<p><strong>Action:</strong> This is where you make the activity interactive. It’s where you should start tasks that require interaction with the user, such as animations, data updates, or registering event listeners.</p>\n" +
+                                        "<p><strong>When to Use:</strong> Resume ongoing tasks, start animations, and register listeners for UI elements like buttons.</p>\n" +
+                                        "<pre><code>override fun onResume() {\n" +
+                                        "    super.onResume()\n" +
+                                        "    // Activity is now interactive\n" +
+                                        "}</code></pre>\n" +
+                                        "\n" +
+                                        "<h3>2.4. onPause()</h3>\n" +
+                                        "<p><strong>Purpose:</strong> Called when the system is about to resume another activity, or when the current activity is no longer in the foreground.</p>\n" +
+                                        "<p><strong>Action:</strong> Use this method to pause tasks that shouldn’t continue while the activity is not in focus, such as stopping animations, saving user input, or pausing a video.</p>\n" +
+                                        "<p><strong>When to Use:</strong> Save data, stop ongoing tasks (such as video playback), or release resources that are not needed while the activity is paused.</p>\n" +
+                                        "<pre><code>override fun onPause() {\n" +
+                                        "    super.onPause()\n" +
+                                        "    // Pause tasks that should not run while the activity is in the background\n" +
+                                        "}</code></pre>\n" +
+                                        "\n" +
+                                        "<h3>2.5. onStop()</h3>\n" +
+                                        "<p><strong>Purpose:</strong> Called when the activity is no longer visible to the user.</p>\n" +
+                                        "<p><strong>Action:</strong> This method is used to release resources and save data that should be persisted across activity sessions. If you need to stop long-running tasks or close connections, this is the place to do it.</p>\n" +
+                                        "<p><strong>When to Use:</strong> Free resources, stop background tasks, and save application data.</p>\n" +
+                                        "<pre><code>override fun onStop() {\n" +
+                                        "    super.onStop()\n" +
+                                        "    // Release resources or save data before the activity is stopped\n" +
+                                        "}</code></pre>\n" +
+                                        "\n" +
+                                        "<h3>2.6. onRestart()</h3>\n" +
+                                        "<p><strong>Purpose:</strong> Called when the activity is coming back to the foreground after being stopped.</p>\n" +
+                                        "<p><strong>Action:</strong> This is the point where you reinitialize resources, update the UI, or restore any data that may have been paused.</p>\n" +
+                                        "<p><strong>When to Use:</strong> Reinitialize UI elements, restore data that might have been paused.</p>\n" +
+                                        "<pre><code>override fun onRestart() {\n" +
+                                        "    super.onRestart()\n" +
+                                        "    // Restore data or UI components after the activity has been stopped\n" +
+                                        "}</code></pre>\n" +
+                                        "\n" +
+                                        "<h3>2.7. onDestroy()</h3>\n" +
+                                        "<p><strong>Purpose:</strong> Called when the activity is about to be destroyed.</p>\n" +
+                                        "<p><strong>Action:</strong> Clean up any resources that were allocated for the activity (e.g., database connections, listeners, or services). This is the last method called before the activity is completely removed from memory.</p>\n" +
+                                        "<p><strong>When to Use:</strong> Clean up resources, stop background services, or release any allocated memory.</p>\n" +
+                                        "<pre><code>override fun onDestroy() {\n" +
+                                        "    super.onDestroy()\n" +
+                                        "    // Clean up resources to prevent memory leaks\n" +
+                                        "}</code></pre>\n",
                                 createdAt = "2024-01-01",
                                 updatedAt = "2024-01-02"
                             ),
@@ -2634,7 +2722,74 @@ val mobileDevelopmentDummy = listOf(
                                 moduleId = 7,
                                 name = "Handling Configuration Changes",
                                 orderIndex = 3,
-                                content = "Managing state during device changes",
+                                content = "<h1>1. Introduction to Configuration Changes</h1>\n" +
+                                        "<p>In Android, configuration changes occur when the device's environment or state changes. These changes can affect the activity and may cause it to be restarted or re-initialized by the Android system. Common examples of configuration changes include:</p>\n" +
+                                        "<ul>\n" +
+                                        "    <li>Screen rotation (portrait ↔ landscape)</li>\n" +
+                                        "    <li>Language changes (e.g., switching between English and Spanish)</li>\n" +
+                                        "    <li>Keyboard visibility changes (e.g., when the soft keyboard is shown/hidden)</li>\n" +
+                                        "    <li>Screen size or density changes (e.g., when the app is running on a tablet versus a phone)</li>\n" +
+                                        "</ul>\n" +
+                                        "<p>By default, Android restarts activities when certain configuration changes occur, which can lead to loss of UI data (e.g., text entered by the user). Therefore, managing state across these changes is crucial to maintaining a seamless user experience.</p>\n" +
+                                        "\n" +
+                                        "<h1>2. Default Behavior for Configuration Changes</h1>\n" +
+                                        "<p>When a configuration change occurs (like a screen rotation), Android destroys and recreates the current activity to adjust to the new configuration. This means:</p>\n" +
+                                        "<ul>\n" +
+                                        "    <li>The <code>onPause()</code>, <code>onStop()</code>, <code>onDestroy()</code>, and <code>onCreate()</code> methods are called as the activity is destroyed and recreated.</li>\n" +
+                                        "    <li>All UI elements and any data held in the activity are lost during this process unless managed properly.</li>\n" +
+                                        "</ul>\n" +
+                                        "\n" +
+                                        "<h1>3. Managing Configuration Changes with onSaveInstanceState()</h1>\n" +
+                                        "<p>To prevent the loss of critical data during configuration changes, you can save the activity's state using <code>onSaveInstanceState()</code>. This method is called before the activity is paused or stopped and is intended for saving transient state information, such as user input or UI states.</p>\n" +
+                                        "\n" +
+                                        "<p><strong>When to Use:</strong> Use <code>onSaveInstanceState()</code> to save small pieces of data that you need to restore after a configuration change (e.g., text in a form, current scroll position, etc.).</p>\n" +
+                                        "\n" +
+                                        "<h3>Example of saving state:</h3>\n" +
+                                        "<pre><code>override fun onSaveInstanceState(outState: Bundle) {\n" +
+                                        "    super.onSaveInstanceState(outState)\n" +
+                                        "    // Save data that should persist during configuration changes\n" +
+                                        "    outState.putString(\"user_input\", editText.text.toString())\n" +
+                                        "}</code></pre>\n" +
+                                        "<p><strong>Explanation:</strong> In this example, the text entered in the EditText field is saved into the Bundle object, which will be passed to <code>onRestoreInstanceState()</code> when the activity is recreated.</p>\n" +
+                                        "\n" +
+                                        "<h1>4. Restoring State with onRestoreInstanceState()</h1>\n" +
+                                        "<p>When the activity is recreated after a configuration change, the saved state can be restored using the <code>onRestoreInstanceState()</code> method or directly in <code>onCreate()</code>.</p>\n" +
+                                        "\n" +
+                                        "<p><strong>When to Use:</strong> Use <code>onRestoreInstanceState()</code> to restore data that was saved in <code>onSaveInstanceState()</code> after a configuration change.</p>\n" +
+                                        "\n" +
+                                        "<h3>Example of restoring state:</h3>\n" +
+                                        "<pre><code>override fun onRestoreInstanceState(savedInstanceState: Bundle) {\n" +
+                                        "    super.onRestoreInstanceState(savedInstanceState)\n" +
+                                        "    // Restore saved data\n" +
+                                        "    val userInput = savedInstanceState.getString(\"user_input\")\n" +
+                                        "    editText.setText(userInput)\n" +
+                                        "}</code></pre>\n" +
+                                        "<p><strong>Explanation:</strong> Here, the text that was entered by the user in the EditText field is retrieved from the saved Bundle and set back into the EditText when the activity is recreated.</p>\n" +
+                                        "\n" +
+                                        "<h1>5. Handling Configuration Changes Manually</h1>\n" +
+                                        "<p>In some cases, you may want to handle configuration changes manually (instead of the default behavior where the activity is destroyed and recreated). This can be useful for maintaining the state of certain resources (like a network connection) or avoiding costly resource reloading.</p>\n" +
+                                        "\n" +
+                                        "<p>To handle configuration changes manually, you need to declare which configuration changes your activity will handle in the <code>AndroidManifest.xml</code> file. For example, if you want to handle screen rotation manually:</p>\n" +
+                                        "\n" +
+                                        "<h3>Declare Configuration Changes in Manifest:</h3>\n" +
+                                        "<pre><code>&lt;activity\n" +
+                                        "    android:name=\".MainActivity\"\n" +
+                                        "    android:configChanges=\"orientation|screenSize\"\n" +
+                                        "    android:label=\"@string/app_name\"&gt;\n" +
+                                        "&lt;/activity&gt;</code></pre>\n" +
+                                        "\n" +
+                                        "<h3>Override onConfigurationChanged() Method:</h3>\n" +
+                                        "<p>In your activity, you can override the <code>onConfigurationChanged()</code> method to manually handle changes without destroying and recreating the activity.</p>\n" +
+                                        "<pre><code>override fun onConfigurationChanged(newConfig: Configuration) {\n" +
+                                        "    super.onConfigurationChanged(newConfig)\n" +
+                                        "    // Handle configuration changes manually, such as updating the layout for a new orientation\n" +
+                                        "    if (newConfig.orientation == Configuration.ORIENTATION_LANDSCAPE) {\n" +
+                                        "        // Do something for landscape mode\n" +
+                                        "    } else if (newConfig.orientation == Configuration.ORIENTATION_PORTRAIT) {\n" +
+                                        "        // Do something for portrait mode\n" +
+                                        "    }\n" +
+                                        "}</code></pre>\n" +
+                                        "<p><strong>Explanation:</strong> In this case, Android will not restart the activity when the screen is rotated. Instead, the <code>onConfigurationChanged()</code> method will be called, and the app can handle the changes programmatically.</p>\n",
                                 createdAt = "2024-01-01",
                                 updatedAt = "2024-01-02"
                             )
@@ -2654,7 +2809,32 @@ val mobileDevelopmentDummy = listOf(
                                 moduleId = 8,
                                 name = "Creating Multiple Activities",
                                 orderIndex = 1,
-                                content = "Designing multi-screen applications",
+                                content = "<h1>1. Introduction to Multiple Activities</h1>\n" +
+                                        "<p>In Android, an Activity represents a single screen with a user interface. A typical Android application often has multiple activities, each serving a different screen or function. For example, an app might have a login screen, a main screen, and a settings screen.</p>\n" +
+                                        "<p>To create a multi-screen application, you need to understand how to:</p>\n" +
+                                        "<ul>\n" +
+                                        "    <li>Create new activities</li>\n" +
+                                        "    <li>Switch between activities</li>\n" +
+                                        "    <li>Pass data between activities</li>\n" +
+                                        "    <li>Manage activity transitions</li>\n" +
+                                        "</ul>\n" +
+                                        "\n" +
+                                        "<h1>2. Creating New Activities</h1>\n" +
+                                        "<p>To add a new activity to your project in Android Studio, follow these steps:</p>\n" +
+                                        "<ol>\n" +
+                                        "    <li>Right-click the <code>src</code> folder → New → Activity → Choose the activity template (e.g., Empty Activity).</li>\n" +
+                                        "    <li>Name your activity and click Finish.</li>\n" +
+                                        "</ol>\n" +
+                                        "<p>This process automatically creates a new Java/Kotlin class (e.g., <code>SecondActivity</code>) and the corresponding XML layout file (e.g., <code>activity_second.xml</code>).</p>\n" +
+                                        "\n" +
+                                        "<h3>Example:</h3>\n" +
+                                        "<pre><code>// SecondActivity.kt\n" +
+                                        "class SecondActivity : AppCompatActivity() {\n" +
+                                        "    override fun onCreate(savedInstanceState: Bundle?) {\n" +
+                                        "        super.onCreate(savedInstanceState)\n" +
+                                        "        setContentView(R.layout.activity_second)\n" +
+                                        "    }\n" +
+                                        "}</code></pre>\n",
                                 createdAt = "2024-01-01",
                                 updatedAt = "2024-01-02"
                             ),
@@ -2663,7 +2843,24 @@ val mobileDevelopmentDummy = listOf(
                                 moduleId = 8,
                                 name = "Using Intents for Navigation",
                                 orderIndex = 2,
-                                content = "Navigating between app components",
+                                content = "3. Navigating Between Activities\n" +
+                                        "To navigate from one activity to another, you need to use an Intent. An Intent is an abstract description of an operation to be performed and can be used to launch activities.\n" +
+                                        "\n" +
+                                        "Example of navigating from MainActivity to SecondActivity:\n" +
+                                        "In MainActivity, create an Intent to start SecondActivity:\n" +
+                                        "// MainActivity.kt\n" +
+                                        "val intent = Intent(this, SecondActivity::class.java)\n" +
+                                        "startActivity(intent)\n" +
+                                        "In SecondActivity, you can add code for the UI or handle data:\n" +
+                                        "// SecondActivity.kt\n" +
+                                        "override fun onCreate(savedInstanceState: Bundle?) {\n" +
+                                        "    super.onCreate(savedInstanceState)\n" +
+                                        "    setContentView(R.layout.activity_second)\n" +
+                                        "\n" +
+                                        "    // Code for SecondActivity UI and interactions\n" +
+                                        "}\n" +
+                                        "This code creates an intent and starts SecondActivity. When you call startActivity(), Android starts the new activity and switches to it.\n" +
+                                        "\n",
                                 createdAt = "2024-01-01",
                                 updatedAt = "2024-01-02"
                             ),
@@ -2672,7 +2869,67 @@ val mobileDevelopmentDummy = listOf(
                                 moduleId = 8,
                                 name = "Passing Data Between Screens",
                                 orderIndex = 3,
-                                content = "Sharing information across activities",
+                                content = "<h1>4. Passing Data Between Activities</h1>\n" +
+                                        "<p>In many cases, you will want to pass data from one activity to another. You can do this using Intent extras.</p>\n" +
+                                        "\n" +
+                                        "<h2>Example of passing data from MainActivity to SecondActivity:</h2>\n" +
+                                        "\n" +
+                                        "<h3>Passing data (e.g., a string) via Intent:</h3>\n" +
+                                        "\n" +
+                                        "<pre><code>// MainActivity.kt\n" +
+                                        "val intent = Intent(this, SecondActivity::class.java)\n" +
+                                        "intent.putExtra(\"key_name\", \"Hello from MainActivity\")\n" +
+                                        "startActivity(intent)</code></pre>\n" +
+                                        "\n" +
+                                        "<h3>Receiving data in SecondActivity:</h3>\n" +
+                                        "\n" +
+                                        "<pre><code>// SecondActivity.kt\n" +
+                                        "override fun onCreate(savedInstanceState: Bundle?) {\n" +
+                                        "    super.onCreate(savedInstanceState)\n" +
+                                        "    setContentView(R.layout.activity_second)\n" +
+                                        "\n" +
+                                        "    // Receive the data\n" +
+                                        "    val message = intent.getStringExtra(\"key_name\")\n" +
+                                        "    // Use the received data (e.g., display it in a TextView)\n" +
+                                        "    val textView = findViewById<TextView>(R.id.textView)\n" +
+                                        "    textView.text = message\n" +
+                                        "}</code></pre>\n" +
+                                        "\n" +
+                                        "<p><strong>Explanation:</strong> The <code>putExtra()</code> method adds data (e.g., a string, integer, etc.) to the Intent. In SecondActivity, you retrieve this data using <code>getStringExtra()</code>.</p>\n" +
+                                        "\n" +
+                                        "<h1>5. Managing Activity Results</h1>\n" +
+                                        "<p>Sometimes, you may need to get a result back from another activity. You can use <code>startActivityForResult()</code> to launch an activity and receive a result when it finishes.</p>\n" +
+                                        "\n" +
+                                        "<h2>Example of getting a result from an activity:</h2>\n" +
+                                        "\n" +
+                                        "<h3>Launching an activity for a result in MainActivity:</h3>\n" +
+                                        "\n" +
+                                        "<pre><code>// MainActivity.kt\n" +
+                                        "val intent = Intent(this, SecondActivity::class.java)\n" +
+                                        "startActivityForResult(intent, 1)  // 1 is the request code</code></pre>\n" +
+                                        "\n" +
+                                        "<h3>Returning a result in SecondActivity:</h3>\n" +
+                                        "\n" +
+                                        "<pre><code>// SecondActivity.kt\n" +
+                                        "val returnIntent = Intent()\n" +
+                                        "returnIntent.putExtra(\"result\", \"Data from SecondActivity\")\n" +
+                                        "setResult(Activity.RESULT_OK, returnIntent)\n" +
+                                        "finish()  // This ends the activity</code></pre>\n" +
+                                        "\n" +
+                                        "<h3>Receiving the result in MainActivity:</h3>\n" +
+                                        "\n" +
+                                        "<pre><code>// MainActivity.kt\n" +
+                                        "override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {\n" +
+                                        "    super.onActivityResult(requestCode, resultCode, data)\n" +
+                                        "    if (requestCode == 1 && resultCode == Activity.RESULT_OK) {\n" +
+                                        "        val result = data?.getStringExtra(\"result\")\n" +
+                                        "        // Use the result (e.g., display it in a TextView)\n" +
+                                        "        val textView = findViewById<TextView>(R.id.textView)\n" +
+                                        "        textView.text = result\n" +
+                                        "    }\n" +
+                                        "}</code></pre>\n" +
+                                        "\n" +
+                                        "<p><strong>Explanation:</strong> <code>startActivityForResult()</code> starts SecondActivity and expects a result back. SecondActivity sends a result using <code>setResult()</code> and finishes the activity, which triggers <code>onActivityResult()</code> in MainActivity.</p>\n",
                                 createdAt = "2024-01-01",
                                 updatedAt = "2024-01-02"
                             )
@@ -2692,7 +2949,55 @@ val mobileDevelopmentDummy = listOf(
                                 moduleId = 9,
                                 name = "Shared Preferences",
                                 orderIndex = 1,
-                                content = "Storing key-value data",
+                                content = "<h1>1. Introduction to Shared Preferences</h1>\n" +
+                                        "<p>Shared Preferences in Android provide a way to store simple key-value pairs (such as settings, preferences, and user data) in persistent storage. These key-value pairs are stored in XML files, which are accessible across app sessions, making them ideal for storing lightweight data such as:</p>\n" +
+                                        "<ul>\n" +
+                                        "    <li>User preferences (e.g., dark mode preference)</li>\n" +
+                                        "    <li>App settings (e.g., sound on/off)</li>\n" +
+                                        "    <li>Authentication tokens (e.g., user login session)</li>\n" +
+                                        "</ul>\n" +
+                                        "<p>SharedPreferences is a simple way to store data that doesn’t require the complexity of a database or file system.</p>\n" +
+                                        "\n" +
+                                        "<h1>2. Creating and Accessing Shared Preferences</h1>\n" +
+                                        "<p>To work with SharedPreferences, you typically need to:</p>\n" +
+                                        "<ol>\n" +
+                                        "    <li>Get a reference to SharedPreferences: Using either the <code>getSharedPreferences()</code> method (for storing multiple sets of preferences) or <code>getPreferences()</code> (for a single activity).</li>\n" +
+                                        "    <li>Write data: Using <code>SharedPreferences.Editor</code> to store key-value pairs.</li>\n" +
+                                        "    <li>Read data: Using <code>SharedPreferences</code> to retrieve data based on the key.</li>\n" +
+                                        "</ol>\n" +
+                                        "\n" +
+                                        "<h1>3. Writing Data to Shared Preferences</h1>\n" +
+                                        "<p>You can store data in SharedPreferences by using the <code>SharedPreferences.Editor</code> object. This object provides methods to store various data types such as strings, integers, booleans, floats, and long values.</p>\n" +
+                                        "\n" +
+                                        "<h2>Example: Saving user preferences (e.g., storing a theme preference):</h2>\n" +
+                                        "<pre><code>// Getting a reference to SharedPreferences\n" +
+                                        "val sharedPreferences = getSharedPreferences(\"user_preferences\", MODE_PRIVATE)\n" +
+                                        "\n" +
+                                        "// Getting the editor to modify SharedPreferences\n" +
+                                        "val editor = sharedPreferences.edit()\n" +
+                                        "\n" +
+                                        "// Storing data (key-value pairs)\n" +
+                                        "editor.putString(\"theme\", \"dark\")   // Saving a string\n" +
+                                        "editor.putBoolean(\"is_logged_in\", true)   // Saving a boolean\n" +
+                                        "editor.putInt(\"user_age\", 25)  // Saving an integer\n" +
+                                        "editor.apply()  // Apply changes asynchronously</code></pre>\n" +
+                                        "<p><strong>Explanation:</strong> In this example, we store three types of data: a string (theme preference), a boolean (user login status), and an integer (user age). The <code>apply()</code> method is used to commit the changes asynchronously. If you want to commit the changes synchronously, you can use <code>commit()</code> instead, but <code>apply()</code> is generally preferred for better performance.</p>\n" +
+                                        "\n" +
+                                        "<h1>4. Reading Data from Shared Preferences</h1>\n" +
+                                        "<p>To retrieve data from SharedPreferences, you use the get methods. You must provide the key to look up the value, along with a default value to return if the key is not found.</p>\n" +
+                                        "\n" +
+                                        "<h2>Example: Retrieving the saved data:</h2>\n" +
+                                        "<pre><code>// Getting a reference to SharedPreferences\n" +
+                                        "val sharedPreferences = getSharedPreferences(\"user_preferences\", MODE_PRIVATE)\n" +
+                                        "\n" +
+                                        "// Retrieving data (with default values)\n" +
+                                        "val theme = sharedPreferences.getString(\"theme\", \"light\")   // Default value: \"light\"\n" +
+                                        "val isLoggedIn = sharedPreferences.getBoolean(\"is_logged_in\", false)   // Default value: false\n" +
+                                        "val userAge = sharedPreferences.getInt(\"user_age\", 0)   // Default value: 0\n" +
+                                        "\n" +
+                                        "// Use the retrieved values (e.g., set the theme)\n" +
+                                        "println(\"User's theme: $theme, logged in: $isLoggedIn, age: $userAge\")</code></pre>\n" +
+                                        "<p><strong>Explanation:</strong> The <code>getString()</code>, <code>getBoolean()</code>, and <code>getInt()</code> methods retrieve the saved data based on the provided keys. If the key doesn't exist, the default value is returned.</p>\n",
                                 createdAt = "2024-01-01",
                                 updatedAt = "2024-01-02"
                             ),
@@ -2701,7 +3006,50 @@ val mobileDevelopmentDummy = listOf(
                                 moduleId = 9,
                                 name = "Internal Storage",
                                 orderIndex = 2,
-                                content = "Saving files on device",
+                                content = "<h1>1. Introduction to Internal Storage</h1>\n" +
+                                        "<p>Android provides several ways to store data on a device, and Internal Storage is one of them. Files saved to the internal storage are private to the app and cannot be accessed by other applications or users. This makes it ideal for storing sensitive data, application settings, or user-generated content.</p>\n" +
+                                        "<ul>\n" +
+                                        "    <li><strong>Private to the app:</strong> Other apps cannot access files stored in the internal storage of your app.</li>\n" +
+                                        "    <li><strong>Persistent across sessions:</strong> Files remain on the device even after the app is closed or the device is restarted.</li>\n" +
+                                        "</ul>\n" +
+                                        "<p>Internal storage is suitable for storing small to medium-sized files like text files, images, and configurations.</p>\n" +
+                                        "\n" +
+                                        "<h1>2. Writing Data to Internal Storage</h1>\n" +
+                                        "<p>To write data to internal storage, you use the <code>openFileOutput()</code> method, which creates or opens a file for writing.</p>\n" +
+                                        "\n" +
+                                        "<h2>Example: Writing text data to a file</h2>\n" +
+                                        "<pre><code>// Writing to internal storage\n" +
+                                        "val filename = \"example.txt\"\n" +
+                                        "val fileContent = \"This is a test file stored in internal storage.\"\n" +
+                                        "\n" +
+                                        "try {\n" +
+                                        "    val fileOutputStream: FileOutputStream = openFileOutput(filename, MODE_PRIVATE)\n" +
+                                        "    fileOutputStream.write(fileContent.toByteArray())  // Convert text to byte array\n" +
+                                        "    fileOutputStream.close()  // Always close the stream after use\n" +
+                                        "    println(\"File saved successfully!\")\n" +
+                                        "} catch (e: IOException) {\n" +
+                                        "    e.printStackTrace()\n" +
+                                        "}</code></pre>\n" +
+                                        "<p><strong>Explanation:</strong> <code>openFileOutput()</code> is used to create or open a file in the app's private storage. The second parameter, <code>MODE_PRIVATE</code>, ensures that the file is private to the app. The data is then written to the file in the form of a byte array.</p>\n" +
+                                        "\n" +
+                                        "<h1>3. Reading Data from Internal Storage</h1>\n" +
+                                        "<p>To read data from internal storage, use the <code>openFileInput()</code> method, which allows you to open a file and read its contents.</p>\n" +
+                                        "\n" +
+                                        "<h2>Example: Reading text data from a file</h2>\n" +
+                                        "<pre><code>// Reading from internal storage\n" +
+                                        "val filename = \"example.txt\"\n" +
+                                        "\n" +
+                                        "try {\n" +
+                                        "    val fileInputStream: FileInputStream = openFileInput(filename)\n" +
+                                        "    val inputStreamReader = InputStreamReader(fileInputStream)\n" +
+                                        "    val bufferedReader = BufferedReader(inputStreamReader)\n" +
+                                        "    val fileContent = bufferedReader.readLine()  // Read the first line of the file\n" +
+                                        "    bufferedReader.close()\n" +
+                                        "    println(\"File content: $fileContent\")\n" +
+                                        "} catch (e: IOException) {\n" +
+                                        "    e.printStackTrace()\n" +
+                                        "}</code></pre>\n" +
+                                        "<p><strong>Explanation:</strong> <code>openFileInput()</code> is used to open the file in read-only mode. The <code>InputStreamReader</code> converts the byte stream into characters, and <code>BufferedReader</code> is used to read the file line by line.</p>\n",
                                 createdAt = "2024-01-01",
                                 updatedAt = "2024-01-02"
                             ),
@@ -2710,7 +3058,100 @@ val mobileDevelopmentDummy = listOf(
                                 moduleId = 9,
                                 name = "Basic SQLite Operations",
                                 orderIndex = 3,
-                                content = "Managing local databases",
+                                content = "<h1>1. Introduction to SQLite in Android</h1>\n" +
+                                        "<p>SQLite is a lightweight, serverless relational database management system that is widely used in mobile app development. It allows developers to store data in a structured format using tables, rows, and columns within the app itself, without needing a network connection to an external server.</p>\n" +
+                                        "<h2>Key Features:</h2>\n" +
+                                        "<ul>\n" +
+                                        "    <li>Stores data in tables with rows and columns.</li>\n" +
+                                        "    <li>Data is persisted even if the app is closed or the device is restarted.</li>\n" +
+                                        "    <li>Ideal for structured, small-to-medium-sized data storage.</li>\n" +
+                                        "    <li>Does not require a network connection.</li>\n" +
+                                        "</ul>\n" +
+                                        "<p>SQLite is integrated into Android, and developers can use it to store data locally in a persistent manner.</p>\n" +
+                                        "\n" +
+                                        "<h1>2. Setting Up SQLite Database in Android</h1>\n" +
+                                        "<p>In Android, SQLite is used through a helper class called SQLiteOpenHelper. This class simplifies the management of SQLite databases by providing methods for creating, upgrading, and accessing the database.</p>\n" +
+                                        "\n" +
+                                        "<h2>Example: Creating an SQLite database helper class</h2>\n" +
+                                        "<pre><code>// SQLiteOpenHelper class to manage database creation and version management\n" +
+                                        "class MyDatabaseHelper(context: Context) : SQLiteOpenHelper(context, DATABASE_NAME, null, DATABASE_VERSION) {\n" +
+                                        "\n" +
+                                        "    override fun onCreate(db: SQLiteDatabase) {\n" +
+                                        "        val createTableQuery = \"CREATE TABLE $TABLE_NAME (\" +\n" +
+                                        "                \"$COLUMN_ID INTEGER PRIMARY KEY AUTOINCREMENT, \" +\n" +
+                                        "                \"$COLUMN_NAME TEXT, \" +\n" +
+                                        "                \"$COLUMN_AGE INTEGER)\"\n" +
+                                        "        db.execSQL(createTableQuery)\n" +
+                                        "    }\n" +
+                                        "\n" +
+                                        "    override fun onUpgrade(db: SQLiteDatabase, oldVersion: Int, newVersion: Int) {\n" +
+                                        "        // Drop the old table if it exists and create a new one\n" +
+                                        "        db.execSQL(\"DROP TABLE IF EXISTS $TABLE_NAME\")\n" +
+                                        "        onCreate(db)\n" +
+                                        "    }\n" +
+                                        "\n" +
+                                        "    companion object {\n" +
+                                        "        const val DATABASE_NAME = \"my_database\"\n" +
+                                        "        const val DATABASE_VERSION = 1\n" +
+                                        "        const val TABLE_NAME = \"users\"\n" +
+                                        "        const val COLUMN_ID = \"id\"\n" +
+                                        "        const val COLUMN_NAME = \"name\"\n" +
+                                        "        const val COLUMN_AGE = \"age\"\n" +
+                                        "    }\n" +
+                                        "}</code></pre>\n" +
+                                        "<p><strong>Explanation:</strong> <code>SQLiteOpenHelper</code> provides a constructor to specify the database name, version, and a context. The <code>onCreate()</code> method is called when the database is first created and should define the structure of the database. The <code>onUpgrade()</code> method is used for database version upgrades (e.g., adding new columns or tables).</p>\n" +
+                                        "\n" +
+                                        "<h1>3. Inserting Data into SQLite Database</h1>\n" +
+                                        "<p>Once the database is created, you can perform CRUD (Create, Read, Update, Delete) operations. Let's start with inserting data.</p>\n" +
+                                        "\n" +
+                                        "<h2>Example: Inserting data into the database</h2>\n" +
+                                        "<pre><code>// Inserting data into the database\n" +
+                                        "val dbHelper = MyDatabaseHelper(context)\n" +
+                                        "val db = dbHelper.writableDatabase\n" +
+                                        "\n" +
+                                        "// Creating a ContentValues object to insert data\n" +
+                                        "val values = ContentValues().apply {\n" +
+                                        "    put(MyDatabaseHelper.COLUMN_NAME, \"John Doe\")\n" +
+                                        "    put(MyDatabaseHelper.COLUMN_AGE, 30)\n" +
+                                        "}\n" +
+                                        "\n" +
+                                        "// Inserting the data into the database\n" +
+                                        "val newRowId = db.insert(MyDatabaseHelper.TABLE_NAME, null, values)\n" +
+                                        "println(\"New row inserted with ID: $newRowId\")</code></pre>\n" +
+                                        "<p><strong>Explanation:</strong> <code>ContentValues</code> is used to store the values that you want to insert. The <code>insert()</code> method is called on the writable database instance to insert the data into the specified table.</p>\n" +
+                                        "\n" +
+                                        "<h1>4. Querying Data from SQLite Database</h1>\n" +
+                                        "<p>After inserting data, you can query the database to retrieve records.</p>\n" +
+                                        "\n" +
+                                        "<h2>Example: Querying data from the database</h2>\n" +
+                                        "<pre><code>// Querying the database to fetch data\n" +
+                                        "val dbHelper = MyDatabaseHelper(context)\n" +
+                                        "val db = dbHelper.readableDatabase\n" +
+                                        "\n" +
+                                        "// Defining the columns you want to retrieve\n" +
+                                        "val projection = arrayOf(MyDatabaseHelper.COLUMN_ID, MyDatabaseHelper.COLUMN_NAME, MyDatabaseHelper.COLUMN_AGE)\n" +
+                                        "\n" +
+                                        "// Performing the query\n" +
+                                        "val cursor: Cursor = db.query(\n" +
+                                        "    MyDatabaseHelper.TABLE_NAME,  // Table to query\n" +
+                                        "    projection,                   // Columns to return\n" +
+                                        "    null,                         // WHERE clause (null for all rows)\n" +
+                                        "    null,                         // WHERE args (null for all rows)\n" +
+                                        "    null,                         // GROUP BY\n" +
+                                        "    null,                         // HAVING\n" +
+                                        "    null                          // ORDER BY\n" +
+                                        ")\n" +
+                                        "\n" +
+                                        "while (cursor.moveToNext()) {\n" +
+                                        "    val id = cursor.getLong(cursor.getColumnIndexOrThrow(MyDatabaseHelper.COLUMN_ID))\n" +
+                                        "    val name = cursor.getString(cursor.getColumnIndexOrThrow(MyDatabaseHelper.COLUMN_NAME))\n" +
+                                        "    val age = cursor.getInt(cursor.getColumnIndexOrThrow(MyDatabaseHelper.COLUMN_AGE))\n" +
+                                        "\n" +
+                                        "    println(\"ID: $id, Name: $name, Age: $age\")\n" +
+                                        "}\n" +
+                                        "\n" +
+                                        "cursor.close()</code></pre>\n" +
+                                        "<p><strong>Explanation:</strong> The <code>query()</code> method is used to retrieve data from the database. The <code>Cursor</code> object holds the result of the query, and <code>moveToNext()</code> is used to iterate over the rows returned. <code>getColumnIndexOrThrow()</code> is used to get the index of the columns to fetch their data.</p>\n",
                                 createdAt = "2024-01-01",
                                 updatedAt = "2024-01-02"
                             )
