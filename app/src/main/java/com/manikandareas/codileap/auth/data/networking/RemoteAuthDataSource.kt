@@ -49,13 +49,4 @@ class RemoteAuthDataSource(private val httpClient: HttpClient) {
         }
     }
 
-    suspend fun refreshToken(refreshToken: String): Result<ApiResponse<RefreshTokenResponseDto>, NetworkError> {
-        return safeCall<ApiResponse<RefreshTokenResponseDto>> {
-            httpClient.post(
-                urlString = constructUrl("/api/auth/refresh")
-            ){
-                bearerAuth(refreshToken)
-            }
-        }
-    }
 }

@@ -10,7 +10,7 @@ data class LearningPathUi(
     override val name: String,
     val level: LearningPathLevel,
     override val description: String,
-    val estimatedDuration: String,
+    val estimatedDuration: Int,
 
     override val totalModules: Int,
 

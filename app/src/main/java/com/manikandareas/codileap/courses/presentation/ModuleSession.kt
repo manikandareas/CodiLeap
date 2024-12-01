@@ -37,7 +37,7 @@ import androidx.compose.ui.unit.dp
 import com.manikandareas.codileap.core.presentation.util.HtmlParser
 import com.manikandareas.codileap.core.presentation.util.HtmlRenderer
 import com.manikandareas.codileap.core.presentation.util.kotlinModule
-import com.manikandareas.codileap.courses.data.dummy.createModulesForCourse
+
 
 import com.manikandareas.codileap.courses.presentation.component.ModuleAppBar
 import com.manikandareas.codileap.courses.presentation.component.ModuleBottomAppBar
@@ -251,19 +251,19 @@ fun ModuleSession(
     }
 }
 
-@PreviewLightDark
-@Composable
-private fun ModuleScreenPreview() {
-    CodiLeapTheme {
-        ModuleSession(
-            state = ModuleState(
-                moduleUi = createModulesForCourse(
-                    learningPath = "Android Development Fundamentals", courseName = "Kotlin Basics"
-                ).first().toUiModel()
-            ),
-            onAction = {}
-        )
-    }
-}
+//@PreviewLightDark
+//@Composable
+//private fun ModuleScreenPreview() {
+//    CodiLeapTheme {
+//        ModuleSession(
+//            state = ModuleState(
+//                moduleUi = createModulesForCourse(
+//                    learningPath = "Android Development Fundamentals", courseName = "Kotlin Basics"
+//                ).first().toUiModel()
+//            ),
+//            onAction = {}
+//        )
+//    }
+//}
 
 

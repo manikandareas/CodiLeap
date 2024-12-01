@@ -6,10 +6,10 @@ import kotlinx.serialization.Serializable
 data class LearningPathDto(
     val id: Int,
     val name: String,
-    val description: String,
     val level: String,
-    val totalModules: Int,
-    val estimatedDuration: String,
+    val description: String,
+    val estimatedDuration: Int,
     val createdAt: String,
-    val updatedAt: String
+    val updatedAt: String,
+    val courses: List<CourseDto>
 )

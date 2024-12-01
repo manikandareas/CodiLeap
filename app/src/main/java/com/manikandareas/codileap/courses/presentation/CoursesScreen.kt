@@ -37,12 +37,8 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.LocalDensity
-import androidx.compose.ui.tooling.preview.PreviewLightDark
 import androidx.compose.ui.unit.dp
 import com.manikandareas.codileap.core.navigation.Destination
-import com.manikandareas.codileap.courses.data.dummy.createCoursesForLearningPath
-import com.manikandareas.codileap.courses.data.dummy.createModulesForCourse
-import com.manikandareas.codileap.courses.data.dummy.learningPathsDummy
 import com.manikandareas.codileap.courses.presentation.component.BottomSheetOptions
 import com.manikandareas.codileap.courses.presentation.component.CoursesAppBar
 import com.manikandareas.codileap.courses.presentation.component.ModuleItem
@@ -51,10 +47,8 @@ import com.manikandareas.codileap.courses.presentation.component.Options
 import com.manikandareas.codileap.courses.presentation.defaults.CircleParametersDefaults
 import com.manikandareas.codileap.courses.presentation.defaults.LineParametersDefaults
 import com.manikandareas.codileap.courses.presentation.model.ModuleNodePosition
-import com.manikandareas.codileap.courses.presentation.model.toUiModel
 import com.manikandareas.codileap.home.presentation.component.HomeBottomAppBar
 import com.manikandareas.codileap.home.presentation.component.HomeChatBotFab
-import com.manikandareas.codileap.ui.theme.CodiLeapTheme
 import kotlin.math.roundToInt
 
 @Composable
@@ -195,12 +189,9 @@ fun CoursesScreen(
                 Spacer(modifier = Modifier.height(32.dp))
             }
             items(
-                items = createModulesForCourse(
-                    learningPath = state.selectedLearningPath?.name ?: "",
-                    courseName = state.selectedCourse?.name ?: ""
-                ).map { it.toUiModel() },
+                items = state.selectedCourse?.modules!!,
 
-                key = { item -> item.id }
+                key = { item -> item }
             ) { item ->
                 // Calculate position dynamically based on index
                 val position = when (item) {
@@ -251,26 +242,26 @@ fun CoursesScreen(
     }
 }
 
-
-@PreviewLightDark
-@Composable
-fun PreviewCoursesScreen(modifier: Modifier = Modifier) {
-    val selectedLearningPath = learningPathsDummy.first().toUiModel()
-    val selectedModule = createCoursesForLearningPath(
-        learningPathId = selectedLearningPath.id,
-        pathName = selectedLearningPath.name
-    ).first().toUiModel()
-    val state = CoursesState(
-        isLoading = false,
-        selectedLearningPath = selectedLearningPath,
-        learningPaths = learningPathsDummy.map { it.toUiModel() },
-        selectedCourse = selectedModule,
-        courses = createCoursesForLearningPath(
-            learningPathId = selectedLearningPath.id,
-            pathName = selectedLearningPath.name
-        ).map { it.toUiModel() }
-    )
-    CodiLeapTheme {
-        CoursesScreen(modifier = modifier, state = state, onAction = {})
-    }
-}
+//
+//@PreviewLightDark
+//@Composable
+//fun PreviewCoursesScreen(modifier: Modifier = Modifier) {
+//    val selectedLearningPath = learningPathsDummy.first().toUiModel()
+//    val selectedModule = createCoursesForLearningPath(
+//        learningPathId = selectedLearningPath.id,
+//        pathName = selectedLearningPath.name
+//    ).first().toUiModel()
+//    val state = CoursesState(
+//        isLoading = false,
+//        selectedLearningPath = selectedLearningPath,
+//        learningPaths = learningPathsDummy.map { it.toUiModel() },
+//        selectedCourse = selectedModule,
+//        courses = createCoursesForLearningPath(
+//            learningPathId = selectedLearningPath.id,
+//            pathName = selectedLearningPath.name
+//        ).map { it.toUiModel() }
+//    )
+//    CodiLeapTheme {
+//        CoursesScreen(modifier = modifier, state = state, onAction = {})
+//    }
+//}

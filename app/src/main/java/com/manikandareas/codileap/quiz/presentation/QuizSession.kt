@@ -1,8 +1,7 @@
 @file:OptIn(ExperimentalAnimationApi::class)
 
-package com.manikandareas.codileap.courses.presentation
+package com.manikandareas.codileap.quiz.presentation
 
-import android.widget.Toast
 import androidx.activity.compose.BackHandler
 import androidx.compose.animation.AnimatedContent
 import androidx.compose.animation.ExperimentalAnimationApi
@@ -32,13 +31,12 @@ import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.PreviewLightDark
 import androidx.compose.ui.unit.dp
 import com.manikandareas.codileap.R
-import com.manikandareas.codileap.courses.domain.AnswerOption
-import com.manikandareas.codileap.courses.domain.Question
-import com.manikandareas.codileap.courses.domain.Quiz
-
-import com.manikandareas.codileap.courses.presentation.component.QuizAppBar
-import com.manikandareas.codileap.courses.presentation.component.QuizBottomAppBar
-import com.manikandareas.codileap.courses.presentation.model.toUiModel
+import com.manikandareas.codileap.quiz.domain.AnswerOption
+import com.manikandareas.codileap.quiz.domain.Question
+import com.manikandareas.codileap.quiz.domain.Quiz
+import com.manikandareas.codileap.quiz.presentation.component.QuizAppBar
+import com.manikandareas.codileap.quiz.presentation.component.QuizBottomAppBar
+import com.manikandareas.codileap.quiz.presentation.model.toUiModel
 import com.manikandareas.codileap.screening.presentation.component.CodiButton
 import com.manikandareas.codileap.ui.compositions.CodiDialog
 import com.manikandareas.codileap.ui.theme.AlertDialogType

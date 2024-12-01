@@ -22,24 +22,22 @@ import com.manikandareas.codileap.auth.presentation.auth_signIn.AuthSignInViewMo
 import com.manikandareas.codileap.chatbot.presentation.ChatBotScreen
 import com.manikandareas.codileap.core.presentation.util.ObserveAsEvents
 import com.manikandareas.codileap.core.presentation.util.parcelableType
-import com.manikandareas.codileap.courses.data.dummy.createCoursesForLearningPath
-import com.manikandareas.codileap.courses.data.dummy.learningPathsDummy
 import com.manikandareas.codileap.courses.presentation.CoursesAction
 import com.manikandareas.codileap.courses.presentation.CoursesScreen
 import com.manikandareas.codileap.courses.presentation.CoursesState
 import com.manikandareas.codileap.courses.presentation.ModuleAction
 import com.manikandareas.codileap.courses.presentation.ModuleSession
 import com.manikandareas.codileap.courses.presentation.ModuleState
-import com.manikandareas.codileap.courses.presentation.QuizAction
-import com.manikandareas.codileap.courses.presentation.QuizSession
-import com.manikandareas.codileap.courses.presentation.QuizState
-import com.manikandareas.codileap.courses.presentation.dummyQuiz
 import com.manikandareas.codileap.courses.presentation.model.ModuleUi
-import com.manikandareas.codileap.courses.presentation.model.toUiModel
 import com.manikandareas.codileap.home.presentation.HomeAction
 import com.manikandareas.codileap.home.presentation.HomeScreen
 import com.manikandareas.codileap.intro.presentation.IntroScreen
 import com.manikandareas.codileap.profile.presentation.ProfileScreen
+import com.manikandareas.codileap.quiz.presentation.QuizAction
+import com.manikandareas.codileap.quiz.presentation.QuizSession
+import com.manikandareas.codileap.quiz.presentation.QuizState
+import com.manikandareas.codileap.quiz.presentation.dummyQuiz
+import com.manikandareas.codileap.quiz.presentation.model.toUiModel
 import com.manikandareas.codileap.screening.presentation.ScreeningAction
 import com.manikandareas.codileap.screening.presentation.ScreeningScreen
 import com.manikandareas.codileap.settings.presentation.FAQsScreen
@@ -94,11 +92,19 @@ fun CodiLeapNavigation(
                 }
                 composable<Destination.RegisterScreen> {
                     val viewModel = koinViewModel<AuthRegisterViewModel>()
-                    AuthRegisterScreen(onAction = viewModel::onAction)
+                    AuthRegisterScreen(
+                        state = viewModel.state,
+                        events = viewModel.events,
+                        onAction = viewModel::onAction
+                    )
                 }
                 composable<Destination.LoginScreen> {
                     val viewModel = koinViewModel<AuthSignInViewModel>()
-                    AuthSignInScreen(onAction = viewModel::onAction)
+                    AuthSignInScreen(
+                        state = viewModel.state,
+                        events = viewModel.events,
+                        onAction = viewModel::onAction
+                    )
                 }
             }
 
@@ -131,20 +137,20 @@ fun CodiLeapNavigation(
                 }
 
                 composable<Destination.CoursesScreen> {
-                    val selectedLearningPath = learningPathsDummy[2].toUiModel()
-                    val selectedCourse = createCoursesForLearningPath(
-                        learningPathId = selectedLearningPath.id,
-                        pathName = selectedLearningPath.name
-                    ).first().toUiModel()
-                    val state = CoursesState(isLoading = false,
-                        selectedLearningPath = selectedLearningPath,
-                        learningPaths = learningPathsDummy.map { it.toUiModel() },
-                        selectedCourse = selectedCourse,
-                        courses = createCoursesForLearningPath(
-                            learningPathId = selectedLearningPath.id,
-                            pathName = selectedLearningPath.name
-                        ).map { it.toUiModel() })
-                    CoursesScreen(state = state, onAction = {
+//                    val selectedLearningPath = learningPathsDummy[2].toUiModel()
+//                    val selectedCourse = createCoursesForLearningPath(
+//                        learningPathId = selectedLearningPath.id,
+//                        pathName = selectedLearningPath.name
+//                    ).first().toUiModel()
+//                    val state = CoursesState(isLoading = false,
+//                        selectedLearningPath = selectedLearningPath,
+//                        learningPaths = learningPathsDummy.map { it.toUiModel() },
+//                        selectedCourse = selectedCourse,
+//                        courses = createCoursesForLearningPath(
+//                            learningPathId = selectedLearningPath.id,
+//                            pathName = selectedLearningPath.name
+//                        ).map { it.toUiModel() })
+                    CoursesScreen(state = CoursesState(), onAction = {
                         when (it) {
                             is CoursesAction.NavigateTo -> navController.navigate(it.des) {
                                 popUpTo(it.des) { inclusive = true }
@@ -175,25 +181,7 @@ fun CodiLeapNavigation(
                     })
                 }
 
-                composable<Destination.QuizScreen> {
-                    QuizSession(
-                        state = QuizState(
-                            quiz = dummyQuiz.toUiModel(),
-                            isLoading = false
-                        ),
-                        onAction = {
-                            when (it) {
 
-                                QuizAction.NavigateBack -> {
-                                    navController.navigateUp()
-                                }
-                                QuizAction.OnSubmitClick -> {
-                                    navController.navigateUp()
-                                }
-                            }
-                        }
-                    )
-                }
 
                 composable<Destination.AnalyticsScreen> {
                     AnalyticsScreen(onAction = {
@@ -209,6 +197,31 @@ fun CodiLeapNavigation(
                     ChatBotScreen()
                 }
 
+            }
+
+            navigation<Destination.QuizGraph>(
+                startDestination = Destination.QuizScreen
+            ) {
+                composable<Destination.QuizScreen> {
+                    QuizSession(
+                        state = QuizState(
+                            quiz = dummyQuiz.toUiModel(),
+                            isLoading = false
+                        ),
+                        onAction = {
+                            when (it) {
+
+                                QuizAction.NavigateBack -> {
+                                    navController.navigateUp()
+                                }
+
+                                QuizAction.OnSubmitClick -> {
+                                    navController.navigateUp()
+                                }
+                            }
+                        }
+                    )
+                }
             }
 
 

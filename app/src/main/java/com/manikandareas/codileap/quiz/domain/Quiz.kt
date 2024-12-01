@@ -1,4 +1,4 @@
-package com.manikandareas.codileap.courses.domain
+package com.manikandareas.codileap.quiz.domain
 
 data class Quiz(
     val id: Int,

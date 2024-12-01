@@ -15,7 +15,7 @@ val machineLearningDummy = listOf(
         description = "Learn the basics of Machine Learning, including concepts and tools.",
         createdAt = "2024-03-01",
         updatedAt = "2024-03-02",
-        estimatedDuration = "2 months",
+        estimatedDuration = 3000,
         courses = listOf(
             Course(
                 id = 1,
@@ -189,7 +189,7 @@ val machineLearningDummy = listOf(
         description = "Explore advanced Machine Learning models and techniques.",
         createdAt = "2024-03-01",
         updatedAt = "2024-03-02",
-        estimatedDuration = "3 months",
+        estimatedDuration = 3000,
         courses = listOf(
             Course(
                 id = 4,
@@ -363,7 +363,7 @@ val machineLearningDummy = listOf(
         description = "Master advanced Machine Learning techniques and deep learning.",
         createdAt = "2024-03-01",
         updatedAt = "2024-03-02",
-        estimatedDuration = "4 months",
+        estimatedDuration = 3000,
         courses = listOf(
             Course(
                 id = 7,

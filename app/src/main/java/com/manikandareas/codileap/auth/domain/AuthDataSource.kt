@@ -12,5 +12,4 @@ interface AuthDataSource {
     suspend fun register(request: RegisterRequestDto): Result<ApiResponse<Unit>, NetworkError>
     suspend fun login(request: LoginRequestDto): Result<ApiResponse<LoginResponseDto>, NetworkError>
     suspend fun logout()
-    suspend fun refreshToken(): Result<ApiResponse<RefreshTokenResponseDto>, NetworkError>
 }

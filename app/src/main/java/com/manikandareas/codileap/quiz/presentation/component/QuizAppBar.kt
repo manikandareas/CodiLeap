@@ -1,6 +1,6 @@
 @file:OptIn(ExperimentalMaterial3Api::class)
 
-package com.manikandareas.codileap.courses.presentation.component
+package com.manikandareas.codileap.quiz.presentation.component
 
 import androidx.compose.foundation.layout.height
 import androidx.compose.material.icons.Icons

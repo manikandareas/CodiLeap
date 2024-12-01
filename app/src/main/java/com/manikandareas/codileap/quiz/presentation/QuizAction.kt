@@ -1,4 +1,4 @@
-package com.manikandareas.codileap.courses.presentation
+package com.manikandareas.codileap.quiz.presentation
 
 
 sealed class QuizAction {

@@ -7,6 +7,7 @@ import com.manikandareas.codileap.core.navigation.Navigator
 import kotlinx.coroutines.launch
 
 class AuthViewModel(private val navigator: Navigator) : ViewModel() {
+
     fun onAction(action: AuthAction) {
         when (action) {
             AuthAction.OnSignInClicked -> viewModelScope.launch {

@@ -1,4 +1,4 @@
-package com.manikandareas.codileap.courses.presentation.component
+package com.manikandareas.codileap.quiz.presentation.component
 
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.PaddingValues

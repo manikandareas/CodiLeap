@@ -1,7 +1,8 @@
-package com.manikandareas.codileap.courses.presentation.model
+package com.manikandareas.codileap.quiz.presentation.model
 
-import com.manikandareas.codileap.courses.domain.Question
-import com.manikandareas.codileap.courses.domain.Quiz
+
+import com.manikandareas.codileap.quiz.domain.Question
+import com.manikandareas.codileap.quiz.domain.Quiz
 import java.time.ZonedDateTime
 
 data class QuizUi(
