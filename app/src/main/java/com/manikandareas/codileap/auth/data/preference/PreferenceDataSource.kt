@@ -20,11 +20,11 @@ class PreferenceDataSource(
         try {
             val serializedToken = TokenSerializer.serialize(token)
 
-            val encryptedToken = KeystoreHelper.encrypt(serializedToken)
+//            val encryptedToken = KeystoreHelper.encrypt(serializedToken)
 
             withContext(ioDispatcher) {
                 dataStore.edit { preferences ->
-                    preferences[USER_TOKEN_KEY] = encryptedToken
+                    preferences[USER_TOKEN_KEY] = serializedToken
                 }
             }
 
@@ -47,9 +47,9 @@ class PreferenceDataSource(
 
         try {
             // Dekripsi token yang sudah terenkripsi
-            val decryptedToken = KeystoreHelper.decrypt(encryptedToken)
+//            val decryptedToken = KeystoreHelper.decrypt(encryptedToken)
             // Deserialisasi JSON ke objek Token
-            TokenSerializer.deserialize(decryptedToken)
+            TokenSerializer.deserialize(encryptedToken)
         } catch (e: Exception) {
             e.printStackTrace()
             null

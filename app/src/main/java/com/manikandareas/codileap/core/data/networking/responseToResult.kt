@@ -17,6 +17,7 @@ suspend inline fun <reified T> responseToResult(response: HttpResponse): Result<
         }
         401-> Result.Error(NetworkError.UNAUTHORIZED)
         408 -> Result.Error(NetworkError.REQUEST_TIMEOUT)
+        409 -> Result.Error(NetworkError.CONFLICT)
         429 -> Result.Error(NetworkError.TOO_MANY_REQUESTS)
         in 500..599 -> Result.Error(NetworkError.SERVER_ERROR)
         else -> Result.Error(NetworkError.UNKNOWN)

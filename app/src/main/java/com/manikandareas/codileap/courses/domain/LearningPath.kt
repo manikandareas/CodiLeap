@@ -1,9 +1,9 @@
 package com.manikandareas.codileap.courses.domain
 
 enum class LearningPathLevel(val level: String) {
-     BEGINNER  ("beginner"),
-     INTERMEDIATE ("Intermediate"),
-     ADVANCED ("advanced")
+    BEGINNER("beginner"),
+    INTERMEDIATE("Intermediate"),
+    ADVANCED("advanced")
 }
 
 data class LearningPath(
@@ -13,7 +13,7 @@ data class LearningPath(
     val description: String,
     val createdAt: String,
     val updatedAt: String,
-    val estimatedDuration: String,
+    val estimatedDuration: Int,
 
     val courses: List<Course>
 )

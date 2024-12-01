@@ -29,10 +29,10 @@ android {
                 getDefaultProguardFile("proguard-android-optimize.txt"),
                 "proguard-rules.pro"
             )
-            buildConfigField("String", "BASE_URL", "\"https://story-api.dicoding.dev/v1/\"")
+            buildConfigField("String", "BASE_URL", "\"http://34.128.107.34:3000/\"")
         }
         debug {
-            buildConfigField("String", "BASE_URL", "\"https://story-api.dicoding.dev/v1/\"")
+            buildConfigField("String", "BASE_URL", "\"http://34.128.107.34:3000/\"")
             buildConfigField("String", "APP_SECRET_KEY", "\"codileap_secret_key\"")
         }
     }
@@ -52,6 +52,7 @@ android {
 dependencies {
 
     implementation(libs.bundles.ktor)
+    implementation(libs.ktor.client.auth)
 
     implementation(libs.bundles.koin)
 

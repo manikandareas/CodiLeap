@@ -15,7 +15,7 @@ val devOpsDummy = listOf(
         description = "Introduction to DevOps principles and practices.",
         createdAt = "2024-02-01",
         updatedAt = "2024-02-02",
-        estimatedDuration = "2 months",
+    estimatedDuration = 1200,
         courses = listOf(
             Course(
                 id = 1,
@@ -188,7 +188,7 @@ val devOpsDummy = listOf(
         description = "Deep dive into DevOps tools and workflows.",
         createdAt = "2024-02-01",
         updatedAt = "2024-02-02",
-        estimatedDuration = "3 months",
+        estimatedDuration = 1200,
         courses = listOf(
             Course(
                 id = 4,
@@ -362,7 +362,7 @@ val devOpsDummy = listOf(
         description = "Master advanced DevOps practices and cloud automation.",
         createdAt = "2024-02-01",
         updatedAt = "2024-02-02",
-        estimatedDuration = "4 months",
+        estimatedDuration = 1200,
         courses = listOf(
             Course(
                 id = 7,

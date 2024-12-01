@@ -14,7 +14,7 @@ val mobileDevelopmentDummy = listOf(
         description = "Comprehensive introduction to mobile app development.",
         createdAt = "2024-01-01",
         updatedAt = "2024-01-02",
-        estimatedDuration = "2 months",
+        estimatedDuration = 3000,
         courses = listOf(
             Course(
                 id = 1,
@@ -403,7 +403,7 @@ val mobileDevelopmentDummy = listOf(
         description = "Advance your skills with more complex concepts in mobile development.",
         createdAt = "2024-11-01",
         updatedAt = "2024-11-01",
-        estimatedDuration = "3 months",
+        estimatedDuration = 3000,
         courses = listOf(
             Course(
                 id = 4,
@@ -577,7 +577,7 @@ val mobileDevelopmentDummy = listOf(
         description = "Master advanced topics to build scalable and robust mobile applications.",
         createdAt = "2024-11-01",
         updatedAt = "2024-11-01",
-        estimatedDuration = "4 months",
+        estimatedDuration = 3000,
         courses = listOf(
             Course(
                 id = 7,

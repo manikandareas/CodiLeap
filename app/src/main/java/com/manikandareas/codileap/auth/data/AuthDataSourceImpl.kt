@@ -25,6 +25,7 @@ class AuthDataSourceImpl(
     override suspend fun login(request: LoginRequestDto): Result<ApiResponse<LoginResponseDto>, NetworkError> {
         return remoteAuthDataSource.login(request).onSuccess { res ->
             res.data.let { data ->
+                println("TOKEN: ${data!!.toToken()}")
                 preferenceDataSource.saveToken(data!!.toToken())
             }
         }
@@ -34,10 +35,4 @@ class AuthDataSourceImpl(
         return preferenceDataSource.clearToken()
     }
 
-    override suspend fun refreshToken(): Result<ApiResponse<RefreshTokenResponseDto>, NetworkError> {
-    val refreshToken = preferenceDataSource.getToken()
-        refreshToken.first().let {
-            return remoteAuthDataSource.refreshToken(it!!.refreshToken)
-        }
-    }
 }
