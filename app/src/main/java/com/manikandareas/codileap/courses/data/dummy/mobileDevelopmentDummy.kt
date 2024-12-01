@@ -2996,7 +2996,7 @@ val mobileDevelopmentDummy = listOf(
                                         "val userAge = sharedPreferences.getInt(\"user_age\", 0)   // Default value: 0\n" +
                                         "\n" +
                                         "// Use the retrieved values (e.g., set the theme)\n" +
-                                        "println(\"User's theme: $theme, logged in: $isLoggedIn, age: $userAge\")</code></pre>\n" +
+                                        "println(\"User's theme: \$theme, logged in: \$isLoggedIn, age: \$userAge\")</code></pre>\n" +
                                         "<p><strong>Explanation:</strong> The <code>getString()</code>, <code>getBoolean()</code>, and <code>getInt()</code> methods retrieve the saved data based on the provided keys. If the key doesn't exist, the default value is returned.</p>\n",
                                 createdAt = "2024-01-01",
                                 updatedAt = "2024-01-02"
@@ -3045,7 +3045,7 @@ val mobileDevelopmentDummy = listOf(
                                         "    val bufferedReader = BufferedReader(inputStreamReader)\n" +
                                         "    val fileContent = bufferedReader.readLine()  // Read the first line of the file\n" +
                                         "    bufferedReader.close()\n" +
-                                        "    println(\"File content: $fileContent\")\n" +
+                                        "    println(\"File content: \$fileContent\")\n" +
                                         "} catch (e: IOException) {\n" +
                                         "    e.printStackTrace()\n" +
                                         "}</code></pre>\n" +
@@ -3077,16 +3077,16 @@ val mobileDevelopmentDummy = listOf(
                                         "class MyDatabaseHelper(context: Context) : SQLiteOpenHelper(context, DATABASE_NAME, null, DATABASE_VERSION) {\n" +
                                         "\n" +
                                         "    override fun onCreate(db: SQLiteDatabase) {\n" +
-                                        "        val createTableQuery = \"CREATE TABLE $TABLE_NAME (\" +\n" +
-                                        "                \"$COLUMN_ID INTEGER PRIMARY KEY AUTOINCREMENT, \" +\n" +
-                                        "                \"$COLUMN_NAME TEXT, \" +\n" +
-                                        "                \"$COLUMN_AGE INTEGER)\"\n" +
+                                        "        val createTableQuery = \"CREATE TABLE \$TABLE_NAME (\" +\n" +
+                                        "                \"\$COLUMN_ID INTEGER PRIMARY KEY AUTOINCREMENT, \" +\n" +
+                                        "                \"\$COLUMN_NAME TEXT, \" +\n" +
+                                        "                \"\$COLUMN_AGE INTEGER)\"\n" +
                                         "        db.execSQL(createTableQuery)\n" +
                                         "    }\n" +
                                         "\n" +
                                         "    override fun onUpgrade(db: SQLiteDatabase, oldVersion: Int, newVersion: Int) {\n" +
                                         "        // Drop the old table if it exists and create a new one\n" +
-                                        "        db.execSQL(\"DROP TABLE IF EXISTS $TABLE_NAME\")\n" +
+                                        "        db.execSQL(\"DROP TABLE IF EXISTS \$TABLE_NAME\")\n" +
                                         "        onCreate(db)\n" +
                                         "    }\n" +
                                         "\n" +
@@ -3117,7 +3117,7 @@ val mobileDevelopmentDummy = listOf(
                                         "\n" +
                                         "// Inserting the data into the database\n" +
                                         "val newRowId = db.insert(MyDatabaseHelper.TABLE_NAME, null, values)\n" +
-                                        "println(\"New row inserted with ID: $newRowId\")</code></pre>\n" +
+                                        "println(\"New row inserted with ID: \$newRowId\")</code></pre>\n" +
                                         "<p><strong>Explanation:</strong> <code>ContentValues</code> is used to store the values that you want to insert. The <code>insert()</code> method is called on the writable database instance to insert the data into the specified table.</p>\n" +
                                         "\n" +
                                         "<h1>4. Querying Data from SQLite Database</h1>\n" +
@@ -3147,7 +3147,7 @@ val mobileDevelopmentDummy = listOf(
                                         "    val name = cursor.getString(cursor.getColumnIndexOrThrow(MyDatabaseHelper.COLUMN_NAME))\n" +
                                         "    val age = cursor.getInt(cursor.getColumnIndexOrThrow(MyDatabaseHelper.COLUMN_AGE))\n" +
                                         "\n" +
-                                        "    println(\"ID: $id, Name: $name, Age: $age\")\n" +
+                                        "    println(\"ID: \$id, Name: \$name, Age: \$age\")\n" +
                                         "}\n" +
                                         "\n" +
                                         "cursor.close()</code></pre>\n" +
