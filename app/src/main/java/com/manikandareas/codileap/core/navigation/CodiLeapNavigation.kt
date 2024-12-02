@@ -15,7 +15,7 @@ import androidx.navigation.navigation
 import androidx.navigation.toRoute
 import com.manikandareas.codileap.analytics.presentation.AnalyticsAction
 import com.manikandareas.codileap.analytics.presentation.AnalyticsScreen
-import com.manikandareas.codileap.auth.domain.User
+import com.manikandareas.codileap.user.domain.User
 import com.manikandareas.codileap.auth.presentation.AuthScreen
 import com.manikandareas.codileap.auth.presentation.AuthViewModel
 import com.manikandareas.codileap.auth.presentation.auth_register.AuthRegisterScreen
@@ -29,9 +29,9 @@ import com.manikandareas.codileap.courses.presentation.CoursesAction
 import com.manikandareas.codileap.courses.presentation.CoursesScreen
 import com.manikandareas.codileap.courses.presentation.CoursesState
 import com.manikandareas.codileap.courses.presentation.CoursesViewModel
-import com.manikandareas.codileap.courses.presentation.ModuleAction
-import com.manikandareas.codileap.courses.presentation.ModuleSession
-import com.manikandareas.codileap.courses.presentation.ModuleState
+import com.manikandareas.codileap.courses.presentation.module.ModuleAction
+import com.manikandareas.codileap.courses.presentation.module.ModuleSession
+import com.manikandareas.codileap.courses.presentation.module.ModuleState
 import com.manikandareas.codileap.courses.presentation.model.ModuleUi
 import com.manikandareas.codileap.home.presentation.HomeAction
 import com.manikandareas.codileap.home.presentation.HomeScreen

@@ -52,7 +52,7 @@ fun IntroGraphUi(intro: IntroUi) {
         Spacer(
             modifier = Modifier
                 .fillMaxWidth()
-                .size(15.dp)
+                .size(16.dp)
         )
 
         Text(
@@ -63,7 +63,8 @@ fun IntroGraphUi(intro: IntroUi) {
             fontSize = 16.sp,
             textAlign = TextAlign.Center,
             style = MaterialTheme.typography.bodySmall,
-            color = MaterialTheme.colorScheme.onSurface,
+            lineHeight = 24.sp,
+            color = MaterialTheme.colorScheme.onBackground.copy(alpha = 0.6f),
         )
 
         Spacer(

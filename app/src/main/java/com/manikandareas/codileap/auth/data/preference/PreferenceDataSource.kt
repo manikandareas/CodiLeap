@@ -7,8 +7,8 @@ import androidx.datastore.preferences.core.stringPreferencesKey
 import com.manikandareas.codileap.auth.data.networking.dto.UserResponseDto
 import com.manikandareas.codileap.auth.domain.Token
 import com.manikandareas.codileap.auth.domain.TokenSerializer
-import com.manikandareas.codileap.auth.domain.User
-import com.manikandareas.codileap.auth.domain.UserSerializer
+import com.manikandareas.codileap.user.domain.User
+import com.manikandareas.codileap.user.domain.UserSerializer
 import com.manikandareas.codileap.core.data.util.KeystoreHelper
 import kotlinx.coroutines.CoroutineDispatcher
 import kotlinx.coroutines.flow.Flow

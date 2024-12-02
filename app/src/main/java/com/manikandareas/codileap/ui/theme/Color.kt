@@ -1,18 +1,34 @@
 package com.manikandareas.codileap.ui.theme
 import androidx.compose.ui.graphics.Color
 
+//val primaryLight = Color(0xFF00284C)
+//val onPrimaryLight = Color(0xFFFFFFFF)
+//val primaryContainerLight = Color(0xFF224A76)
+//val onPrimaryContainerLight = Color(0xFFD4E4FF)
+//val secondaryLight = Color(0xFF655F41)
+//val onSecondaryLight = Color(0xFFFFFFFF)
+//val secondaryContainerLight = Color(0xFFFCF2CC)
+//val onSecondaryContainerLight = Color(0xFF575135)
+//val tertiaryLight = Color(0xFF715C00)
+//val onTertiaryLight = Color(0xFFFFFFFF)
+//val tertiaryContainerLight = Color(0xFFFAD963)
+//val onTertiaryContainerLight = Color(0xFF524200)
+// Light Mode Colors
 val primaryLight = Color(0xFF00284C)
 val onPrimaryLight = Color(0xFFFFFFFF)
 val primaryContainerLight = Color(0xFF224A76)
 val onPrimaryContainerLight = Color(0xFFD4E4FF)
-val secondaryLight = Color(0xFF655F41)
+
+val secondaryLight = Color(0xFF3C5D7E)  // Nuansa biru yang lebih muda, terinspirasi primary
 val onSecondaryLight = Color(0xFFFFFFFF)
-val secondaryContainerLight = Color(0xFFFCF2CC)
-val onSecondaryContainerLight = Color(0xFF575135)
-val tertiaryLight = Color(0xFF715C00)
+val secondaryContainerLight = Color(0xFFCFE1F4)  // Container dengan warna soft blue
+val onSecondaryContainerLight = Color(0xFF002646)  // Warna teks kontras
+
+val tertiaryLight = Color(0xFF405E7D)  // Variasi biru gelap
 val onTertiaryLight = Color(0xFFFFFFFF)
-val tertiaryContainerLight = Color(0xFFFAD963)
-val onTertiaryContainerLight = Color(0xFF524200)
+val tertiaryContainerLight = Color(0xFFD6E3F7)  // Container dengan warna blue-grey
+val onTertiaryContainerLight = Color(0xFF00315B)
+
 val errorLight = Color(0xFFBA1A1A)
 val onErrorLight = Color(0xFFFFFFFF)
 val errorContainerLight = Color(0xFFBA1A1A)
@@ -109,18 +125,35 @@ val surfaceContainerLightHighContrast = Color(0xFFEEEDF2)
 val surfaceContainerHighLightHighContrast = Color(0xFFE8E8EC)
 val surfaceContainerHighestLightHighContrast = Color(0xFFE2E2E6)
 
+//val primaryDark = Color(0xFFA4C9FC)
+//val onPrimaryDark = Color(0xFF00315B)
+//val primaryContainerDark = Color(0xFF00325B)
+//val onPrimaryContainerDark = Color(0xFF9CC1F4)
+//val secondaryDark = Color(0xFFFFFFFF)
+//val onSecondaryDark = Color(0xFF353117)
+//val secondaryContainerDark = Color(0xFFDED5B0)
+//val onSecondaryContainerDark = Color(0xFF453F25)
+//val tertiaryDark = Color(0xFFFFFAFF)
+//val onTertiaryDark = Color(0xFF3B2F00)
+//val tertiaryContainerDark = Color(0xFFF0CF5A)
+//val onTertiaryContainerDark = Color(0xFF4A3C00)
+
+// Dark Mode Colors
 val primaryDark = Color(0xFFA4C9FC)
 val onPrimaryDark = Color(0xFF00315B)
 val primaryContainerDark = Color(0xFF00325B)
 val onPrimaryContainerDark = Color(0xFF9CC1F4)
-val secondaryDark = Color(0xFFFFFFFF)
-val onSecondaryDark = Color(0xFF353117)
-val secondaryContainerDark = Color(0xFFDED5B0)
-val onSecondaryContainerDark = Color(0xFF453F25)
-val tertiaryDark = Color(0xFFFFFAFF)
-val onTertiaryDark = Color(0xFF3B2F00)
-val tertiaryContainerDark = Color(0xFFF0CF5A)
-val onTertiaryContainerDark = Color(0xFF4A3C00)
+
+val secondaryDark = Color(0xFF8CAED6)  // Biru muda di dark mode
+val onSecondaryDark = Color(0xFF00315B)
+val secondaryContainerDark = Color(0xFF2C4A6A)  // Container dengan warna biru gelap
+val onSecondaryContainerDark = Color(0xFFCFE1F4)
+
+val tertiaryDark = Color(0xFF7E9BC1)  // Biru keabuan
+val onTertiaryDark = Color(0xFF00315B)
+val tertiaryContainerDark = Color(0xFF3E5C7D)  // Container dengan warna biru gelap
+val onTertiaryContainerDark = Color(0xFFD6E3F7)
+
 val errorDark = Color(0xFFFFB4AB)
 val onErrorDark = Color(0xFF690005)
 val errorContainerDark = Color(0xFF93000A)

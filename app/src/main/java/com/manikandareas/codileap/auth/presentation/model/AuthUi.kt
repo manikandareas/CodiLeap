@@ -9,9 +9,9 @@ sealed class AuthUi(
     val description: String
 ) {
     object AuthData : AuthUi(
-        image = R.drawable.illustration_auth,
+        image = R.drawable.coder_1,
         title = "Start Your Coding Journey!",
-        description = "Sign up or log in to start your coding journey. Track progress, earn rewards, and access exclusive learning content. Let’s leap into learning!"
+        description = "Start coding! Sign up or log in to track your progress, earn rewards, and unlock exclusive content."
     )
 
     object RegisterData : AuthUi(

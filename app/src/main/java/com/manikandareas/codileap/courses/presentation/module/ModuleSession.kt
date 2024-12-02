@@ -1,6 +1,6 @@
 @file:OptIn(ExperimentalAnimationApi::class)
 
-package com.manikandareas.codileap.courses.presentation
+package com.manikandareas.codileap.courses.presentation.module
 
 import android.widget.Toast
 import androidx.activity.compose.BackHandler
@@ -18,8 +18,6 @@ import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.offset
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.lazy.rememberLazyListState
-import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.filled.Warning
 import androidx.compose.material3.FabPosition
 import androidx.compose.material3.Scaffold
 import androidx.compose.runtime.Composable
@@ -32,7 +30,6 @@ import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
-import androidx.compose.ui.tooling.preview.PreviewLightDark
 import androidx.compose.ui.unit.dp
 import com.manikandareas.codileap.core.presentation.util.HtmlParser
 import com.manikandareas.codileap.core.presentation.util.HtmlRenderer
@@ -42,10 +39,8 @@ import com.manikandareas.codileap.core.presentation.util.kotlinModule
 import com.manikandareas.codileap.courses.presentation.component.ModuleAppBar
 import com.manikandareas.codileap.courses.presentation.component.ModuleBottomAppBar
 
-import com.manikandareas.codileap.courses.presentation.model.toUiModel
 import com.manikandareas.codileap.ui.compositions.CodiDialog
 import com.manikandareas.codileap.ui.theme.AlertDialogType
-import com.manikandareas.codileap.ui.theme.CodiLeapTheme
 import com.manikandareas.codileap.ui.theme.ErrorAlertDialogStyle
 import com.manikandareas.codileap.ui.theme.SuccessAlertDialogStyle
 

@@ -24,7 +24,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalDensity
 import androidx.compose.ui.tooling.preview.PreviewLightDark
 import androidx.compose.ui.unit.dp
-import com.manikandareas.codileap.auth.domain.User
+import com.manikandareas.codileap.user.domain.User
 import com.manikandareas.codileap.core.navigation.Destination
 import com.manikandareas.codileap.home.presentation.component.HomeAppBar
 import com.manikandareas.codileap.home.presentation.component.HomeBanner

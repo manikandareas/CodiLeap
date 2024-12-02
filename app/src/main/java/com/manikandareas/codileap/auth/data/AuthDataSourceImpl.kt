@@ -7,7 +7,7 @@ import com.manikandareas.codileap.auth.data.networking.dto.RegisterRequestDto
 import com.manikandareas.codileap.auth.data.networking.mappers.toToken
 import com.manikandareas.codileap.auth.data.preference.PreferenceDataSource
 import com.manikandareas.codileap.auth.domain.AuthDataSource
-import com.manikandareas.codileap.auth.domain.toUser
+import com.manikandareas.codileap.user.domain.toUser
 import com.manikandareas.codileap.core.domain.networking.ApiResponse
 import com.manikandareas.codileap.core.domain.util.NetworkError
 import com.manikandareas.codileap.core.domain.util.Result
