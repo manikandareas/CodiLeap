@@ -2,7 +2,7 @@ package com.manikandareas.codileap.courses.domain
 
 enum class LearningPathLevel(val level: String) {
     BEGINNER("beginner"),
-    INTERMEDIATE("Intermediate"),
+    INTERMEDIATE("intermediate"),
     ADVANCED("advanced")
 }
 

@@ -40,20 +40,26 @@ class MainActivity : ComponentActivity() {
                 val token by dataSource.getToken()
                     .collectAsState(initial = null)
 
-                println("TOKEN INITIAL VALUE: $token")
+                val user by dataSource.getUser().collectAsState(initial = null)
 
-                LaunchedEffect(token) {
-                    startDestination = if (token?.accessToken?.isNotEmpty() == true) {
-                        Destination.HomeGraph // Atau nama route home graph kamu
-                    } else {
+                println("TOKEN INITIAL VALUE: $token")
+                println("USER INITIAL VALUE: $user")
+
+                LaunchedEffect(token, user) {
+                    startDestination = if (token == null) {
                         navigator.startDestination
+                    } else if (user?.isAlreadyScreened == false) {
+                        Destination.ScreeningGraph
+                    } else {
+                        Destination.HomeGraph
                     }
                 }
 
                 CodiLeapNavigation(
                     navController = navController,
                     navigator = navigator,
-                    startDestination = startDestination
+                    startDestination = startDestination,
+                    currentUser = user
                 )
             }
         }

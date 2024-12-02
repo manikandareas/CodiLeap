@@ -1,9 +1,13 @@
 package com.manikandareas.codileap.courses.presentation.model
 
+import com.manikandareas.codileap.core.presentation.util.toUTC
 import com.manikandareas.codileap.courses.domain.Course
 import com.manikandareas.codileap.courses.domain.LearningPath
 import com.manikandareas.codileap.courses.domain.LearningPathLevel
+import java.time.Instant
+import java.time.ZoneOffset
 import java.time.ZonedDateTime
+import java.time.format.DateTimeFormatter
 
 data class LearningPathUi(
     override val id: Int,
@@ -17,19 +21,20 @@ data class LearningPathUi(
     val courses: List<CourseUi>,
     val createdAt: ZonedDateTime,
     val updatedAt: ZonedDateTime
-): HasBasicCourse
+) : HasBasicCourse
 
 
-fun LearningPath.toUiModel() = LearningPathUi(
-    id = id,
-    name = name,
-    level = level,
-    description = description,
-    estimatedDuration = estimatedDuration,
-    totalModules = courses.sumOf { it.totalModules },
-    courses = courses.map { it.toUiModel() },
-    createdAt = ZonedDateTime.parse(createdAt),
-    updatedAt = ZonedDateTime.parse(updatedAt)
-)
+fun LearningPath.toUiModel(): LearningPathUi {
 
-
+    return LearningPathUi(
+        id = id,
+        name = name,
+        level = level,
+        description = description,
+        estimatedDuration = estimatedDuration,
+        totalModules = courses.sumOf { it.totalModules },
+        courses = courses.map { it.toUiModel() },
+        createdAt = ZonedDateTime.parse(createdAt.toUTC()),
+        updatedAt = ZonedDateTime.parse(updatedAt.toUTC()),
+    )
+}

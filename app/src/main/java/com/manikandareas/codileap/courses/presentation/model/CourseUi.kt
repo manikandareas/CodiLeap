@@ -1,8 +1,12 @@
 package com.manikandareas.codileap.courses.presentation.model
 
+import com.manikandareas.codileap.core.presentation.util.toUTC
 import com.manikandareas.codileap.courses.domain.Course
 import com.manikandareas.codileap.courses.domain.Module
+import java.time.Instant
+import java.time.ZoneOffset
 import java.time.ZonedDateTime
+import java.time.format.DateTimeFormatter
 
 
 data class CourseUi(
@@ -19,14 +23,18 @@ data class CourseUi(
 ) : HasBasicCourse
 
 
-fun Course.toUiModel() = CourseUi(
-    id = id,
-    name = name,
-    description = description,
-    totalModules = totalModules,
-    learningPathId = learningPathId,
-    createdAt = ZonedDateTime.parse(createdAt),
-    updatedAt = ZonedDateTime.parse(updatedAt),
-    orderIndex = orderIndex,
-    modules = modules.map { it.toUiModel() }
-)
+fun Course.toUiModel(): CourseUi {
+
+
+    return CourseUi(
+        id = id,
+        name = name,
+        description = description,
+        totalModules = totalModules,
+        learningPathId = learningPathId,
+        createdAt = ZonedDateTime.parse(createdAt.toUTC()),
+        updatedAt = ZonedDateTime.parse(updatedAt.toUTC()),
+        orderIndex = orderIndex,
+        modules = modules.map { it.toUiModel() }
+    )
+}

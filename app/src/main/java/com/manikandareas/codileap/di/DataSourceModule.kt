@@ -8,6 +8,8 @@ import com.manikandareas.codileap.auth.data.AuthDataSourceImpl
 import com.manikandareas.codileap.auth.data.networking.RemoteAuthDataSource
 import com.manikandareas.codileap.auth.data.preference.PreferenceDataSource
 import com.manikandareas.codileap.auth.domain.AuthDataSource
+import com.manikandareas.codileap.courses.data.networking.RemoteLearningPathDataSource
+import com.manikandareas.codileap.courses.domain.LearningPathDataSource
 import kotlinx.coroutines.CoroutineDispatcher
 import kotlinx.coroutines.Dispatchers
 import org.koin.core.module.dsl.singleOf
@@ -33,4 +35,6 @@ val dataSourceModule = module {
     singleOf(::RemoteAuthDataSource)
     singleOf(::AuthDataSourceImpl).bind<AuthDataSource>()
     factory { providePreferenceDataSource(get(), get(named("IODispatcher"))) }
+
+    singleOf(::RemoteLearningPathDataSource).bind<LearningPathDataSource>()
 }

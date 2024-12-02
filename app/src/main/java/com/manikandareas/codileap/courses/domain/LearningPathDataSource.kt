@@ -9,7 +9,7 @@ import com.manikandareas.codileap.courses.data.networking.dto.ScreeningLearningP
 import com.manikandareas.codileap.courses.data.networking.dto.ScreeningLearningPathResponseDto
 
 interface LearningPathDataSource {
-    suspend fun getAllLearningPathsWithCourses(): Result<ApiResponse<List<LearningPathDto>>, NetworkError>
+    suspend fun getAllLearningPathsWithCourses(): Result<List<LearningPath>, NetworkError>
     suspend fun enrollLearningPath(learningPathId: Int): Result<EnrollLearningPathResponseDto, NetworkError>
-    suspend fun screeningLearningPath(request: ScreeningLearningPathRequestDto): Result<ApiResponse<ScreeningLearningPathResponseDto>, NetworkError>
+    suspend fun screeningLearningPath(request: ScreeningLearningPathRequestDto): Result<ScreeningLearningPathResponseDto, NetworkError>
 }

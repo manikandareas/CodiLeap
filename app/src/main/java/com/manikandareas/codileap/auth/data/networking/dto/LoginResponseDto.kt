@@ -15,5 +15,7 @@ data class LoginResponseDto(
 @Serializable
 data class UserResponseDto(
     val id: Int,
-    val email: String
+    val email: String,
+    val avatarUrl: String,
+    val isAlreadyScreened: Boolean
 )

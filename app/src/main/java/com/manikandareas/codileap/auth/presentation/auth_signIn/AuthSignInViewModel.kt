@@ -69,7 +69,12 @@ class AuthSignInViewModel(
         ).onSuccess { response ->
             state = state.copy(isLoading = false)
             _events.send(AuthSignInEvent.Success)
-            navigator.navigate(Destination.HomeGraph)
+
+            if (response.data?.user?.isAlreadyScreened == false ) {
+                navigator.navigate(Destination.ScreeningGraph)
+            }else {
+                navigator.navigate(Destination.HomeGraph)
+            }
         }.onError {
             state = state.copy(isLoading = false)
             _events.send(AuthSignInEvent.Error(it))

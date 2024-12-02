@@ -12,6 +12,7 @@ fun LearningPathDto.toDomain(courses: List<CourseDto>? = null) = LearningPath(
     createdAt = createdAt,
     updatedAt = updatedAt,
     courses = courses?.map { it.toDomain() } ?: emptyList(),
-    level = LearningPathLevel.valueOf(level),
+    level = LearningPathLevel.values().find { it.level == level }
+        ?: throw IllegalArgumentException("Invalid level: $level"),
     estimatedDuration = estimatedDuration
 )
