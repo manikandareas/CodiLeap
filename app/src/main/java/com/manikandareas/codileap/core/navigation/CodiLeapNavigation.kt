@@ -5,7 +5,9 @@ package com.manikandareas.codileap.core.navigation
 import androidx.compose.animation.ExperimentalSharedTransitionApi
 import androidx.compose.animation.SharedTransitionLayout
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.getValue
 import androidx.compose.ui.Modifier
+import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
@@ -13,6 +15,7 @@ import androidx.navigation.navigation
 import androidx.navigation.toRoute
 import com.manikandareas.codileap.analytics.presentation.AnalyticsAction
 import com.manikandareas.codileap.analytics.presentation.AnalyticsScreen
+import com.manikandareas.codileap.auth.domain.User
 import com.manikandareas.codileap.auth.presentation.AuthScreen
 import com.manikandareas.codileap.auth.presentation.AuthViewModel
 import com.manikandareas.codileap.auth.presentation.auth_register.AuthRegisterScreen
@@ -25,12 +28,15 @@ import com.manikandareas.codileap.core.presentation.util.parcelableType
 import com.manikandareas.codileap.courses.presentation.CoursesAction
 import com.manikandareas.codileap.courses.presentation.CoursesScreen
 import com.manikandareas.codileap.courses.presentation.CoursesState
+import com.manikandareas.codileap.courses.presentation.CoursesViewModel
 import com.manikandareas.codileap.courses.presentation.ModuleAction
 import com.manikandareas.codileap.courses.presentation.ModuleSession
 import com.manikandareas.codileap.courses.presentation.ModuleState
 import com.manikandareas.codileap.courses.presentation.model.ModuleUi
 import com.manikandareas.codileap.home.presentation.HomeAction
 import com.manikandareas.codileap.home.presentation.HomeScreen
+import com.manikandareas.codileap.home.presentation.HomeState
+import com.manikandareas.codileap.home.presentation.model.toUiModel
 import com.manikandareas.codileap.intro.presentation.IntroScreen
 import com.manikandareas.codileap.profile.presentation.ProfileScreen
 import com.manikandareas.codileap.quiz.presentation.QuizAction
@@ -53,6 +59,7 @@ fun CodiLeapNavigation(
     navController: NavHostController,
     startDestination: Destination,
     navigator: Navigator,
+    currentUser: User? = null
 ) {
 
     ObserveAsEvents(events = navigator.navigationActions) { action ->
@@ -127,29 +134,23 @@ fun CodiLeapNavigation(
                 startDestination = Destination.HomeScreen
             ) {
                 composable<Destination.HomeScreen> {
-                    HomeScreen(onAction = {
-                        when (it) {
-                            is HomeAction.NavigateTo -> navController.navigate(it.des) {
-                                popUpTo(it.des) { inclusive = true }
+                    val state = HomeState(user = currentUser?.toUiModel())
+                    val viewModel = koinViewModel<CoursesViewModel>()
+//                    val state by viewModel.state.collectAsStateWithLifecycle()
+                    val courseState by viewModel.state.collectAsStateWithLifecycle()
+
+                    println("LEARNING PATHS: ${courseState.learningPaths}")
+                    HomeScreen(
+                        state = state, onAction = {
+                            when (it) {
+                                is HomeAction.NavigateTo -> navController.navigate(it.des) {
+                                    popUpTo(it.des) { inclusive = true }
+                                }
                             }
-                        }
-                    })
+                        })
                 }
 
                 composable<Destination.CoursesScreen> {
-//                    val selectedLearningPath = learningPathsDummy[2].toUiModel()
-//                    val selectedCourse = createCoursesForLearningPath(
-//                        learningPathId = selectedLearningPath.id,
-//                        pathName = selectedLearningPath.name
-//                    ).first().toUiModel()
-//                    val state = CoursesState(isLoading = false,
-//                        selectedLearningPath = selectedLearningPath,
-//                        learningPaths = learningPathsDummy.map { it.toUiModel() },
-//                        selectedCourse = selectedCourse,
-//                        courses = createCoursesForLearningPath(
-//                            learningPathId = selectedLearningPath.id,
-//                            pathName = selectedLearningPath.name
-//                        ).map { it.toUiModel() })
                     CoursesScreen(state = CoursesState(), onAction = {
                         when (it) {
                             is CoursesAction.NavigateTo -> navController.navigate(it.des) {

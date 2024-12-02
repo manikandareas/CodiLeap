@@ -17,6 +17,8 @@ import io.ktor.client.plugins.logging.LogLevel
 import io.ktor.client.plugins.logging.Logger
 import io.ktor.client.plugins.logging.Logging
 import io.ktor.client.request.forms.submitForm
+import io.ktor.client.request.parameter
+import io.ktor.client.request.post
 import io.ktor.http.ContentType
 import io.ktor.http.HttpHeaders
 import io.ktor.http.Parameters
@@ -38,14 +40,12 @@ object HttpClientFactory {
             }
             install(Auth) {
                 bearer {
-
                     // Perbaikan: Gunakan return untuk menentukan path mana yang tidak memerlukan token
                     sendWithoutRequest { request ->
                         request.url.encodedPath.contains("login") || request.url.encodedPath.contains(
                             "register"
                         )
                     }
-
 
                     loadTokens {
                         val token = dataSource.getToken().first()
@@ -55,39 +55,65 @@ object HttpClientFactory {
                         )
                     }
 
+//                    refreshTokens {
+//                        val currentToken = dataSource.getToken().first()
+//                        val refreshToken = currentToken?.refreshToken ?: ""
+//
+//                        // Khusus untuk refresh token endpoint, gunakan refresh token di header
+//                        val refreshTokenInfo: ApiResponse<RefreshTokenResponseDto> = client.submitForm(
+//                            url = constructUrl("/api/auth/refresh"), // URL endpoint refresh token
+//                            formParameters = Parameters.build {
+//                                append("grant_type", "refresh_token")
+//                                append("refresh_token", refreshToken)
+//                            }
+//                        ) {
+//                            // Khusus untuk endpoint refresh, gunakan refresh token di header
+//                            headers {
+//                                append(HttpHeaders.Authorization, "Bearer $refreshToken")
+//                            }
+//                            markAsRefreshTokenRequest()
+//                        }.body()
+//
+//                        val newToken = Token(
+//                            accessToken = refreshTokenInfo.data!!.accessToken,
+//                            refreshToken = refreshTokenInfo.data!!.refreshToken,
+//                            expiresIn = refreshTokenInfo.data!!.expiresIn,
+//                            tokenType = refreshTokenInfo.data!!.tokenType,
+//                            refreshTokenExpiresIn = refreshTokenInfo.data!!.refreshTokenExpiresIn
+//                        )
+//
+//                        dataSource.clearToken()
+//                        dataSource.saveToken(newToken)
+//
+//                        BearerTokens(
+//                            accessToken = newToken.accessToken,
+//                            refreshToken = newToken.refreshToken
+//                        )
+//                    }
+
                     refreshTokens {
-                        val currentToken = dataSource.getToken().first()
-                        val refreshToken = currentToken?.refreshToken ?: ""
+                        val currentRefreshToken = dataSource.getToken().first()?.refreshToken
 
-                        // Khusus untuk refresh token endpoint, gunakan refresh token di header
-                        val refreshTokenInfo: ApiResponse<RefreshTokenResponseDto> = client.submitForm(
-                            url = constructUrl("/api/auth/refresh"), // URL endpoint refresh token
-                            formParameters = Parameters.build {
-                                append("grant_type", "refresh_token")
-                                append("refresh_token", refreshToken)
-                            }
-                        ) {
-                            // Khusus untuk endpoint refresh, gunakan refresh token di header
-                            headers {
-                                append(HttpHeaders.Authorization, "Bearer $refreshToken")
-                            }
+                        val token = client.post(urlString = constructUrl("/api/auth/refresh")) {
                             markAsRefreshTokenRequest()
-                        }.body()
+                            headers {
+                                append(HttpHeaders.Authorization, "Bearer $currentRefreshToken")
+                            }
+                        }.body<ApiResponse<RefreshTokenResponseDto>>()
 
-                        val newToken = Token(
-                            accessToken = refreshTokenInfo.data!!.accessToken,
-                            refreshToken = refreshTokenInfo.data!!.refreshToken,
-                            expiresIn = refreshTokenInfo.data!!.expiresIn,
-                            tokenType = refreshTokenInfo.data!!.tokenType,
-                            refreshTokenExpiresIn = refreshTokenInfo.data!!.refreshTokenExpiresIn
+                        dataSource.saveToken(
+                            Token(
+                                accessToken = token.data?.accessToken ?: "",
+                                refreshToken = token.data?.refreshToken ?: "",
+                                expiresIn = token.data?.expiresIn ?: 0,
+                                tokenType = token.data?.tokenType ?: "",
+                                refreshTokenExpiresIn = token.data?.refreshTokenExpiresIn ?: 0
+                            )
                         )
 
-                        dataSource.clearToken()
-                        dataSource.saveToken(newToken)
-
                         BearerTokens(
-                            accessToken = newToken.accessToken,
-                            refreshToken = newToken.refreshToken
+                            accessToken = token.data?.accessToken ?: "",
+                            refreshToken = token.data?.refreshToken ?: ""
                         )
                     }
                 }

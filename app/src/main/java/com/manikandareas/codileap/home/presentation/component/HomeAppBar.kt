@@ -25,7 +25,7 @@ fun HomeAppBar(onProfileClick: () -> Unit, data: UserUi, modifier: Modifier = Mo
         modifier = modifier,
         title = {
             Column {
-                Text(text = data.name, style = MaterialTheme.typography.titleMedium)
+                Text(text = data.name?: "Unknown", style = MaterialTheme.typography.titleMedium)
                 Text(
                     text = "Let's learn something new today!",
                     style = MaterialTheme.typography.labelSmall
@@ -57,5 +57,8 @@ fun PreviewHomeAppBar(modifier: Modifier = Modifier) {
 
 val userUi = UserUi(
     name = "Vito Manik",
-    imageUrl = "https://avatars.githubusercontent.com/u/86580600?v=4"
+    imageUrl = "https://avatars.githubusercontent.com/u/86580600?v=4",
+    isAlreadyScreened = false,
+    email = "",
+    id = 0
 )
