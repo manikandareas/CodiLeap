@@ -22,6 +22,7 @@ import org.koin.compose.koinInject
 import androidx.compose.runtime.setValue
 import androidx.compose.runtime.getValue
 import com.manikandareas.codileap.core.navigation.Destination
+import com.manikandareas.codileap.user.domain.User
 
 class MainActivity : ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {

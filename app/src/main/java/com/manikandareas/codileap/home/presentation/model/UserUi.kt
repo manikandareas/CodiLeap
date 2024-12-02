@@ -1,6 +1,6 @@
 package com.manikandareas.codileap.home.presentation.model
 
-import com.manikandareas.codileap.auth.domain.User
+import com.manikandareas.codileap.user.domain.User
 
 data class UserUi (
  val id: Int,

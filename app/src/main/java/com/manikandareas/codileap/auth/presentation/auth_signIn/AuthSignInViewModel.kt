@@ -60,6 +60,15 @@ class AuthSignInViewModel(
 
 
     private fun onSubmit() = viewModelScope.launch {
+
+        if (state.email.isEmpty() || state.password.isEmpty()) {
+            state = state.copy(
+                emailError = if (state.email.isEmpty()) "The email can't be blank" else null,
+                passwordError = if (state.password.isEmpty()) "The password can't be blank" else null
+            )
+            return@launch
+        }
+
         state = state.copy(isLoading = true)
         authDataSource.login(
             LoginRequestDto(

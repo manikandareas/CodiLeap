@@ -84,7 +84,7 @@ fun AuthRegisterScreen(
         TopAppBar(
             title = { },
             navigationIcon = {
-                IconButton(onClick = { onAction(AuthRegisterAction.OnBackClicked) }) {
+                IconButton(enabled = !state.isLoading, onClick = { onAction(AuthRegisterAction.OnBackClicked) }) {
                     Icon(
                         imageVector = Icons.Default.ArrowBackIosNew,
                         contentDescription = "Back",
@@ -113,12 +113,13 @@ fun AuthRegisterScreen(
                         text = "Already have an account? ",
                         style = MaterialTheme.typography.bodyMedium
                     )
-                    TextButton(onClick = { onAction(AuthRegisterAction.OnSignInClicked) }) {
+                    TextButton(enabled = !state.isLoading, onClick = { onAction(AuthRegisterAction.OnSignInClicked) }) {
                         Text("Sign in")
                     }
                 }
 
                 CodiButton(
+                    enabled = !state.isLoading,
                     onClick = { onAction(AuthRegisterAction.OnSubmitClicked) },
                     modifier = Modifier.fillMaxWidth()
                 ) {
@@ -219,8 +220,7 @@ fun AuthRegisterScreen(
             if (state.isLoading) {
                 Box(
                     modifier = Modifier
-                        .fillMaxSize()
-                        .background(Color.Black.copy(alpha = 0.6f)),
+                        .fillMaxSize(),
                     contentAlignment = Alignment.Center
                 ) {
                     CircularProgressIndicator(

@@ -1,4 +1,4 @@
-package com.manikandareas.codileap.auth.domain
+package com.manikandareas.codileap.user.domain
 
 import com.manikandareas.codileap.auth.data.networking.dto.UserResponseDto
 import kotlinx.serialization.Serializable
@@ -13,7 +13,6 @@ data class User(
     val isAlreadyScreened: Boolean
 )
 
-
 fun UserResponseDto.toUser(): User {
     return User(
         id = id,
@@ -22,7 +21,6 @@ fun UserResponseDto.toUser(): User {
         isAlreadyScreened = isAlreadyScreened
     )
 }
-
 
 object  UserSerializer {
     private val json = Json { prettyPrint = true }
