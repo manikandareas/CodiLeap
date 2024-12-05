@@ -4,4 +4,6 @@ import com.manikandareas.codileap.core.navigation.Destination
 
 sealed class SettingsAction {
     data class NavigateTo(val des: Destination) : SettingsAction()
+
+    object OnSignOutClick : SettingsAction()
 }

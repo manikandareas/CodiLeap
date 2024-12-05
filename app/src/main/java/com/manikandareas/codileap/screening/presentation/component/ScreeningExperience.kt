@@ -34,7 +34,7 @@ import com.manikandareas.codileap.ui.theme.CodiLeapTheme
 
 @Composable
 fun ScreeningExperience(modifier: Modifier = Modifier) {
-    var selectedButton by remember { mutableIntStateOf(0) }
+
     Column(modifier = modifier.fillMaxWidth(), horizontalAlignment = Alignment.CenterHorizontally) {
         Text(
             "How much experience coding do you have?",

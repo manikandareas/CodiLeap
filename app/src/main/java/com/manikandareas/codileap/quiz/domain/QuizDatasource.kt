@@ -8,6 +8,6 @@ import com.manikandareas.codileap.courses.data.networking.dto.SubmitQuizResponse
 import com.manikandareas.codileap.quiz.data.networking.dto.DailyQuizResponseDto
 
 interface QuizDatasource {
-    suspend fun getDailyQuiz (): Result<ApiResponse<DailyQuizResponseDto>, NetworkError>
-    suspend fun submitQuiz (request: SubmitQuizRequestDto): Result<ApiResponse<SubmitQuizResponseDto>, NetworkError>
+    suspend fun getDailyQuiz (): Result<Quiz, NetworkError>
+    suspend fun submitQuiz (request: SubmitQuizRequestDto): Result<SubmitQuizResponseDto, NetworkError>
 }

@@ -20,14 +20,14 @@ import com.manikandareas.codileap.auth.presentation.AuthAction
 import com.manikandareas.codileap.ui.theme.CodiLeapTheme
 
 @Composable
-fun FAQsAppBar(modifier: Modifier = Modifier,onBackClicked: (AuthAction) -> Unit = {}) {
+fun FAQsAppBar(modifier: Modifier = Modifier,onBack: () -> Unit = {}) {
     TopAppBar(
         title = {
             Text(text = "FAQs", style = MaterialTheme.typography.titleLarge)
         },
         navigationIcon = {
             IconButton(
-                onClick = { onBackClicked(AuthAction.OnBackClicked) },
+                onClick = { onBack() },
                 modifier = Modifier.padding(start = 12.dp)
             ) {
                 Icon(

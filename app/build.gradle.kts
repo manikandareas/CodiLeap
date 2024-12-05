@@ -29,10 +29,11 @@ android {
                 getDefaultProguardFile("proguard-android-optimize.txt"),
                 "proguard-rules.pro"
             )
-            buildConfigField("String", "BASE_URL", "\"http://34.128.107.34:3000/\"")
+            buildConfigField("String", "BASE_URL", "\"https://d66b-114-10-138-196.ngrok-free.app/\"")
+//            buildConfigField("String", "BASE_URL", "\"http://34.128.113.63:3000/\"")
         }
         debug {
-            buildConfigField("String", "BASE_URL", "\"http://34.128.107.34:3000/\"")
+            buildConfigField("String", "BASE_URL", "\"https://d66b-114-10-138-196.ngrok-free.app/\"")
             buildConfigField("String", "APP_SECRET_KEY", "\"codileap_secret_key\"")
         }
     }

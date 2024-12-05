@@ -1,6 +1,6 @@
 @file:OptIn(ExperimentalMaterial3Api::class)
 
-package com.manikandareas.codileap.profile.presentation.component
+package com.manikandareas.codileap.user.presentation.component
 
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
@@ -20,14 +20,14 @@ import com.manikandareas.codileap.auth.presentation.AuthAction
 import com.manikandareas.codileap.ui.theme.CodiLeapTheme
 
 @Composable
-fun ProfileAppBar(modifier: Modifier = Modifier,onBackClicked: (AuthAction) -> Unit = {}) {
+fun ProfileAppBar(modifier: Modifier = Modifier,onBackClicked: () -> Unit = {}) {
     TopAppBar(
         title = {
             Text(text = "Profile", style = MaterialTheme.typography.titleLarge)
         },
         navigationIcon = {
             IconButton(
-                onClick = { onBackClicked(AuthAction.OnBackClicked) },
+                onClick = {onBackClicked() },
                 modifier = Modifier.padding(start = 12.dp)
             ) {
                 Icon(

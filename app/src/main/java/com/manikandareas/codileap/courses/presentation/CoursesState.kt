@@ -8,5 +8,6 @@ data class CoursesState(
     val selectedLearningPath: LearningPathUi? = null,
     val learningPaths: List<LearningPathUi> = emptyList(),
     val selectedCourse: CourseUi? = null,
+    val currentModuleId: Int? = null,
     val courses: List<CourseUi> = emptyList()
 )

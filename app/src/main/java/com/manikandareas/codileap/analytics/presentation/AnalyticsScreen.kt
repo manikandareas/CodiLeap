@@ -86,11 +86,11 @@ fun AnalyticsScreen(onAction: (AnalyticsAction) -> Unit, modifier: Modifier = Mo
                     .offset(y = bottomBarTranslation.roundToInt().dp)
             )
         },
-        floatingActionButton = {
-            HomeChatBotFab(onClick = {
-                onAction(AnalyticsAction.NavigateTo(Destination.ChatBotScreen))
-            })
-        }
+//        floatingActionButton = {
+//            HomeChatBotFab(onClick = {
+//                onAction(AnalyticsAction.NavigateTo(Destination.ChatBotScreen))
+//            })
+//        }
 
     ) { innerPadding ->
         Column(

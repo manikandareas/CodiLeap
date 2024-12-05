@@ -18,61 +18,63 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Send
+import com.manikandareas.codileap.chatbot.domain.VirtualAssistantChat
 import com.manikandareas.codileap.ui.theme.CodiLeapTheme
 
-data class ChatMessage(
-    val message: String,
-    val isFromUser: Boolean,
-    val timestamp: String = ""
-)
 
 @Composable
 fun ChatBotChat(
     modifier: Modifier = Modifier,
-    messages: List<ChatMessage> = emptyList(),
-    onSendMessage: (String) -> Unit = {}
+    messages: List<VirtualAssistantChat> = emptyList(),
 ) {
-    var messageText by remember { mutableStateOf("") }
 
     Column(
         modifier = modifier
             .fillMaxSize()
-            .background(MaterialTheme.colorScheme.background)
     ) {
         LazyColumn(
             modifier = Modifier
                 .weight(1f)
                 .fillMaxWidth()
-                .padding(horizontal = 16.dp),
-            reverseLayout = true
+//            reverseLayout = true
         ) {
             items(messages.asReversed()) { message ->
-                ChatBubble(message = message)
+                ChatBubble(
+                    state = BubbleChatUi(
+                        message = message.question,
+                        position = Alignment.End
+                    )
+                )
+                Spacer(modifier = Modifier.height(8.dp))
+                ChatBubble(
+                    state = BubbleChatUi(
+                        message = message.answer,
+                        position = Alignment.Start
+                    )
+                )
                 Spacer(modifier = Modifier.height(8.dp))
             }
         }
 
-        ChatInput(
-            value = messageText,
-            onValueChange = { messageText = it },
-            onSendClick = {
-                if (messageText.isNotBlank()) {
-                    onSendMessage(messageText)
-                    messageText = ""
-                }
-            }
-        )
+
     }
 }
+
+data class BubbleChatUi(
+    val message: String,
+    val position: Alignment.Horizontal = Alignment.End,
+    val timestamp: String = "",
+
+    )
 
 @Composable
 fun ChatBubble(
     modifier: Modifier = Modifier,
-    message: ChatMessage
+    state: BubbleChatUi,
 ) {
     Column(
         modifier = modifier.fillMaxWidth(),
-        horizontalAlignment = if (message.isFromUser) Alignment.End else Alignment.Start
+        horizontalAlignment = state.position
     ) {
         Box(
             modifier = Modifier
@@ -80,12 +82,12 @@ fun ChatBubble(
                     RoundedCornerShape(
                         topStart = 16.dp,
                         topEnd = 16.dp,
-                        bottomStart = if (message.isFromUser) 16.dp else 4.dp,
-                        bottomEnd = if (message.isFromUser) 4.dp else 16.dp
+                        bottomStart = if (state.position == Alignment.End) 16.dp else 4.dp,
+                        bottomEnd = if (state.position == Alignment.End) 4.dp else 16.dp
                     )
                 )
                 .background(
-                    if (message.isFromUser)
+                    if (state.position == Alignment.End)
                         MaterialTheme.colorScheme.primary
                     else
                         MaterialTheme.colorScheme.secondaryContainer
@@ -93,8 +95,8 @@ fun ChatBubble(
                 .padding(12.dp)
         ) {
             Text(
-                text = message.message,
-                color = if (message.isFromUser)
+                text = state.message,
+                color = if (state.position == Alignment.End)
                     MaterialTheme.colorScheme.onPrimary
                 else
                     MaterialTheme.colorScheme.onSecondaryContainer,
@@ -102,10 +104,10 @@ fun ChatBubble(
             )
         }
 
-        if (message.timestamp.isNotEmpty()) {
+        if (state.timestamp.isNotEmpty()) {
             Spacer(modifier = Modifier.height(4.dp))
             Text(
-                text = message.timestamp,
+                text = state.timestamp,
                 color = MaterialTheme.colorScheme.onSurfaceVariant,
                 style = TextStyle(fontSize = 12.sp)
             )
@@ -166,24 +168,29 @@ fun PreviewChatBotChat() {
     CodiLeapTheme {
         ChatBotChat(
             messages = listOf(
-                ChatMessage("Hello! How can I help you today?", false),
-                ChatMessage("I have a question about coding", true)
+                VirtualAssistantChat(
+                    question = "Hi can i get some help?",
+                    answer = "Sure, how can I help you?",
+                    timestamp = "12:00 AM",
+                    id = 1,
+                    userId = 1
+                ),
             )
         )
     }
 }
-
-@PreviewLightDark
-@Composable
-fun PreviewChatBubble() {
-    CodiLeapTheme {
-        Column {
-            ChatBubble(message = ChatMessage("Hello! How can I help you?", false))
-            Spacer(modifier = Modifier.height(8.dp))
-            ChatBubble(message = ChatMessage("I need help with my learning path", true))
-        }
-    }
-}
+//
+//@PreviewLightDark
+//@Composable
+//fun PreviewChatBubble() {
+//    CodiLeapTheme {
+//        Column {
+//            ChatBubble()
+//            Spacer(modifier = Modifier.height(8.dp))
+//            ChatBubble(message = ChatMessage("I need help with my learning path", true))
+//        }
+//    }
+//}
 
 @PreviewLightDark
 @Composable

@@ -1,19 +1,6 @@
 package com.manikandareas.codileap.ui.theme
 import androidx.compose.ui.graphics.Color
 
-//val primaryLight = Color(0xFF00284C)
-//val onPrimaryLight = Color(0xFFFFFFFF)
-//val primaryContainerLight = Color(0xFF224A76)
-//val onPrimaryContainerLight = Color(0xFFD4E4FF)
-//val secondaryLight = Color(0xFF655F41)
-//val onSecondaryLight = Color(0xFFFFFFFF)
-//val secondaryContainerLight = Color(0xFFFCF2CC)
-//val onSecondaryContainerLight = Color(0xFF575135)
-//val tertiaryLight = Color(0xFF715C00)
-//val onTertiaryLight = Color(0xFFFFFFFF)
-//val tertiaryContainerLight = Color(0xFFFAD963)
-//val onTertiaryContainerLight = Color(0xFF524200)
-// Light Mode Colors
 val primaryLight = Color(0xFF00284C)
 val onPrimaryLight = Color(0xFFFFFFFF)
 val primaryContainerLight = Color(0xFF224A76)

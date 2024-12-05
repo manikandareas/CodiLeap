@@ -52,7 +52,7 @@ enum class Options {
 @Composable
 fun <T : HasBasicCourse> BottomSheetOptions(
     onDismiss: () -> Unit,
-    onItemClick: (String) -> Unit,
+    onItemClick: (Int) -> Unit,
     title: String = "Learning Path",
     type: Options,
     items: List<T>,
@@ -107,7 +107,7 @@ fun <T : HasBasicCourse> BottomSheetOptions(
                         modifier = modifier
                             .fillMaxWidth()
                             .height(100.dp)
-                            .clickable(enabled = true, onClick = { onItemClick("") }),
+                            .clickable(enabled = true, onClick = { onItemClick(item.id) }),
 
                         ) {
                         Row(

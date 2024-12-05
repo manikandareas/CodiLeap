@@ -5,6 +5,7 @@ package com.manikandareas.codileap.courses.presentation
 import androidx.compose.animation.core.animateFloatAsState
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
+import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
@@ -13,6 +14,7 @@ import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.offset
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.rememberScrollState
@@ -20,6 +22,7 @@ import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.ImportExport
 import androidx.compose.material3.Button
 import androidx.compose.material3.ButtonDefaults
+import androidx.compose.material3.CircularProgressIndicator
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
@@ -37,6 +40,7 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.LocalDensity
+import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
 import com.manikandareas.codileap.core.navigation.Destination
 import com.manikandareas.codileap.courses.presentation.component.BottomSheetOptions
@@ -88,14 +92,32 @@ fun CoursesScreen(
     var showBottomSheet by remember { mutableStateOf(false) }
     var clickedOptionsType by remember { mutableStateOf(Options.LEARNING) }
 
+    val currentModule = state.selectedCourse?.modules?.find {
+        it.id == state.currentModuleId
+    }
+
+    if (state.isLoading) {
+        Box(
+            modifier = Modifier
+                .fillMaxSize(),
+            contentAlignment = Alignment.Center
+        ) {
+            CircularProgressIndicator(
+                modifier = Modifier.size(48.dp),
+                color = MaterialTheme.colorScheme.primary
+            )
+        }
+    }
+
     Scaffold(
         topBar = {
             CoursesAppBar(
                 title = state.selectedLearningPath?.name ?: "Learning Path",
                 onClick = {
-                showBottomSheet = true
-                clickedOptionsType = Options.LEARNING
-            }, modifier = Modifier.fillMaxWidth())
+                    showBottomSheet = true
+                    clickedOptionsType = Options.LEARNING
+                }, modifier = Modifier.fillMaxWidth()
+            )
         },
         bottomBar = {
             HomeBottomAppBar(
@@ -108,11 +130,11 @@ fun CoursesScreen(
                     .offset(y = bottomBarTranslation.roundToInt().dp)
             )
         },
-        floatingActionButton = {
-            HomeChatBotFab(onClick = {
-                onAction(CoursesAction.NavigateTo(Destination.ChatBotScreen))
-            })
-        },
+//        floatingActionButton = {
+//            HomeChatBotFab(onClick = {
+//                onAction(CoursesAction.NavigateTo(Destination.ChatBotScreen))
+//            })
+//        },
         modifier = modifier
             .fillMaxSize()
             .background(MaterialTheme.colorScheme.background)
@@ -126,8 +148,11 @@ fun CoursesScreen(
                         },
                         sheetState = sheetState,
                         items = state.courses,
-                        title = state.selectedCourse?.name ?: "Select Learning Path",
-                        onItemClick = {},
+                        title = state.selectedCourse?.name ?: "Select Course",
+                        onItemClick = {
+                            onAction(CoursesAction.OnCourseChanged(it))
+                            showBottomSheet = false
+                        },
                         type = Options.COURSE,
                     )
                 }
@@ -140,7 +165,10 @@ fun CoursesScreen(
                         sheetState = sheetState,
                         items = state.learningPaths,
                         title = state.selectedLearningPath?.name ?: "Select Learning Path",
-                        onItemClick = {},
+                        onItemClick = {
+                            onAction(CoursesAction.OnLearningPathChanged(it))
+                            showBottomSheet = false
+                        },
                         type = Options.LEARNING,
                     )
                 }
@@ -171,28 +199,37 @@ fun CoursesScreen(
                         verticalAlignment = Alignment.CenterVertically
                     ) {
                         Text(
-                            text = state.selectedCourse?.name ?: "Module Name",
+                            text = state.selectedCourse?.name ?: "Course Name",
                             style = MaterialTheme.typography.titleMedium,
-
-                            )
-//                        Icon(
-//
-//                            imageVector = Icons.Default.ClearAll,
-//                            contentDescription = "Select Module"
-//                        )
+                            maxLines = 1,
+                            overflow = TextOverflow.Ellipsis,
+                            modifier = Modifier.weight(1f)
+                        )
                         Icon(
                             imageVector = Icons.Default.ImportExport,
-                            contentDescription = "Select Modules",
+                            contentDescription = "Select Course",
                         )
                     }
                 }
-                Spacer(modifier = Modifier.height(32.dp))
+                Spacer(modifier = Modifier.height(16.dp))
+            }
+
+            item {
+                if (!state.selectedCourse?.description.isNullOrBlank()) {
+                    Text(
+                        text = state.selectedCourse.description,
+                        style = MaterialTheme.typography.bodyMedium,
+//                        color = MaterialTheme.colorScheme.onSurface.copy(alpha = 0.6f)
+                    )
+                }
+                Spacer(modifier = Modifier.height(16.dp))
             }
             items(
-                items = state.selectedCourse?.modules!!,
-
+                items = state.selectedCourse?.modules ?: emptyList(),
                 key = { item -> item }
             ) { item ->
+
+
                 // Calculate position dynamically based on index
                 val position = when (item) {
                     state.courses.first() -> ModuleNodePosition.FIRST
@@ -214,10 +251,10 @@ fun CoursesScreen(
                     )
                 }
 
-                // Circle radius changes based on position
-                val circleColor = when (position) {
-                    ModuleNodePosition.FIRST -> Color(0xFF00FF9C)
-                    else -> Color(0xFF00FF9C).copy(alpha = 0.3F)
+                val circleColor = if (item.orderIndex <= (currentModule?.orderIndex ?: 0)) {
+                    Color(0xFF00FF9C)
+                } else {
+                    Color(0xFF00FF9C).copy(alpha = 0.3F)
                 }
 
                 ModuleNode(
@@ -231,6 +268,7 @@ fun CoursesScreen(
                     ModuleItem(
                         modifier = modifier,
                         module = item,
+                        isLocked = item.orderIndex > (currentModule?.orderIndex ?: 0),
                         onClick = {
                             println("Clicked on module: ${item.name}")
                             onAction(CoursesAction.OnModuleClicked(item))
