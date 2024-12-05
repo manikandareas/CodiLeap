@@ -24,13 +24,14 @@ import com.manikandareas.codileap.ui.theme.CodiLeapTheme
 
 @Composable
 fun FAQsScreen(
-    modifier: Modifier = Modifier
+    modifier: Modifier = Modifier,
+    onBack: () -> Unit = {}
     ) {
     val faqs = remember { getFAQs() }
     val scrollState = rememberScrollState()
     Scaffold(
         topBar = {
-            FAQsAppBar {  }
+            FAQsAppBar(onBack = onBack)
         },
 
         content = { innerPadding ->

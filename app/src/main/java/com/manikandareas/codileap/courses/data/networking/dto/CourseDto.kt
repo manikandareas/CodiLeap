@@ -9,7 +9,12 @@ data class CourseDto(
     val learningPathId: Int,
     val totalModules: Int,
     val description: String,
-    val orderIndex: Int,
     val createdAt: String,
-    val updatedAt: String
+    val updatedAt: String,
+    val orderIndex: Int,
+    val level: String,
+    val estimatedDuration: Int,
+    val rating: Float,
+    val totalEnrollments: Int,
+    val modules: List<ModuleDto>? = emptyList()
 )

@@ -18,10 +18,12 @@ fun <T> ObserveAsEvents(
     onEvent: (T) -> Unit
 ) {
     val lifecycleOwner = LocalLifecycleOwner.current
-    LaunchedEffect(key1 = lifecycleOwner.lifecycle, key1, key2) {
+    LaunchedEffect(events, lifecycleOwner.lifecycle, key1, key2) {
         lifecycleOwner.repeatOnLifecycle(Lifecycle.State.STARTED) {
-            withContext(Dispatchers.Main.immediate) {
-                events.collect(onEvent)
+            events.collect { event ->
+                // Log or print the event to debug
+                println("Received event: $event")
+                onEvent(event)
             }
         }
     }

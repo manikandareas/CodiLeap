@@ -27,6 +27,7 @@ import com.manikandareas.codileap.screening.presentation.component.ScreeningAppB
 import com.manikandareas.codileap.screening.presentation.component.ScreeningExperience
 import com.manikandareas.codileap.screening.presentation.component.ScreeningMotive
 import com.manikandareas.codileap.screening.presentation.component.ScreeningName
+import com.manikandareas.codileap.screening.presentation.component.ScreeningStudyHour
 import com.manikandareas.codileap.screening.presentation.component.ScreeningWelcome
 import com.manikandareas.codileap.ui.compositions.CodiButton
 import com.manikandareas.codileap.ui.theme.CodiLeapTheme
@@ -40,6 +41,7 @@ fun ScreeningScreen(onAction: (ScreeningAction) -> Unit, modifier: Modifier = Mo
         { ScreeningName(modifier = Modifier.fillMaxWidth()) },
         { ScreeningMotive(modifier = Modifier.fillMaxWidth()) },
         { ScreeningExperience(modifier = Modifier.fillMaxWidth()) },
+        { ScreeningStudyHour(modifier = Modifier.fillMaxWidth()) }
     )
 
     val pagerState = rememberPagerState(initialPage = 0) {
@@ -53,6 +55,7 @@ fun ScreeningScreen(onAction: (ScreeningAction) -> Unit, modifier: Modifier = Mo
                 1 -> ScreeningAppBarUi(title = "Personal Information")
                 2 -> ScreeningAppBarUi(title = "Motive")
                 3 -> ScreeningAppBarUi(title = "Experience")
+                4 -> ScreeningAppBarUi(title = "Study Hour")
                 else -> ScreeningAppBarUi()
             }
         }
@@ -63,13 +66,13 @@ fun ScreeningScreen(onAction: (ScreeningAction) -> Unit, modifier: Modifier = Mo
                 0 -> "Let's Go"
                 1 -> "Continue"
                 2 -> "Continue"
-                3 -> "Finish"
-                else -> listOf("", "")
+                3 -> "Continue"
+                4 -> "Finish"
+                else -> ""
             }
         }
     }
-
-    val scope = rememberCoroutineScope()
+    
 
 
     Scaffold(
@@ -85,7 +88,7 @@ fun ScreeningScreen(onAction: (ScreeningAction) -> Unit, modifier: Modifier = Mo
                     onClick = { onAction(ScreeningAction.NavigateTo(Destination.HomeGraph)) },
                     modifier = Modifier.fillMaxWidth(),
                 ) {
-                    Text("Let's Go")
+                    Text(buttonState.value)
                 }
             }
         },

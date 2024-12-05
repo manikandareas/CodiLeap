@@ -1,73 +1,61 @@
-@file:OptIn(ExperimentalAnimationApi::class)
+@file:OptIn(ExperimentalAnimationApi::class, ExperimentalMaterial3Api::class)
 
 package com.manikandareas.codileap.courses.presentation.module
 
-import android.widget.Toast
+import android.util.Log
 import androidx.activity.compose.BackHandler
-import androidx.compose.animation.AnimatedContent
-import androidx.compose.animation.AnimatedVisibility
-import androidx.compose.animation.ExperimentalAnimationApi
+import androidx.compose.animation.*
 import androidx.compose.animation.core.tween
-import androidx.compose.animation.slideInHorizontally
-import androidx.compose.animation.slideInVertically
-import androidx.compose.animation.slideOutHorizontally
-import androidx.compose.animation.slideOutVertically
-import androidx.compose.animation.togetherWith
-import androidx.compose.foundation.layout.Box
-import androidx.compose.foundation.layout.fillMaxSize
-import androidx.compose.foundation.layout.offset
-import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.rememberLazyListState
-import androidx.compose.material3.FabPosition
-import androidx.compose.material3.Scaffold
-import androidx.compose.runtime.Composable
-import androidx.compose.runtime.LaunchedEffect
-import androidx.compose.runtime.derivedStateOf
-import androidx.compose.runtime.getValue
-import androidx.compose.runtime.mutableIntStateOf
-import androidx.compose.runtime.mutableStateOf
-import androidx.compose.runtime.remember
-import androidx.compose.runtime.setValue
+import androidx.compose.material3.*
+import androidx.compose.runtime.*
+import androidx.compose.runtime.saveable.rememberSaveable
+import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.unit.dp
+import com.manikandareas.codileap.chatbot.presentation.ChatBotSheet
 import com.manikandareas.codileap.core.presentation.util.HtmlParser
 import com.manikandareas.codileap.core.presentation.util.HtmlRenderer
-import com.manikandareas.codileap.core.presentation.util.kotlinModule
-
-
+import com.manikandareas.codileap.core.presentation.util.ObserveAsEvents
 import com.manikandareas.codileap.courses.presentation.component.ModuleAppBar
 import com.manikandareas.codileap.courses.presentation.component.ModuleBottomAppBar
-
+import com.manikandareas.codileap.courses.presentation.model.ModuleUi
+import com.manikandareas.codileap.courses.presentation.model.UnitUi
 import com.manikandareas.codileap.ui.compositions.CodiDialog
+import com.manikandareas.codileap.ui.compositions.CodiDialogProps
 import com.manikandareas.codileap.ui.theme.AlertDialogType
 import com.manikandareas.codileap.ui.theme.ErrorAlertDialogStyle
 import com.manikandareas.codileap.ui.theme.SuccessAlertDialogStyle
+import kotlinx.coroutines.flow.Flow
+
 
 @Composable
 fun ModuleSession(
     state: ModuleState,
     onAction: (ModuleAction) -> Unit,
-    modifier: Modifier = Modifier
+    modifier: Modifier = Modifier,
+    events: Flow<ModuleEvent>
 ) {
     val parser = HtmlParser()
-    val elements = parser.parseHtml(kotlinModule)
-    val units = state.moduleUi.units
+    // Add null safety for units
+    val units = state.moduleUi?.units ?: return
 
-    val isAlertDialogOpen = remember { mutableStateOf(false) }
-    var moduleActionType by remember { mutableStateOf(AlertDialogType.ERROR) }
+    var codiDialogProps by remember { mutableStateOf<CodiDialogProps?>(null) }
 
+    var codiDialogStyle by rememberSaveable { mutableStateOf(AlertDialogType.ERROR) }
 
-    var currentUnitIndex by remember { mutableIntStateOf(0) }
-    val currentUnit = units[currentUnitIndex]
+    var currentUnitIndex by rememberSaveable {
+        mutableIntStateOf(0.coerceIn(0, units.size - 1))
+    }
+
+    val currentUnit = units.getOrNull(currentUnitIndex) ?: return
     val progress = (currentUnitIndex + 1).toFloat() / units.size
 
-    // Buat LazyListState baru untuk setiap unit
     val listState = rememberLazyListState()
-    var lastIndex by remember { mutableIntStateOf(0) }
-    var lastOffset by remember { mutableIntStateOf(0) }
+    var lastIndex by rememberSaveable { mutableIntStateOf(0) }
+    var lastOffset by rememberSaveable { mutableIntStateOf(0) }
 
-    val context = LocalContext.current
 
     val isBottomBarVisible by remember {
         derivedStateOf {
@@ -99,22 +87,129 @@ fun ModuleSession(
         }
     }
 
-    // Reset scroll position when unit changes
+    var isAlertDialogOpen by rememberSaveable { mutableStateOf(false) }
+//    var alertDialogEvent by rememberSaveable { mutableStateOf(ModuleEventTypes.Exit) }
+
+    var showBottomSheet by remember { mutableStateOf(false) }
+
+    val chatBotSheetState = rememberModalBottomSheetState(
+        skipPartiallyExpanded = false
+    )
+
     LaunchedEffect(currentUnit.id) {
         listState.scrollToItem(0)
     }
 
     BackHandler(enabled = true) {
         if (currentUnitIndex == 0) {
-            moduleActionType = AlertDialogType.ERROR
-            isAlertDialogOpen.value = true
+            onAction(ModuleAction.Exit)
         } else {
             currentUnitIndex--
         }
     }
 
+    ObserveAsEvents(events) { event ->
+        when (event) {
+            is ModuleEvent.Error -> {
+                isAlertDialogOpen = true
+                codiDialogStyle = AlertDialogType.ERROR
+                codiDialogProps = CodiDialogProps(
+                    onDismissRequest = {
+                        isAlertDialogOpen = false
+                    },
+                    onConfirmRequest = {
+                        isAlertDialogOpen = false
+                    },
+                    title = "Oops! Something Went Wrong",
+                    description = "An unexpected error occurred. Don't worry, you can try again!",
+                    confirmTitle = "Got It"
+                )
+            }
+
+            is ModuleEvent.SuccessCourseCompleted -> {
+                isAlertDialogOpen = true
+                codiDialogStyle = AlertDialogType.SUCCESS
+                codiDialogProps = CodiDialogProps(
+                    onDismissRequest = {
+                        isAlertDialogOpen = false
+                        onAction(ModuleAction.NavigateBack)
+                    },
+                    onConfirmRequest = {
+                        isAlertDialogOpen = false
+                        onAction(ModuleAction.NavigateBack)
+                    },
+                    title = "Congratulations, You Did It!",
+                    description = "You've successfully completed the course! Ready to take on the next challenge?",
+                    confirmTitle = "Next Adventure",
+                    dismissTitle = "Maybe Later"
+                )
+            }
+
+            is ModuleEvent.SuccessHasNextModule -> {
+                isAlertDialogOpen = true
+                codiDialogStyle = AlertDialogType.SUCCESS
+                codiDialogProps = CodiDialogProps(
+                    onDismissRequest = {
+                        isAlertDialogOpen = false
+                    },
+                    onDismiss = {
+                        isAlertDialogOpen = false
+                        onAction(ModuleAction.NavigateBack)
+                    },
+                    onConfirmRequest = {
+                        isAlertDialogOpen = false
+                        onAction(ModuleAction.GotoNextModule(event.moduleUi))
+                    },
+                    title = "Way to Go!",
+                    description = "You’ve completed this module! The next one is waiting for you.",
+                    confirmTitle = "Start Next Module",
+                    dismissTitle = "Not Now"
+                )
+            }
+
+            ModuleEvent.SuccessLearningPathCompleted -> {
+                isAlertDialogOpen = true
+                codiDialogStyle = AlertDialogType.SUCCESS
+                codiDialogProps = CodiDialogProps(
+                    onDismissRequest = {
+                        isAlertDialogOpen = false
+                        onAction(ModuleAction.NavigateBack)
+                    },
+                    onConfirmRequest = {
+                        isAlertDialogOpen = false
+                        onAction(ModuleAction.NavigateBack)
+                    },
+                    title = "You’re a Learning Star!",
+                    description = "Amazing work! You’ve completed this learning path. Ready for the next one?",
+                    confirmTitle = "Explore More",
+                    dismissTitle = "Take a Break"
+                )
+            }
+
+            ModuleEvent.Exit -> {
+                isAlertDialogOpen = true
+                codiDialogStyle = AlertDialogType.ERROR
+                codiDialogProps = CodiDialogProps(
+                    onDismissRequest = {
+                        isAlertDialogOpen = false
+                    },
+                    onConfirmRequest = {
+                        isAlertDialogOpen = false
+                        onAction(ModuleAction.NavigateBack)
+                    },
+                    dismissTitle = "Stay Here",
+                    confirmTitle = "Yes, Exit",
+                    title = "Leave Already?",
+                    description = "Exiting now means your progress won’t be saved. Are you sure?",
+                )
+            }
+        }
+    }
+
+
+
     Scaffold(
-        modifier = modifier.fillMaxSize(),  // Hapus background di sini
+        modifier = modifier.fillMaxSize(),
         topBar = {
             ModuleAppBar(
                 unitProgress = progress,
@@ -125,8 +220,7 @@ fun ModuleSession(
                 },
                 enabled = currentUnitIndex > 0,
                 onExit = {
-                    moduleActionType = AlertDialogType.ERROR
-                    isAlertDialogOpen.value = true
+                    onAction(ModuleAction.Exit)
                 }
             )
         },
@@ -136,129 +230,140 @@ fun ModuleSession(
                 enter = slideInVertically(initialOffsetY = { it }),
                 exit = slideOutVertically(targetOffsetY = { it * 40 })
             ) {
-                ModuleBottomAppBar(
-                    modifier = Modifier.offset(y = (40).dp),
-                    onContinue = {
-                        if (currentUnitIndex < units.size - 1) {
-                            currentUnitIndex++
-                        } else {
-                            moduleActionType = AlertDialogType.SUCCESS
-                            isAlertDialogOpen.value = true
-                            Toast.makeText(context, "Module Completed", Toast.LENGTH_SHORT)
-                                .show()
+                if (state.currentModuleId > state.moduleUi.id) {
+                    ModuleBottomAppBar(
+                        modifier = Modifier.offset(y = 40.dp),
+                        onContinue = {
+                            if (currentUnitIndex < units.size - 1) {
+                                currentUnitIndex++
+                            } else {
+                                onAction(ModuleAction.OnContinueClicked)
+                            }
+                        },
+                        text = if (currentUnitIndex < units.size - 1) "Continue" else "Completed",
+                        enabled = currentUnitIndex != units.size - 1,
+                        onChatBotFABClick = {
+                            showBottomSheet = true
                         }
-                    },
-                    text = if (currentUnitIndex < units.size - 1) "Continue" else "Complete"
-                )
+                    )
+                } else {
+                    ModuleBottomAppBar(
+                        modifier = Modifier.offset(y = 40.dp),
+                        onContinue = {
+                            if (currentUnitIndex < units.size - 1) {
+                                currentUnitIndex++
+                            } else {
+                                onAction(ModuleAction.OnContinueClicked)
+                            }
+                        },
+                        text = if (currentUnitIndex < units.size - 1) "Continue" else "Complete",
+                        onChatBotFABClick = {
+                            showBottomSheet = true
+                        }
+                    )
+                }
             }
         },
         floatingActionButtonPosition = FabPosition.Center,
     ) { innerPadding ->
-
-        if (isAlertDialogOpen.value) {
-            when (moduleActionType) {
-                AlertDialogType.SUCCESS -> {
-                    CodiDialog(
-                        onDismissRequest = {
-                            isAlertDialogOpen.value = false
-                            onAction(ModuleAction.NavigateBack)
-                        },
-                        onDismiss = {
-                            isAlertDialogOpen.value = false
-                        },
-                        onConfirmRequest = {
-                            isAlertDialogOpen.value = false
-                            onAction(ModuleAction.NavigateBack)
-                        },
-                        title = "Yeay, you have completed the lesson!",
-                        description = "You have completed the lesson, you can now move to the next lesson",
-                        style = SuccessAlertDialogStyle(),
-                        confirmTitle = "Continue",
-                    )
-
-                }
-
-                AlertDialogType.ERROR -> {
-                    CodiDialog(
-                        onDismissRequest = {
-                            isAlertDialogOpen.value = false
-                        },
-                        onConfirmRequest = {
-                            isAlertDialogOpen.value = false
-                            onAction(ModuleAction.NavigateBack)
-                        },
-                        dismissTitle = "Cancel",
-                        confirmTitle = "Yes, Exit",
-                        title = "Are you sure!",
-                        description = "If you exit now, your progress will not be saved",
-                        style = ErrorAlertDialogStyle()
-                    )
-                }
-
-                AlertDialogType.WARNING -> {}
-            }
+        if (isAlertDialogOpen && codiDialogProps != null) {
+            CodiDialog(
+                onDismissRequest = {
+                    isAlertDialogOpen = false
+                },
+                onConfirmRequest = {
+                    isAlertDialogOpen = false
+                    codiDialogProps?.onConfirmRequest?.invoke()
+                },
+                onDismiss = {
+                    isAlertDialogOpen = false
+                    codiDialogProps?.onDismissRequest?.invoke()
+                },
+                title = codiDialogProps!!.title,
+                description = codiDialogProps!!.description,
+                style = if (codiDialogStyle == AlertDialogType.SUCCESS) SuccessAlertDialogStyle() else ErrorAlertDialogStyle(),
+                confirmTitle = codiDialogProps!!.confirmTitle,
+                dismissTitle = codiDialogProps!!.dismissTitle
+            )
         }
 
-        AnimatedContent(
-            modifier = Modifier
-                .fillMaxSize()
-                .padding(innerPadding),  // Pindahkan padding ke sini
-            targetState = currentUnit,
-            transitionSpec = {
-                val targetIndex = targetState.id
-                val initialIndex = initialState.id
+        if (showBottomSheet) {
+            ChatBotSheet(
+                onDismiss = { showBottomSheet = false },
+                onClick = { },
+                sheetState = chatBotSheetState
+            )
+        }
 
-                if (targetIndex > initialIndex) {
-                    // Gerak maju (continue) - slide dari kanan ke kiri
-                    slideInHorizontally(
-                        initialOffsetX = { it }, // Masuk dari kanan
-                        animationSpec = tween(300)
-                    ) togetherWith slideOutHorizontally(
-                        targetOffsetX = { -it }, // Keluar ke kiri
-                        animationSpec = tween(300)
-                    )
-                } else {
-                    // Gerak mundur (back) - slide dari kiri ke kanan
-                    slideInHorizontally(
-                        initialOffsetX = { -it }, // Masuk dari kiri
-                        animationSpec = tween(300)
-                    ) togetherWith slideOutHorizontally(
-                        targetOffsetX = { it }, // Keluar ke kanan
-                        animationSpec = tween(300)
-                    )
-                }
-            },
-            label = "AnimatedContent"
-        ) { unit ->
-            Box(
+        if (state.isLoading) {
+            Box(modifier = Modifier.fillMaxSize(), contentAlignment = Alignment.Center) {
+                CircularProgressIndicator(color = MaterialTheme.colorScheme.primary)
+            }
+        } else {
+            AnimatedContent(
                 modifier = Modifier
                     .fillMaxSize()
-                    .padding(horizontal = 16.dp)  // Pindahkan padding horizontal ke sini
-            ) {
-//                val elements = parser.parseHtml(unit.content)
-                HtmlRenderer(
-                    lazyState = listState,
-                    elements = elements,
-//                    modifier = Modifier.fillMaxSize()  // Tambahkan modifier untuk HtmlRenderer
-                )
+                    .padding(innerPadding),
+                targetState = currentUnit,
+                transitionSpec = {
+                    val targetIndex = targetState.id
+                    val initialIndex = initialState.id
+
+                    if (targetIndex > initialIndex) {
+                        slideInHorizontally(
+                            initialOffsetX = { it },
+                            animationSpec = tween(300)
+                        ) togetherWith slideOutHorizontally(
+                            targetOffsetX = { -it },
+                            animationSpec = tween(300)
+                        )
+                    } else {
+                        slideInHorizontally(
+                            initialOffsetX = { -it },
+                            animationSpec = tween(300)
+                        ) togetherWith slideOutHorizontally(
+                            targetOffsetX = { it },
+                            animationSpec = tween(300)
+                        )
+                    }
+                },
+                label = "AnimatedContent"
+            ) { unit ->
+                val elements = parser.parseHtml(unit.content)
+                Box(
+                    modifier = Modifier
+                        .fillMaxSize()
+                        .padding(horizontal = 16.dp)
+                ) {
+                    HtmlRenderer(
+                        lazyState = listState,
+                        elements = elements,
+                    )
+                }
             }
         }
     }
 }
 
-//@PreviewLightDark
-//@Composable
-//private fun ModuleScreenPreview() {
-//    CodiLeapTheme {
-//        ModuleSession(
-//            state = ModuleState(
-//                moduleUi = createModulesForCourse(
-//                    learningPath = "Android Development Fundamentals", courseName = "Kotlin Basics"
-//                ).first().toUiModel()
-//            ),
-//            onAction = {}
-//        )
-//    }
-//}
-
-
+val defaultModule = listOf(
+    ModuleUi(
+        id = 1,
+        description = "Loading",
+        courseId = 1,
+        name = "Loading",
+        orderIndex = 0,
+        createdAt = "",
+        updatedAt = "",
+        units = listOf(
+            UnitUi(
+                id = 1,
+                createdAt = "",
+                updatedAt = "",
+                moduleId = 1,
+                name = "Loading",
+                orderIndex = 0,
+                content = "Loading"
+            )
+        )
+    )
+)

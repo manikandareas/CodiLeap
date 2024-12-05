@@ -15,6 +15,7 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.tooling.preview.PreviewLightDark
 import androidx.compose.ui.unit.dp
+import com.manikandareas.codileap.home.presentation.component.HomeChatBotFab
 import com.manikandareas.codileap.ui.compositions.CodiButton
 import com.manikandareas.codileap.ui.theme.CodiLeapTheme
 
@@ -23,12 +24,13 @@ fun ModuleBottomAppBar(
     modifier: Modifier = Modifier,
     enabled: Boolean = true,
     onContinue: () -> Unit = {},
-    text: String = "Continue"
+    text: String = "Continue",
+    onChatBotFABClick : () -> Unit = {}
 ) {
     Row(modifier = modifier.padding(16.dp)) {
         CodiButton (
             onClick = {onContinue()},
-            modifier = Modifier.fillMaxWidth(),
+        modifier = Modifier.weight(1f),
             shape = MaterialTheme.shapes.medium,
             contentPadding = PaddingValues(16.dp),
             enabled = enabled
@@ -41,6 +43,11 @@ fun ModuleBottomAppBar(
                 )
             }
         }
+
+        HomeChatBotFab(
+            modifier = Modifier.padding(start = 16.dp),
+            onClick = {onChatBotFABClick()}
+        )
     }
 }
 

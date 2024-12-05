@@ -44,6 +44,18 @@ import com.manikandareas.codileap.ui.theme.SuccessAlertDialogStyle
 import com.manikandareas.codileap.ui.theme.WarningAlertDialogStyle
 import com.manikandareas.codileap.ui.theme.rememberAlertDialogStyle
 
+data class CodiDialogProps(
+    val onDismissRequest: () -> Unit,
+    val properties: DialogProperties = DialogProperties(),
+    val style: AlertDialogStyle? = null,
+    val title: String = "",
+    val description: String = "",
+    val onConfirmRequest: () -> Unit,
+    val dismissTitle: String = "Cancel",
+    val confirmTitle: String = "Continue",
+    val onDismiss: (() -> Unit)? = null
+)
+
 
 @Composable
 fun CodiDialog(
@@ -142,7 +154,7 @@ fun CodiDialog(
                         )
                         Spacer(modifier = Modifier.height(16.dp))
                         Row {
-                            CodiButton (
+                            CodiButton(
                                 onClick = onDismissRequest,
                                 modifier = Modifier.weight(1f),
                                 colors = ButtonColors(
@@ -152,7 +164,10 @@ fun CodiDialog(
                                     disabledContainerColor = style.containerColor.copy(alpha = .6f)
                                 )
                             ) {
-                                Text(text = dismissTitle, color = MaterialTheme.colorScheme.onSurface)
+                                Text(
+                                    text = dismissTitle,
+                                    color = MaterialTheme.colorScheme.onSurface
+                                )
                             }
                             Spacer(modifier = Modifier.width(8.dp))
                             CodiButton(

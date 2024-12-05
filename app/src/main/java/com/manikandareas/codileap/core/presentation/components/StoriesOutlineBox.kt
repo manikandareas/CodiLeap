@@ -9,8 +9,10 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.PathEffect
 import androidx.compose.ui.graphics.StrokeCap
 import androidx.compose.ui.graphics.drawscope.Stroke
+import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
+import com.manikandareas.codileap.ui.theme.CodiLeapTheme
 
 @Composable
 fun StoriesOutlineBox(
@@ -43,5 +45,13 @@ fun StoriesOutlineBox(
             )
         }
         content()
+    }
+}
+
+@Preview
+@Composable
+private fun PreviewStories() {
+    CodiLeapTheme {
+        StoriesOutlineBox {  }
     }
 }

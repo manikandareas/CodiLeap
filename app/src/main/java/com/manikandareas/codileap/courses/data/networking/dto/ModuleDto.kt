@@ -11,7 +11,7 @@ data class ModuleDto(
     val orderIndex: Int,
     val createdAt: String,
     val updatedAt: String,
-    val units: List<UnitDto>
+    val units: List<UnitDto>? = emptyList()
 )
 
 @Serializable
@@ -19,6 +19,7 @@ data class UnitDto(
     val id: Int,
     val moduleId: Int,
     val name: String,
+
     val content: String,
     val orderIndex: Int,
     val createdAt: String,

@@ -44,7 +44,7 @@ fun ModuleItem(
         modifier = modifier
             .fillMaxWidth()
             .height(100.dp)
-            .clickable(enabled = true, onClick = { onClick(module) }),
+            .clickable(enabled = !isLocked, onClick = { onClick(module) }),
 
         ) {
         Row(

@@ -2,6 +2,7 @@
 
 package com.manikandareas.codileap.quiz.presentation
 
+import android.annotation.SuppressLint
 import androidx.activity.compose.BackHandler
 import androidx.compose.animation.AnimatedContent
 import androidx.compose.animation.ExperimentalAnimationApi
@@ -31,12 +32,14 @@ import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.PreviewLightDark
 import androidx.compose.ui.unit.dp
 import com.manikandareas.codileap.R
+import com.manikandareas.codileap.core.presentation.util.getRandomIcons
 import com.manikandareas.codileap.quiz.domain.AnswerOption
 import com.manikandareas.codileap.quiz.domain.Question
 import com.manikandareas.codileap.quiz.domain.Quiz
 import com.manikandareas.codileap.quiz.presentation.component.QuizAppBar
 import com.manikandareas.codileap.quiz.presentation.component.QuizBottomAppBar
 import com.manikandareas.codileap.quiz.presentation.model.toUiModel
+import com.manikandareas.codileap.screening.data.dummy.interestQuestionsQuiz
 import com.manikandareas.codileap.screening.presentation.component.CodiButton
 import com.manikandareas.codileap.ui.compositions.CodiDialog
 import com.manikandareas.codileap.ui.theme.AlertDialogType
@@ -45,12 +48,15 @@ import com.manikandareas.codileap.ui.theme.ErrorAlertDialogStyle
 import com.manikandareas.codileap.ui.theme.SuccessAlertDialogStyle
 import com.manikandareas.codileap.ui.theme.WarningAlertDialogStyle
 
+@SuppressLint("DefaultLocale")
 @Composable
 fun QuizSession(
     state: QuizState,
     onAction: (QuizAction) -> Unit,
     modifier: Modifier = Modifier
 ) {
+
+    val selectedButtonIndex = remember { mutableIntStateOf(0) }
 
     val questions = state.quiz.questions
 
@@ -133,9 +139,8 @@ fun QuizSession(
                         title = "Submit Quiz",
                         description = "Check your answers carefully before submitting",
                         style = SuccessAlertDialogStyle(),
-                        confirmTitle = "Continue",
+                        confirmTitle = "Submit",
                     )
-
                 }
 
                 AlertDialogType.ERROR -> {
@@ -208,6 +213,9 @@ fun QuizSession(
             },
             label = "AnimatedContent"
         ) { unit ->
+            val icons = remember(unit.answerOptions.size) {
+                getRandomIcons(unit.answerOptions.size) // Ambil ikon acak hanya sekali
+            }
             Column(
                 modifier = Modifier
                     .fillMaxSize()
@@ -224,14 +232,14 @@ fun QuizSession(
                 Spacer(modifier = Modifier.height(32.dp))
 
 
-                unit.answerOptions.forEach() { option ->
+                unit.answerOptions.forEachIndexed { index, option ->
                     CodiButton(
                         text = option.text,
                         onClick = {
-
+selectedButtonIndex.value = index
                         },
-                        icon = R.drawable.ic_coding,
-                        isSelected = false
+                        icon = icons[index],
+                        isSelected = selectedButtonIndex.value == index
                     )
                     Spacer(modifier = Modifier.height(16.dp))
                 }
@@ -249,7 +257,7 @@ private fun ModuleScreenPreview() {
         QuizSession(
             state = QuizState(
                 isLoading = false,
-                quiz = dummyQuiz.toUiModel()
+                quiz = interestQuestionsQuiz.toUiModel()
             ),
             onAction = {}
         )
