@@ -13,6 +13,7 @@ fun NetworkError.toString(context:Context):String {
         NetworkError.SERIALIZATION -> R.string.error_serialization
         NetworkError.UNAUTHORIZED -> R.string.email_or_password_is_incorrect
         NetworkError.UNKNOWN -> R.string.error_unknown
+        NetworkError.CONFLICT -> R.string.credentials_already_exist_please_use_another_email
     }
 
     return context.getString(resId)

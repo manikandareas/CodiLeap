@@ -37,7 +37,7 @@ import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.tooling.preview.PreviewLightDark
 import androidx.compose.ui.unit.dp
 import com.manikandareas.codileap.R
-import com.manikandareas.codileap.courses.data.dummy.learningPathsDummy
+//import com.manikandareas.codileap.courses.data.dummy.learningPathsDummy
 import com.manikandareas.codileap.courses.presentation.model.HasBasicCourse
 import com.manikandareas.codileap.courses.presentation.model.LearningPathUi
 import com.manikandareas.codileap.courses.presentation.model.toUiModel
@@ -52,7 +52,7 @@ enum class Options {
 @Composable
 fun <T : HasBasicCourse> BottomSheetOptions(
     onDismiss: () -> Unit,
-    onItemClick: (String) -> Unit,
+    onItemClick: (Int) -> Unit,
     title: String = "Learning Path",
     type: Options,
     items: List<T>,
@@ -107,7 +107,7 @@ fun <T : HasBasicCourse> BottomSheetOptions(
                         modifier = modifier
                             .fillMaxWidth()
                             .height(100.dp)
-                            .clickable(enabled = true, onClick = { onItemClick("") }),
+                            .clickable(enabled = true, onClick = { onItemClick(item.id) }),
 
                         ) {
                         Row(
@@ -161,18 +161,18 @@ fun <T : HasBasicCourse> BottomSheetOptions(
     }
 }
 
-@OptIn(ExperimentalMaterial3Api::class)
-@PreviewLightDark
-@Composable
-fun PreviewLearningPathOption(modifier: Modifier = Modifier) {
-    CodiLeapTheme {
-        BottomSheetOptions<LearningPathUi>(
-            onDismiss = {},
-            sheetState = rememberModalBottomSheetState(),
-            onItemClick = {},
-            title = "Learning Path",
-            items = learningPathsDummy.map { it.toUiModel() },
-            type = Options.LEARNING
-        )
-    }
-}
+//@OptIn(ExperimentalMaterial3Api::class)
+//@PreviewLightDark
+//@Composable
+//fun PreviewLearningPathOption(modifier: Modifier = Modifier) {
+//    CodiLeapTheme {
+//        BottomSheetOptions<LearningPathUi>(
+//            onDismiss = {},
+//            sheetState = rememberModalBottomSheetState(),
+//            onItemClick = {},
+//            title = "Learning Path",
+//            items = learningPathsDummy.map { it.toUiModel() },
+//            type = Options.LEARNING
+//        )
+//    }
+//}

@@ -7,4 +7,8 @@ sealed class CoursesAction {
     data class NavigateTo(val des: Destination) : CoursesAction()
 
     data class OnModuleClicked(val module: ModuleUi) : CoursesAction()
+
+    data class OnCourseChanged (val courseId: Int) : CoursesAction()
+
+    data class OnLearningPathChanged (val learningPathId: Int) : CoursesAction()
 }

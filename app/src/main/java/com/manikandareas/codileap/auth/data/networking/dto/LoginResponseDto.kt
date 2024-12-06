@@ -8,5 +8,14 @@ data class LoginResponseDto(
     val tokenType: String,
     val expiresIn: Long,
     val refreshToken: String,
-    val refreshTokenExpiresIn: Long
+    val refreshTokenExpiresIn: Long,
+    val user : UserResponseDto
+)
+
+@Serializable
+data class UserResponseDto(
+    val id: Int,
+    val email: String,
+    val avatarUrl: String,
+    val isAlreadyScreened: Boolean
 )

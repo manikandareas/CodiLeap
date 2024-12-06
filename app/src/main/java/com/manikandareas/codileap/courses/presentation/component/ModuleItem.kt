@@ -27,9 +27,7 @@ import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.tooling.preview.PreviewLightDark
 import androidx.compose.ui.unit.dp
 import com.manikandareas.codileap.R
-import com.manikandareas.codileap.courses.data.dummy.createModulesForCourse
 import com.manikandareas.codileap.courses.presentation.model.ModuleUi
-import com.manikandareas.codileap.courses.presentation.model.toUiModel
 import com.manikandareas.codileap.ui.theme.CodiLeapTheme
 
 
@@ -46,7 +44,7 @@ fun ModuleItem(
         modifier = modifier
             .fillMaxWidth()
             .height(100.dp)
-            .clickable(enabled = true, onClick = { onClick(module) }),
+            .clickable(enabled = !isLocked, onClick = { onClick(module) }),
 
         ) {
         Row(
@@ -65,7 +63,10 @@ fun ModuleItem(
                     .background(MaterialTheme.colorScheme.onSurface)
                     .padding(10.dp)
             )
-            Column(verticalArrangement = Arrangement.spacedBy(4.dp), modifier = Modifier.weight(1F)) {
+            Column(
+                verticalArrangement = Arrangement.spacedBy(4.dp),
+                modifier = Modifier.weight(1F)
+            ) {
                 Text(
                     text = module.name ?: "No Title",
                     style = MaterialTheme.typography.titleMedium
@@ -112,10 +113,16 @@ private fun PreviewModuleItem(modifier: Modifier = Modifier) {
         ModuleItem(
             modifier = modifier,
             containerColor = MaterialTheme.colorScheme.surface,
-            module = createModulesForCourse(
-                learningPath = "Android Development Fundamentals",
-                courseName = "Kotlin Basics"
-            ).first().toUiModel(),
+            module = ModuleUi(
+                id = 1,
+                courseId = 1,
+                name = "Module 1",
+                description = "Module 1 Description",
+                orderIndex = 1,
+                createdAt = "2021-09-01",
+                updatedAt = "2021-09-01",
+                units = emptyList()
+            ),
             onClick = {},
             isLocked = true
         )

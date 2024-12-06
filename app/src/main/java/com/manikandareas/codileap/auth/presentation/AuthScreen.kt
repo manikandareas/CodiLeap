@@ -95,6 +95,7 @@ fun AuthScreen(modifier: Modifier = Modifier, onAction: (AuthAction) -> Unit) {
         Column(
             modifier = Modifier
                 .padding(innerPadding)
+                .padding(16.dp)
                 .fillMaxSize(),
             horizontalAlignment = Alignment.CenterHorizontally,
             verticalArrangement = Arrangement.Center
@@ -115,25 +116,26 @@ fun AuthScreen(modifier: Modifier = Modifier, onAction: (AuthAction) -> Unit) {
 
             Text(
                 text = AuthUi.AuthData.title,
-                modifier = Modifier.fillMaxWidth(),
-
-                fontWeight = FontWeight.Bold,
-                style = MaterialTheme.typography.headlineLarge,
-                color = MaterialTheme.colorScheme.onBackground,
-                textAlign = TextAlign.Center
+                                modifier = Modifier.fillMaxWidth(),
+                fontSize = 20.sp,
+                textAlign = TextAlign.Center,
+                style = MaterialTheme.typography.titleMedium,
+                color = MaterialTheme.colorScheme.onBackground
             )
 
             Spacer(
-                modifier = Modifier.size(15.dp)
+                modifier = Modifier.size(16.dp)
             )
+
 
             Text(
                 text = AuthUi.AuthData.description,
                 modifier = Modifier.fillMaxWidth(),
-                fontSize = 14.sp,
-                style = MaterialTheme.typography.bodyMedium,
-                color = MaterialTheme.colorScheme.secondary,
-                textAlign = TextAlign.Center
+                fontSize = 16.sp,
+                textAlign = TextAlign.Center,
+                style = MaterialTheme.typography.bodySmall,
+                lineHeight = 24.sp,
+                color = MaterialTheme.colorScheme.onBackground.copy(alpha = 0.6f),
             )
         }
     }

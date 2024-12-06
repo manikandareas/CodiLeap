@@ -28,6 +28,6 @@ val SettingMenus = listOf<SettingItemUi>(
     SettingItemUi(
         title = "Sign out",
         icon = Icons.AutoMirrored.Filled.ExitToApp,
-        des = Destination.ProfileScreen
+        des = Destination.AuthGraph
     ),
 )

@@ -1,6 +1,5 @@
 package com.manikandareas.codileap.settings.presentation
 
-import androidx.compose.animation.core.animateFloatAsState
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
@@ -11,42 +10,27 @@ import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
-import androidx.compose.foundation.layout.offset
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
-import androidx.compose.foundation.rememberScrollState
-import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.automirrored.filled.ArrowForwardIos
-import androidx.compose.material.icons.filled.ArrowForwardIos
 import androidx.compose.material.icons.filled.Edit
 import androidx.compose.material.icons.filled.HeadsetMic
-import androidx.compose.material.icons.filled.Person
 import androidx.compose.material3.Button
 import androidx.compose.material3.HorizontalDivider
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
 import androidx.compose.material3.MaterialTheme
-import androidx.compose.material3.OutlinedButton
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
-import androidx.compose.material3.TextButton
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.LaunchedEffect
-import androidx.compose.runtime.getValue
-import androidx.compose.runtime.mutableIntStateOf
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
-import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
-import androidx.compose.ui.graphics.vector.ImageVector
-import androidx.compose.ui.platform.LocalDensity
-import androidx.compose.ui.platform.LocalInspectionMode
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.tooling.preview.PreviewLightDark
 import androidx.compose.ui.unit.dp
@@ -54,15 +38,16 @@ import coil.compose.SubcomposeAsyncImage
 import com.manikandareas.codileap.R
 import com.manikandareas.codileap.core.navigation.Destination
 import com.manikandareas.codileap.home.presentation.component.HomeBottomAppBar
-import com.manikandareas.codileap.home.presentation.component.HomeChatBotFab
 import com.manikandareas.codileap.settings.presentation.component.SettingItem
 import com.manikandareas.codileap.settings.presentation.component.SettingsAppBar
 import com.manikandareas.codileap.settings.presentation.defaults.SettingMenus
+import com.manikandareas.codileap.ui.compositions.CodiDialog
 import com.manikandareas.codileap.ui.theme.CodiLeapTheme
-import kotlin.math.roundToInt
+import com.manikandareas.codileap.ui.theme.ErrorAlertDialogStyle
 
 @Composable
 fun SettingsScreen(onAction: (SettingsAction) -> Unit, modifier: Modifier = Modifier) {
+    val isDialogOpen = remember { mutableStateOf(false) }
     Scaffold(
         modifier = modifier
             .fillMaxSize()
@@ -82,13 +67,25 @@ fun SettingsScreen(onAction: (SettingsAction) -> Unit, modifier: Modifier = Modi
                     .fillMaxWidth()
             )
         },
-//        floatingActionButton = {
-//            HomeChatBotFab(onClick = {
-//                onAction(SettingsAction.NavigateTo(Destination.ChatBotScreen))
-//            })
-//        }
 
-    ) { innerPadding ->
+        ) { innerPadding ->
+
+        if (isDialogOpen.value) {
+            CodiDialog(
+                title = "Are you sure want to log out?",
+                description = "Your account will be logged out from this device",
+                style = ErrorAlertDialogStyle(),
+                confirmTitle = "Log out",
+                dismissTitle = "Cancel",
+                onDismiss = { isDialogOpen.value = false },
+                onConfirmRequest = {
+                    isDialogOpen.value = false
+                    onAction(SettingsAction.OnSignOutClick)
+                },
+                onDismissRequest = { isDialogOpen.value = false }
+            )
+        }
+
         LazyColumn(
             modifier = Modifier
                 .padding(innerPadding)
@@ -147,8 +144,13 @@ fun SettingsScreen(onAction: (SettingsAction) -> Unit, modifier: Modifier = Modi
                     settingUi = settingItem,
                     modifier = Modifier.fillMaxWidth(),
                     onClick = {
-                        onAction(SettingsAction.NavigateTo(settingItem.des))
+                        if (settingItem.des == Destination.AuthGraph) {
+                            isDialogOpen.value = true
+                        } else {
+                            onAction(SettingsAction.NavigateTo(settingItem.des))
+                        }
                     }
+
                 )
             }
             item(key = "Customer Support") {

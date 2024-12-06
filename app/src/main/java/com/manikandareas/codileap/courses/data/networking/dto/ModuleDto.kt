@@ -5,15 +5,23 @@ import kotlinx.serialization.Serializable
 @Serializable
 data class ModuleDto(
     val id: Int,
+    val courseId: Int,
     val name: String,
-    val status: String,
-    val units: List<UnitDto>
+    val description: String,
+    val orderIndex: Int,
+    val createdAt: String,
+    val updatedAt: String,
+    val units: List<UnitDto>? = emptyList()
 )
 
 @Serializable
 data class UnitDto(
     val id: Int,
-    val order: Int,
+    val moduleId: Int,
+    val name: String,
+
     val content: String,
-    val type: String,
+    val orderIndex: Int,
+    val createdAt: String,
+    val updatedAt: String
 )

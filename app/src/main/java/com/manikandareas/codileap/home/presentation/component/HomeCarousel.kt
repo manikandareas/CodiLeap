@@ -36,7 +36,6 @@ import coil.compose.SubcomposeAsyncImage
 import coil.request.ImageRequest
 import coil.size.Scale
 import com.manikandareas.codileap.R
-import com.manikandareas.codileap.core.presentation.util.truncateWithEllipsis
 import com.manikandareas.codileap.home.presentation.model.CarouselItemUi
 import com.manikandareas.codileap.home.presentation.model.CarouselUi
 import com.manikandareas.codileap.home.presentation.model.DummyCarouselUi

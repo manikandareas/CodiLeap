@@ -10,4 +10,5 @@
 
     <string name="set_up_your_account">Set up your account</string>
     <string name="email_or_password_is_incorrect">Email or password is incorrect</string>
+    <string name="credentials_already_exist_please_use_another_email">Credentials already exist, please use another email</string>
 </resources>

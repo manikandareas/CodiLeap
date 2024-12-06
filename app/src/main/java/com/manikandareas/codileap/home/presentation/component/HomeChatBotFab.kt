@@ -1,18 +1,21 @@
 package com.manikandareas.codileap.home.presentation.component
 
-import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.filled.ChatBubble
+import androidx.compose.foundation.Image
+import androidx.compose.foundation.layout.size
 import androidx.compose.material3.FloatingActionButton
-import androidx.compose.material3.Icon
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.tooling.preview.PreviewLightDark
+import androidx.compose.ui.unit.dp
+import com.manikandareas.codileap.R
 
 @Composable
 fun HomeChatBotFab(onClick: () -> Unit, modifier: Modifier = Modifier) {
     FloatingActionButton(modifier=modifier, onClick = {onClick()}) {
-        Icon(
-            imageVector = Icons.Default.ChatBubble,
+        Image(
+            painter = painterResource(id = R.drawable.chat_bot_1),
+            modifier = Modifier.size(32.dp),
             contentDescription = "Chat with the bot"
         )
     }

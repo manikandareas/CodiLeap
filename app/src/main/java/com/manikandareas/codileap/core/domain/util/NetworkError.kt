@@ -7,5 +7,6 @@ enum class NetworkError : Error {
     SERVER_ERROR,
     SERIALIZATION,
     UNAUTHORIZED,
+    CONFLICT,
     UNKNOWN
 }

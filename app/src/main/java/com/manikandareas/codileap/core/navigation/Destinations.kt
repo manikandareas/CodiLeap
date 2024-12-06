@@ -44,6 +44,9 @@ sealed interface Destination {
     data class ModuleScreen(val moduleUi: ModuleUi) : Destination
 
     @Serializable
+    data object QuizGraph : Destination
+
+    @Serializable
     data object QuizScreen : Destination
 
     @Serializable

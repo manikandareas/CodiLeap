@@ -1,3 +1,5 @@
+@file:OptIn(ExperimentalMaterial3Api::class)
+
 package com.manikandareas.codileap.home.presentation
 
 import androidx.compose.animation.core.animateFloatAsState
@@ -11,8 +13,10 @@ import androidx.compose.foundation.layout.offset
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.verticalScroll
+import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Scaffold
+import androidx.compose.material3.rememberModalBottomSheetState
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
@@ -24,6 +28,8 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalDensity
 import androidx.compose.ui.tooling.preview.PreviewLightDark
 import androidx.compose.ui.unit.dp
+import com.manikandareas.codileap.chatbot.presentation.ChatBotSheet
+import com.manikandareas.codileap.user.domain.User
 import com.manikandareas.codileap.core.navigation.Destination
 import com.manikandareas.codileap.home.presentation.component.HomeAppBar
 import com.manikandareas.codileap.home.presentation.component.HomeBanner
@@ -34,14 +40,21 @@ import com.manikandareas.codileap.home.presentation.component.HomeCourseProgress
 import com.manikandareas.codileap.home.presentation.component.HomeQuizAction
 import com.manikandareas.codileap.home.presentation.component.userUi
 import com.manikandareas.codileap.home.presentation.model.DummyCarouselUi
+import com.manikandareas.codileap.home.presentation.model.UserUi
 import com.manikandareas.codileap.ui.theme.CodiLeapTheme
 import kotlin.math.roundToInt
 
 @Composable
-fun HomeScreen(onAction: (HomeAction) -> Unit, modifier: Modifier = Modifier) {
+fun HomeScreen(state: HomeState,onAction: (HomeAction) -> Unit, modifier: Modifier = Modifier) {
     val scrollState = rememberScrollState()
     var isBottomBarVisible by remember { mutableStateOf(true) }
     var previousScrollOffset by remember { mutableIntStateOf(0) }
+
+    var showBottomSheet by remember { mutableStateOf(false) }
+
+    val chatBotSheetState = rememberModalBottomSheetState(
+        skipPartiallyExpanded = true
+    )
 
     // Observe scroll position and update bottom bar visibility
     LaunchedEffect(scrollState.value) {
@@ -73,7 +86,9 @@ fun HomeScreen(onAction: (HomeAction) -> Unit, modifier: Modifier = Modifier) {
             .background(MaterialTheme.colorScheme.background),
         topBar = {
             HomeAppBar(
-                data = userUi,
+                data = state.user ?: userUi.copy(
+                    name = "Unknown",
+                ),
                 modifier = Modifier.fillMaxWidth(),
                 onProfileClick = {
                     onAction(HomeAction.NavigateTo(Destination.ProfileScreen))
@@ -91,13 +106,21 @@ fun HomeScreen(onAction: (HomeAction) -> Unit, modifier: Modifier = Modifier) {
                     .offset(y = bottomBarTranslation.roundToInt().dp)
             )
         },
-        floatingActionButton = {
-            HomeChatBotFab(onClick = {
-                onAction(HomeAction.NavigateTo(Destination.ChatBotScreen))
-            })
-        }
+//        floatingActionButton = {
+//            HomeChatBotFab(onClick = {
+////                onAction(HomeAction.NavigateTo(Destination.ChatBotScreen))
+//                showBottomSheet = true
+//            })
+//        }
 
     ) { innerPadding ->
+        if(showBottomSheet) {
+            ChatBotSheet(
+                onDismiss = { showBottomSheet = false },
+                onClick = { },
+                sheetState = chatBotSheetState
+            )
+        }
         Column(
             modifier = Modifier
                 .padding(innerPadding)
@@ -120,6 +143,6 @@ fun HomeScreen(onAction: (HomeAction) -> Unit, modifier: Modifier = Modifier) {
 @Composable
 fun PreviewHomeScreen() {
     CodiLeapTheme {
-        HomeScreen(onAction = {})
+        HomeScreen(onAction = {}, state = HomeState(user = userUi))
     }
 }
