@@ -17,7 +17,7 @@ data class Course(
 
     val totalModules: Int,
     val totalEnrollments: Int,
-    val rating: Float,
+    val rating: Double,
     val estimatedDuration: Int,
 
 
