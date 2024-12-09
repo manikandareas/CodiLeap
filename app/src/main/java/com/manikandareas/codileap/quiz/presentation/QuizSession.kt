@@ -20,24 +20,27 @@ import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Scaffold
+import androidx.compose.material3.SnackbarHost
+import androidx.compose.material3.SnackbarHostState
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableIntStateOf
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
+import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.PreviewLightDark
 import androidx.compose.ui.unit.dp
-import com.manikandareas.codileap.R
+import com.manikandareas.codileap.core.presentation.util.ObserveAsEvents
 import com.manikandareas.codileap.core.presentation.util.getRandomIcons
-import com.manikandareas.codileap.quiz.domain.AnswerOption
-import com.manikandareas.codileap.quiz.domain.Question
-import com.manikandareas.codileap.quiz.domain.Quiz
+import com.manikandareas.codileap.quiz.data.networking.dto.SubmitQuizResponseDto
 import com.manikandareas.codileap.quiz.presentation.component.QuizAppBar
 import com.manikandareas.codileap.quiz.presentation.component.QuizBottomAppBar
+import com.manikandareas.codileap.quiz.presentation.model.AnswerUi
 import com.manikandareas.codileap.quiz.presentation.model.toUiModel
 import com.manikandareas.codileap.screening.data.dummy.interestQuestionsQuiz
 import com.manikandareas.codileap.screening.presentation.component.CodiButton
@@ -47,34 +50,59 @@ import com.manikandareas.codileap.ui.theme.CodiLeapTheme
 import com.manikandareas.codileap.ui.theme.ErrorAlertDialogStyle
 import com.manikandareas.codileap.ui.theme.SuccessAlertDialogStyle
 import com.manikandareas.codileap.ui.theme.WarningAlertDialogStyle
+import kotlinx.coroutines.delay
+import kotlinx.coroutines.flow.Flow
+import kotlinx.coroutines.flow.emptyFlow
+import kotlin.math.roundToInt
 
 @SuppressLint("DefaultLocale")
 @Composable
 fun QuizSession(
     state: QuizState,
     onAction: (QuizAction) -> Unit,
-    modifier: Modifier = Modifier
+    modifier: Modifier = Modifier,
+    snackbarHostState: SnackbarHostState = remember { SnackbarHostState() },
+    events: Flow<QuizEvent>
 ) {
 
-    val selectedButtonIndex = remember { mutableIntStateOf(0) }
+    val questions = state.quiz?.questions ?: return
 
-    val questions = state.quiz.questions
 
     val isAlertDialogOpen = remember { mutableStateOf(false) }
     var moduleActionType by remember { mutableStateOf(AlertDialogType.ERROR) }
 
+    var resultQuiz by remember { mutableStateOf<SubmitQuizResponseDto?>(null) }
 
-    var currentQuestionIndex by remember { mutableIntStateOf(0) }
-    val currentQuestion = questions[currentQuestionIndex]
+
+    var currentQuestionIndex by rememberSaveable {
+        mutableIntStateOf(0.coerceIn(0, questions.size - 1))
+    }
+    val currentQuestion = questions.getOrNull(currentQuestionIndex) ?: return
+
     val progress = (currentQuestionIndex + 1).toFloat() / questions.size
 
     // Buat LazyListState baru untuk setiap unit
 
 
-    val totalTimeInSeconds = 60 * 10
+    val totalTimeInSeconds = state.quiz.timeLimit * 60
     var timeLeft by remember { mutableIntStateOf(totalTimeInSeconds) }
+
+    // Menghitung menit dan detik
     val minutes = timeLeft / 60
     val seconds = timeLeft % 60
+
+    // Mengatur countdown timer
+    LaunchedEffect(timeLeft) {
+        if (timeLeft > 0) {
+            delay(1000L) // Delay 1 detik
+            timeLeft -= 1 // Kurangi waktu setiap detik
+        }
+
+        if (timeLeft == 0) {
+            onAction(QuizAction.OnTimerFinished)
+        }
+    }
+
 
 
     BackHandler(enabled = true) {
@@ -86,10 +114,28 @@ fun QuizSession(
         }
     }
 
+    ObserveAsEvents(events) { event ->
+        when (event) {
+            is QuizEvent.Error -> TODO()
+            is QuizEvent.InvalidAnswer -> {
+                isAlertDialogOpen.value = false
+            }
+
+            is QuizEvent.Success -> {
+                resultQuiz = event.result
+                moduleActionType = AlertDialogType.SUCCESS
+                isAlertDialogOpen.value = true
+            }
+        }
+    }
+
     Scaffold(
         modifier = modifier
             .fillMaxSize()
             .background(MaterialTheme.colorScheme.background),
+        snackbarHost = {
+            SnackbarHost(snackbarHostState)
+        },
         topBar = {
             QuizAppBar(
                 quizProgress = progress,
@@ -107,7 +153,8 @@ fun QuizSession(
         },
         bottomBar = {
             QuizBottomAppBar(
-                title = String.format("%02d:%02d", minutes, seconds),
+                timerTitle = String.format("%02d:%02d", minutes, seconds),
+                title = if (currentQuestionIndex < questions.size - 1) "Next" else "Submit",
                 onClick = {
                     if (currentQuestionIndex < questions.size - 1) {
                         currentQuestionIndex++
@@ -115,32 +162,62 @@ fun QuizSession(
                         moduleActionType = AlertDialogType.WARNING
                         isAlertDialogOpen.value = true
                     }
-                }
+                },
             )
-        }
+        },
 
-    ) { innerPadding ->
+
+        ) { innerPadding ->
 
         if (isAlertDialogOpen.value) {
             when (moduleActionType) {
                 AlertDialogType.SUCCESS -> {
-                    CodiDialog(
-                        onDismissRequest = {
-                            isAlertDialogOpen.value = false
-                            onAction(QuizAction.NavigateBack)
-                        },
-                        onDismiss = {
-                            isAlertDialogOpen.value = false
-                        },
-                        onConfirmRequest = {
-                            isAlertDialogOpen.value = false
-                            onAction(QuizAction.NavigateBack)
-                        },
-                        title = "Submit Quiz",
-                        description = "Check your answers carefully before submitting",
-                        style = SuccessAlertDialogStyle(),
-                        confirmTitle = "Submit",
-                    )
+                    if (resultQuiz != null) {
+                        val maxPoints = 17
+                        val pointInPercent =
+                            (resultQuiz?.totalScore?.toDouble()?.div(maxPoints))?.times(
+                                100
+                            )?.roundToInt()
+                        if (resultQuiz?.status == "completed") {
+                            CodiDialog(
+                                onDismissRequest = {
+                                    isAlertDialogOpen.value = false
+                                    onAction(QuizAction.NavigateBack)
+                                },
+                                onDismiss = {
+                                    isAlertDialogOpen.value = false
+                                },
+                                onConfirmRequest = {
+                                    isAlertDialogOpen.value = false
+                                    onAction(QuizAction.NavigateBack)
+                                },
+                                title = "You have completed the quiz",
+                                description = "Your score is $pointInPercent out of 100",
+                                style = SuccessAlertDialogStyle(),
+                                confirmTitle = "Continue",
+                                isHideDismissButton = true,
+                            )
+                        } else if (resultQuiz?.status == "failed") {
+                            CodiDialog(
+                                onDismissRequest = {
+                                    isAlertDialogOpen.value = false
+                                    onAction(QuizAction.NavigateBack)
+                                },
+                                onDismiss = {
+                                    isAlertDialogOpen.value = false
+                                },
+                                onConfirmRequest = {
+                                    isAlertDialogOpen.value = false
+                                    onAction(QuizAction.NavigateBack)
+                                },
+                                title = "You have failed the quiz",
+                                description = "Your score is $pointInPercent out of 100",
+                                style = ErrorAlertDialogStyle(),
+                                confirmTitle = "Continue",
+                                isHideDismissButton = true,
+                            )
+                        }
+                    }
                 }
 
                 AlertDialogType.ERROR -> {
@@ -170,8 +247,7 @@ fun QuizSession(
                             isAlertDialogOpen.value = false
                         },
                         onConfirmRequest = {
-                            isAlertDialogOpen.value = false
-                            onAction(QuizAction.NavigateBack)
+                            onAction(QuizAction.OnSubmitClick)
                         },
                         title = "Submit Quiz",
                         description = "Check your answers carefully before submitting",
@@ -188,8 +264,9 @@ fun QuizSession(
                 .padding(innerPadding),  // Pindahkan padding ke sini
             targetState = currentQuestion,
             transitionSpec = {
-                val targetIndex = targetState.id
-                val initialIndex = initialState.id
+
+                val targetIndex = state.quiz.questions.indexOfFirst { it.id == targetState.id }
+                val initialIndex = state.quiz.questions.indexOfFirst { it.id == initialState.id }
 
                 if (targetIndex > initialIndex) {
                     // Gerak maju (continue) - slide dari kanan ke kiri
@@ -212,9 +289,9 @@ fun QuizSession(
                 }
             },
             label = "AnimatedContent"
-        ) { unit ->
-            val icons = remember(unit.answerOptions.size) {
-                getRandomIcons(unit.answerOptions.size) // Ambil ikon acak hanya sekali
+        ) { question ->
+            val icons = remember(question.answerOptions.size) {
+                getRandomIcons(question.answerOptions.size) // Ambil ikon acak hanya sekali
             }
             Column(
                 modifier = Modifier
@@ -224,7 +301,7 @@ fun QuizSession(
                 verticalArrangement = Arrangement.Center
             ) {
                 Text(
-                    unit.text,
+                    question.text,
                     style = MaterialTheme.typography.titleLarge,
                     textAlign = TextAlign.Center,
                     modifier = Modifier.fillMaxWidth()
@@ -232,14 +309,17 @@ fun QuizSession(
                 Spacer(modifier = Modifier.height(32.dp))
 
 
-                unit.answerOptions.forEachIndexed { index, option ->
+                question.answerOptions.forEachIndexed { index, option ->
+                    val isSelected = state.userAnswers
+                        ?.firstOrNull { it.questionId == question.id } // Cari jawaban untuk question.id
+                        ?.let { it.answerOptionId == option.id } == true // Jika tidak ditemukan, default ke false
                     CodiButton(
                         text = option.text,
                         onClick = {
-selectedButtonIndex.value = index
+                            onAction(QuizAction.OnAnswerSelected(AnswerUi(question.id, option.id)))
                         },
                         icon = icons[index],
-                        isSelected = selectedButtonIndex.value == index
+                        isSelected = isSelected
                     )
                     Spacer(modifier = Modifier.height(16.dp))
                 }
@@ -259,92 +339,10 @@ private fun ModuleScreenPreview() {
                 isLoading = false,
                 quiz = interestQuestionsQuiz.toUiModel()
             ),
-            onAction = {}
+            onAction = {},
+            events = emptyFlow()
         )
 
     }
 }
 
-
-val dummyQuiz = Quiz(
-    id = 1,
-    title = "Linux and Shell Scripting Quiz",
-    description = "Test your knowledge on Linux and Shell Scripting",
-    createdAt = "2021-08-01T00:00:00Z",
-    updatedAt = "2021-08-01T00:00:00Z",
-    courseId = 1,
-    passingScore = 70,
-    timeLimit = 600,
-    totalQuestions = 5,
-    questions = listOf(
-        Question(
-            id = 1,
-            quizId = 1,
-            text = "What is the main purpose of the lazy delegate in Kotlin?",
-            pointValue = 10,
-            createdAt = "2021-08-01T00:00:00Z",
-            updatedAt = "2021-08-01T00:00:00Z",
-            answerOptions = listOf(
-                AnswerOption(
-                    id = 1,
-                    questionId = 1,
-                    text = "To create variables that are thread-safe by default",
-                    isCorrect = false
-                ),
-                AnswerOption(
-                    id = 2,
-                    questionId = 1,
-                    text = "To initialize variables only when they are first accessed",
-                    isCorrect = true
-                ),
-                AnswerOption(
-                    id = 3,
-                    questionId = 1,
-                    text = "To optimize memory usage for large collections",
-                    isCorrect = false
-                ),
-                AnswerOption(
-                    id = 4,
-                    questionId = 1,
-                    text = "To allow immutable variables to be reassigned",
-                    isCorrect = false
-                )
-            )
-        ),
-        Question(
-            id = 2,
-            quizId = 1,
-            text = "What is the main purpose of the lazy delegate in Kotlin?",
-            pointValue = 10,
-            createdAt = "2021-08-01T00:00:00Z",
-            updatedAt = "2021-08-01T00:00:00Z",
-            answerOptions = listOf(
-                AnswerOption(
-                    id = 5,
-                    questionId = 2,
-                    text = "To create variables that are thread-safe by default",
-                    isCorrect = false
-                ),
-                AnswerOption(
-                    id = 6,
-                    questionId = 2,
-                    text = "To initialize variables only when they are first accessed",
-                    isCorrect = true
-                ),
-                AnswerOption(
-                    id = 7,
-                    questionId = 2,
-                    text = "To optimize memory usage for large collections",
-                    isCorrect = false
-                ),
-                AnswerOption(
-                    id = 8,
-                    questionId = 2,
-                    text = "To allow immutable variables to be reassigned",
-                    isCorrect = false
-                )
-            )
-        )
-
-    )
-)

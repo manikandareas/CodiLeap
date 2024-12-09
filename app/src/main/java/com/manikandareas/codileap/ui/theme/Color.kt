@@ -291,3 +291,11 @@ val onWarningDarkHighContrast = Color(0xFF000000)
 val warningContainerDarkHighContrast = Color(0xFFE9D700)
 val onWarningContainerDarkHighContrast = Color(0xFF000000)
 
+fun Color.withLightness(lightnessFactor: Float): Color {
+    return Color(
+        red = (red * lightnessFactor).coerceIn(0f, 1f),
+        green = (green * lightnessFactor).coerceIn(0f, 1f),
+        blue = (blue * lightnessFactor).coerceIn(0f, 1f),
+        alpha = alpha
+    )
+}

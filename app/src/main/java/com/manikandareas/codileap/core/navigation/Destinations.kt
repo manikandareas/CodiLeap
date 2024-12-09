@@ -34,8 +34,11 @@ sealed interface Destination {
     @Serializable
     data object HomeScreen : Destination
 
+//    @Serializable
+//    data object CoursesScreen : Destination
+
     @Serializable
-    data object CoursesScreen : Destination
+    data class CoursesScreen(val selectedLearningPathId: Int? = null) : Destination
 
     @Serializable
     data object ModuleGraph : Destination

@@ -1,6 +1,7 @@
 package com.manikandareas.codileap.quiz.presentation.model
 
 
+import com.manikandareas.codileap.core.presentation.util.toUTC
 import com.manikandareas.codileap.quiz.domain.Question
 import com.manikandareas.codileap.quiz.domain.Quiz
 import java.time.ZonedDateTime
@@ -27,7 +28,7 @@ fun Quiz.toUiModel() = QuizUi(
     totalQuestions = totalQuestions,
     passingScore = passingScore,
     timeLimit = timeLimit,
-    createdAt = ZonedDateTime.parse(createdAt),
-    updatedAt = ZonedDateTime.parse(updatedAt),
+    createdAt = ZonedDateTime.parse(createdAt.toUTC()),
+    updatedAt = ZonedDateTime.parse(updatedAt.toUTC()),
     questions = questions
 )

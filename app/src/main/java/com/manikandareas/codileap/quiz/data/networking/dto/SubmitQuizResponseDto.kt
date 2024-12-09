@@ -1,5 +1,8 @@
 package com.manikandareas.codileap.quiz.data.networking.dto
 
+import kotlinx.serialization.Serializable
+
+@Serializable
 data class SubmitQuizResponseDto(
     val id: Int,
     val quizId: Int,

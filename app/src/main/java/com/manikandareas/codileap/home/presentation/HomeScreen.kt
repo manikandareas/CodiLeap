@@ -25,12 +25,14 @@ import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.draw.clip
 import androidx.compose.ui.platform.LocalDensity
 import androidx.compose.ui.tooling.preview.PreviewLightDark
 import androidx.compose.ui.unit.dp
 import com.manikandareas.codileap.chatbot.presentation.ChatBotSheet
 import com.manikandareas.codileap.user.domain.User
 import com.manikandareas.codileap.core.navigation.Destination
+import com.manikandareas.codileap.courses.presentation.model.toCarouselItemUi
 import com.manikandareas.codileap.home.presentation.component.HomeAppBar
 import com.manikandareas.codileap.home.presentation.component.HomeBanner
 import com.manikandareas.codileap.home.presentation.component.HomeBottomAppBar
@@ -39,13 +41,15 @@ import com.manikandareas.codileap.home.presentation.component.HomeChatBotFab
 import com.manikandareas.codileap.home.presentation.component.HomeCourseProgress
 import com.manikandareas.codileap.home.presentation.component.HomeQuizAction
 import com.manikandareas.codileap.home.presentation.component.userUi
+import com.manikandareas.codileap.home.presentation.model.CarouselUi
 import com.manikandareas.codileap.home.presentation.model.DummyCarouselUi
 import com.manikandareas.codileap.home.presentation.model.UserUi
+import com.manikandareas.codileap.ui.compositions.CodiSkeleton
 import com.manikandareas.codileap.ui.theme.CodiLeapTheme
 import kotlin.math.roundToInt
 
 @Composable
-fun HomeScreen(state: HomeState,onAction: (HomeAction) -> Unit, modifier: Modifier = Modifier) {
+fun HomeScreen(state: HomeState, onAction: (HomeAction) -> Unit, modifier: Modifier = Modifier) {
     val scrollState = rememberScrollState()
     var isBottomBarVisible by remember { mutableStateOf(true) }
     var previousScrollOffset by remember { mutableIntStateOf(0) }
@@ -87,7 +91,7 @@ fun HomeScreen(state: HomeState,onAction: (HomeAction) -> Unit, modifier: Modifi
         topBar = {
             HomeAppBar(
                 data = state.user ?: userUi.copy(
-                    name = "Unknown",
+                    fullName = "Unknown",
                 ),
                 modifier = Modifier.fillMaxWidth(),
                 onProfileClick = {
@@ -114,7 +118,7 @@ fun HomeScreen(state: HomeState,onAction: (HomeAction) -> Unit, modifier: Modifi
 //        }
 
     ) { innerPadding ->
-        if(showBottomSheet) {
+        if (showBottomSheet) {
             ChatBotSheet(
                 onDismiss = { showBottomSheet = false },
                 onClick = { },
@@ -127,14 +131,43 @@ fun HomeScreen(state: HomeState,onAction: (HomeAction) -> Unit, modifier: Modifi
                 .padding(horizontal = 16.dp)
                 .verticalScroll(scrollState)
         ) {
+            var index = 0
             Spacer(modifier = Modifier.height(8.dp))
             HomeBanner(modifier = Modifier.fillMaxWidth())
             Spacer(modifier = Modifier.height(16.dp))
             HomeCourseProgress(modifier = Modifier.fillMaxWidth())
             Spacer(modifier = Modifier.height(16.dp))
-            HomeQuizAction(onClick = {onAction(HomeAction.NavigateTo(Destination.QuizScreen))}, modifier = Modifier.fillMaxWidth())
+            HomeQuizAction(
+                onClick = { onAction(HomeAction.NavigateTo(Destination.QuizScreen)) },
+                modifier = Modifier.fillMaxWidth()
+            )
             Spacer(modifier = Modifier.height(16.dp))
-            HomeCarousel(modifier = Modifier.fillMaxWidth(), carouselUi = DummyCarouselUi)
+            CodiSkeleton(
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .height(250.dp)
+                    .clip(MaterialTheme.shapes.medium),
+                isShow = state.isLoading
+            ) {
+                HomeCarousel(
+                    modifier = Modifier
+                        .fillMaxWidth(),
+                    carouselUi = CarouselUi(items = state.learningPaths.map {
+                        it.toCarouselItemUi(
+                            onClick = {
+                                onAction(
+                                    HomeAction.NavigateTo(
+                                        Destination.CoursesScreen(
+                                            selectedLearningPathId = it.id
+                                        )
+                                    )
+                                )
+                            },
+                            index = index++
+                        )
+                    })
+                )
+            }
         }
     }
 }

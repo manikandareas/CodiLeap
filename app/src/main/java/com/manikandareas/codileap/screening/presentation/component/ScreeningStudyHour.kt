@@ -2,6 +2,7 @@
 
 package com.manikandareas.codileap.screening.presentation.component
 
+import android.annotation.SuppressLint
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Spacer
@@ -25,11 +26,16 @@ import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import com.manikandareas.codileap.R
+import com.manikandareas.codileap.core.data.preference.PreferenceDataSource
+import com.manikandareas.codileap.core.worker.StudyScheduleSetup
+import org.koin.compose.getKoin
 import java.util.Calendar
 
+@SuppressLint("DefaultLocale")
 @Composable
 fun ScreeningStudyHour(modifier: Modifier = Modifier) {
     val currentTime = Calendar.getInstance()
+    val dataSource = getKoin().get<PreferenceDataSource>()
 
     val timePickerState = rememberTimePickerState(
         initialHour = currentTime.get(Calendar.HOUR_OF_DAY),
@@ -37,6 +43,20 @@ fun ScreeningStudyHour(modifier: Modifier = Modifier) {
         is24Hour = true,
     )
 
+    val formattedTime = remember(timePickerState) {
+        String.format("%02d:%02d",
+            timePickerState.hour,
+            timePickerState.minute
+        )
+    }
+//    val myService = get<MyService>()
+
+    StudyScheduleSetup(
+        timeInput = formattedTime,
+        onTimeSet = {
+        },
+        dataSource = dataSource
+    )
     Column(modifier = modifier.fillMaxWidth(), horizontalAlignment = Alignment.CenterHorizontally) {
         Text(
             "What time of day do you usually study?",
@@ -46,7 +66,7 @@ fun ScreeningStudyHour(modifier: Modifier = Modifier) {
                 .fillMaxWidth()
                 .padding(vertical = 16.dp),
 
-        )
+            )
         Spacer(modifier = Modifier.height(32.dp))
 
         Image(

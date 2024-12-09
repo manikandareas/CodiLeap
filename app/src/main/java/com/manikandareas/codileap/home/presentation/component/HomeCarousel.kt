@@ -1,6 +1,7 @@
 package com.manikandareas.codileap.home.presentation.component
 
 import androidx.compose.foundation.Image
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.gestures.snapping.SnapPosition
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
@@ -83,7 +84,8 @@ fun CardContent(itemUi: CarouselItemUi, index: Int, pagerState: PagerState) {
                     fraction = 1f - pageOffset.absoluteValue.coerceIn(0f, 1f),
                 ).value
             }
-            .height(250.dp),
+            .height(250.dp)
+            .clickable(onClick = itemUi.onClick),
         colors = CardColors(
             containerColor = MaterialTheme.colorScheme.surfaceContainer,
             contentColor = MaterialTheme.colorScheme.onSurface,

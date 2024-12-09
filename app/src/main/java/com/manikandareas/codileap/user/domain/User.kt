@@ -10,7 +10,12 @@ data class User(
     val id: Int,
     val email: String,
     val avatarUrl: String,
-    val isAlreadyScreened: Boolean
+    val isAlreadyScreened: Boolean,
+    val fullName: String? = null,
+    val phoneNumber: String? = null,
+    val address: String? = null,
+    val dob: String? = null,
+    val studyHours: Int? = null,
 )
 
 fun UserResponseDto.toUser(): User {
@@ -18,7 +23,13 @@ fun UserResponseDto.toUser(): User {
         id = id,
         email = email,
         avatarUrl = avatarUrl,
-        isAlreadyScreened = isAlreadyScreened
+        isAlreadyScreened = isAlreadyScreened,
+        fullName = fullName,
+        phoneNumber = phoneNumber,
+        address = address,
+        dob = dob,
+        studyHours = studyHours
+
     )
 }
 

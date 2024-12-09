@@ -41,7 +41,7 @@ class CoursesViewModel(
         when (action) {
             is CoursesAction.NavigateTo -> viewModelScope.launch {
                 navigator.navigate(action.des) {
-                    popUpTo(Destination.CoursesScreen) { inclusive = true }
+                    popUpTo(Destination.CoursesScreen()) { inclusive = true }
                 }
             }
 

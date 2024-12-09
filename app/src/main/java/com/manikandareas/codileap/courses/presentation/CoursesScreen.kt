@@ -12,9 +12,11 @@ import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
+import androidx.compose.foundation.layout.heightIn
 import androidx.compose.foundation.layout.offset
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
+import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.rememberScrollState
@@ -38,6 +40,7 @@ import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.LocalDensity
 import androidx.compose.ui.text.style.TextOverflow
@@ -53,6 +56,7 @@ import com.manikandareas.codileap.courses.presentation.defaults.LineParametersDe
 import com.manikandareas.codileap.courses.presentation.model.ModuleNodePosition
 import com.manikandareas.codileap.home.presentation.component.HomeBottomAppBar
 import com.manikandareas.codileap.home.presentation.component.HomeChatBotFab
+import com.manikandareas.codileap.ui.compositions.CodiSkeleton
 import kotlin.math.roundToInt
 
 @Composable
@@ -116,12 +120,14 @@ fun CoursesScreen(
                 onClick = {
                     showBottomSheet = true
                     clickedOptionsType = Options.LEARNING
-                }, modifier = Modifier.fillMaxWidth()
+                },
+                modifier = Modifier.fillMaxWidth(),
+                isLoading = state.isLoading
             )
         },
         bottomBar = {
             HomeBottomAppBar(
-                currentRoute = Destination.CoursesScreen,
+                currentRoute = Destination.CoursesScreen(),
                 onNavigate = { des ->
                     onAction(CoursesAction.NavigateTo(des))
                 },
@@ -130,11 +136,6 @@ fun CoursesScreen(
                     .offset(y = bottomBarTranslation.roundToInt().dp)
             )
         },
-//        floatingActionButton = {
-//            HomeChatBotFab(onClick = {
-//                onAction(CoursesAction.NavigateTo(Destination.ChatBotScreen))
-//            })
-//        },
         modifier = modifier
             .fillMaxSize()
             .background(MaterialTheme.colorScheme.background)
@@ -198,13 +199,21 @@ fun CoursesScreen(
                         horizontalArrangement = Arrangement.SpaceBetween,
                         verticalAlignment = Alignment.CenterVertically
                     ) {
-                        Text(
-                            text = state.selectedCourse?.name ?: "Course Name",
-                            style = MaterialTheme.typography.titleMedium,
-                            maxLines = 1,
-                            overflow = TextOverflow.Ellipsis,
-                            modifier = Modifier.weight(1f)
-                        )
+                        CodiSkeleton(
+                            isShow = state.isLoading,
+                            modifier = Modifier
+                                .heightIn(min=32.dp)
+                                .weight(1f)
+                                .clip(MaterialTheme.shapes.small)
+                        ) {
+                            Text(
+                                text = state.selectedCourse?.name ?: "Course Name",
+                                style = MaterialTheme.typography.titleMedium,
+                                maxLines = 1,
+                                overflow = TextOverflow.Ellipsis,
+                                modifier = Modifier.fillMaxWidth()
+                            )
+                        }
                         Icon(
                             imageVector = Icons.Default.ImportExport,
                             contentDescription = "Select Course",
@@ -215,12 +224,20 @@ fun CoursesScreen(
             }
 
             item {
-                if (!state.selectedCourse?.description.isNullOrBlank()) {
-                    Text(
-                        text = state.selectedCourse.description,
-                        style = MaterialTheme.typography.bodyMedium,
+                CodiSkeleton(
+                    isShow = state.isLoading,
+                    modifier = Modifier
+                        .heightIn(min =112.dp)
+                        .fillMaxWidth()
+                        .clip(MaterialTheme.shapes.medium)
+                ) {
+                    if (!state.selectedCourse?.description.isNullOrBlank()) {
+                        Text(
+                            text = state.selectedCourse.description,
+                            style = MaterialTheme.typography.bodyMedium,
 //                        color = MaterialTheme.colorScheme.onSurface.copy(alpha = 0.6f)
-                    )
+                        )
+                    }
                 }
                 Spacer(modifier = Modifier.height(16.dp))
             }

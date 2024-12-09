@@ -6,12 +6,14 @@ import androidx.datastore.preferences.core.Preferences
 import androidx.datastore.preferences.preferencesDataStore
 import com.manikandareas.codileap.auth.data.AuthDataSourceImpl
 import com.manikandareas.codileap.auth.data.networking.RemoteAuthDataSource
-import com.manikandareas.codileap.auth.data.preference.PreferenceDataSource
+import com.manikandareas.codileap.core.data.preference.PreferenceDataSource
 import com.manikandareas.codileap.auth.domain.AuthDataSource
 import com.manikandareas.codileap.courses.data.networking.RemoteCoursesDataSource
 import com.manikandareas.codileap.courses.data.networking.RemoteLearningPathDataSource
 import com.manikandareas.codileap.courses.domain.CoursesDataSource
 import com.manikandareas.codileap.courses.domain.LearningPathDataSource
+import com.manikandareas.codileap.quiz.data.networking.RemoteQuizDataSource
+import com.manikandareas.codileap.quiz.domain.QuizDataSource
 import com.manikandareas.codileap.user.data.networking.RemoteProgressDataSource
 import com.manikandareas.codileap.user.domain.ProgressDataSource
 import kotlinx.coroutines.CoroutineDispatcher
@@ -43,4 +45,6 @@ val dataSourceModule = module {
     singleOf(::RemoteLearningPathDataSource).bind<LearningPathDataSource>()
     singleOf(::RemoteProgressDataSource).bind<ProgressDataSource>()
     singleOf(::RemoteCoursesDataSource).bind<CoursesDataSource>()
+    singleOf(::RemoteQuizDataSource).bind<QuizDataSource>()
+
 }

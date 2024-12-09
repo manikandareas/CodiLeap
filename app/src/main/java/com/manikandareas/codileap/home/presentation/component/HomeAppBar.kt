@@ -25,7 +25,7 @@ fun HomeAppBar(onProfileClick: () -> Unit, data: UserUi, modifier: Modifier = Mo
         modifier = modifier,
         title = {
             Column {
-                Text(text = data.name?: "Unknown", style = MaterialTheme.typography.titleMedium)
+                Text(text = data.fullName?: "Unknown", style = MaterialTheme.typography.titleMedium)
                 Text(
                     text = "Let's learn something new today!",
                     style = MaterialTheme.typography.labelSmall
@@ -36,7 +36,7 @@ fun HomeAppBar(onProfileClick: () -> Unit, data: UserUi, modifier: Modifier = Mo
 
             IconButton(onClick = {onProfileClick()}, modifier = Modifier.padding(end = 8.dp)) {
                 AsyncImage(
-                    data.imageUrl,
+                    data.avatarUrl,
                     contentDescription = null,
                     modifier = Modifier
                         .size(40.dp)
@@ -56,8 +56,8 @@ fun PreviewHomeAppBar(modifier: Modifier = Modifier) {
 }
 
 val userUi = UserUi(
-    name = "Vito Manik",
-    imageUrl = "https://avatars.githubusercontent.com/u/86580600?v=4",
+    fullName = "Vito Manik",
+    avatarUrl = "https://avatars.githubusercontent.com/u/86580600?v=4",
     isAlreadyScreened = false,
     email = "",
     id = 0

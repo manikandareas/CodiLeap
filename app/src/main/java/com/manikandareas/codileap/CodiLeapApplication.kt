@@ -3,6 +3,7 @@ package com.manikandareas.codileap
 import android.app.Application
 import android.content.pm.ApplicationInfo
 import coil.ImageLoader
+import com.manikandareas.codileap.core.worker.NotificationHelper
 import com.manikandareas.codileap.di.dataSourceModule
 import com.manikandareas.codileap.di.navigationModule
 import com.manikandareas.codileap.di.networkModule
@@ -19,6 +20,7 @@ class CodiLeapApplication : Application() {
         ImageLoader.Builder(this)
             .crossfade(true)
             .build()
+
         startKoin {
             if (0 != applicationInfo.flags and ApplicationInfo.FLAG_DEBUGGABLE) {
                 androidLogger(Level.INFO)
@@ -36,5 +38,8 @@ class CodiLeapApplication : Application() {
                 )
             )
         }
+
+        val notificationHelper = NotificationHelper(this)
+        notificationHelper.createNotificationChannel()
     }
 }

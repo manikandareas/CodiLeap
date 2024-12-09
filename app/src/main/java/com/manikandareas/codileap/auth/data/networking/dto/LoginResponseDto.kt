@@ -17,5 +17,10 @@ data class UserResponseDto(
     val id: Int,
     val email: String,
     val avatarUrl: String,
-    val isAlreadyScreened: Boolean
+    val isAlreadyScreened: Boolean,
+    val fullName: String? = null,
+    val phoneNumber: String? = null,
+    val address: String? = null,
+    val dob: String? = null,
+    val studyHours: Int? = null,
 )

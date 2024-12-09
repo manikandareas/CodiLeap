@@ -22,7 +22,7 @@ sealed class BottomBarUi(
     object Courses : BottomBarUi(
         title = "Courses",
         icon = Icons.Default.LocalLibrary,
-        route = Destination.CoursesScreen
+        route = Destination.CoursesScreen()
     )
 
     object Analytics : BottomBarUi(

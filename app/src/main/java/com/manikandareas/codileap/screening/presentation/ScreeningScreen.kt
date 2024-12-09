@@ -104,16 +104,6 @@ fun ScreeningScreen(onAction: (ScreeningAction) -> Unit, modifier: Modifier = Mo
             verticalArrangement = Arrangement.Center
         ) {
 
-//            if (pagerState.currentPage != 0) {
-//                Text(
-//                    text = "Steps 1/6",
-//                    style = MaterialTheme.typography.bodyMedium,
-//                    color = MaterialTheme.colorScheme.onSurface.copy(
-//                        alpha = 0.6F
-//                    )
-//                )
-//                Spacer(modifier = Modifier.height(8.dp))
-//            }
             HorizontalPager(
                 state = pagerState, modifier = Modifier.fillMaxWidth(),
                 pageContent = { page ->

@@ -1,5 +1,8 @@
 package com.manikandareas.codileap.quiz.data.networking.dto
 
+import kotlinx.serialization.Serializable
+
+@Serializable
 data class DailyQuizResponseDto(
     val id: Int,
     val courseId: Int,
@@ -13,6 +16,7 @@ data class DailyQuizResponseDto(
     val questions: List<QuestionDto>
 )
 
+@Serializable
 data class QuestionDto(
     val id: Int,
     val quizId: Int,
@@ -23,6 +27,7 @@ data class QuestionDto(
     val answerOptions: List<AnswerOptionDto>
 )
 
+@Serializable
 data class AnswerOptionDto(
     val id: Int,
     val questionId: Int,

@@ -106,24 +106,36 @@ private fun TextElement(text: HtmlElement.Text) {
         )
     }
 
+//    val textStyle = when (text.type) {
+//        TextType.H1 -> MaterialTheme.typography.titleLarge.copy(fontWeight = FontWeight.Bold)
+//        TextType.H2 -> MaterialTheme.typography.titleMedium.copy(fontWeight = FontWeight.Bold)
+//        TextType.H3 -> MaterialTheme.typography.titleSmall.copy(fontWeight = FontWeight.Bold)
+//        TextType.H4 -> MaterialTheme.typography.bodyLarge.copy(fontWeight = FontWeight.Bold)
+//        TextType.H5 -> MaterialTheme.typography.bodyMedium.copy(fontWeight = FontWeight.Bold)
+//        TextType.H6 -> MaterialTheme.typography.bodySmall.copy(fontWeight = FontWeight.Bold)
+//        TextType.BODY -> MaterialTheme.typography.bodyMedium
+//        TextType.QUOTE -> MaterialTheme.typography.bodySmall.copy(fontStyle = FontStyle.Italic)
+//        TextType.CAPTION -> MaterialTheme.typography.labelSmall
+//        TextType.SUBTITLE -> MaterialTheme.typography.labelMedium
+//    }
+
     val textStyle = when (text.type) {
-        TextType.H1 -> MaterialTheme.typography.headlineLarge
-        TextType.H2 -> MaterialTheme.typography.headlineMedium
-        TextType.H3 -> MaterialTheme.typography.headlineSmall
-        TextType.H4 -> MaterialTheme.typography.titleLarge
-        TextType.H5 -> MaterialTheme.typography.titleMedium
-        TextType.H6 -> MaterialTheme.typography.titleSmall
+        TextType.H1 -> MaterialTheme.typography.headlineMedium.copy(fontWeight = FontWeight.Bold)
+        TextType.H2 -> MaterialTheme.typography.headlineSmall.copy(fontWeight = FontWeight.Bold)
+        TextType.H3 -> MaterialTheme.typography.titleLarge.copy(fontWeight = FontWeight.Bold)
+        TextType.H4 -> MaterialTheme.typography.titleMedium.copy(fontWeight = FontWeight.Bold)
+        TextType.H5 -> MaterialTheme.typography.titleSmall.copy(fontWeight = FontWeight.Bold)
+        TextType.H6 -> MaterialTheme.typography.bodyLarge.copy(fontWeight = FontWeight.Bold)
         TextType.BODY -> MaterialTheme.typography.bodyMedium
-        TextType.QUOTE -> MaterialTheme.typography.bodyLarge
-        TextType.CAPTION -> MaterialTheme.typography.bodySmall
+        TextType.QUOTE -> MaterialTheme.typography.bodySmall.copy(fontStyle = FontStyle.Italic)
+        TextType.CAPTION -> MaterialTheme.typography.labelSmall
         TextType.SUBTITLE -> MaterialTheme.typography.labelMedium
     }
 
     Text(
         text = annotatedString,
         modifier = Modifier
-            .fillMaxWidth()
-            .padding(horizontal = 16.dp),
+            .fillMaxWidth(),
         style = textStyle,
         textAlign = textAlign
     )

@@ -5,6 +5,8 @@ import com.manikandareas.codileap.auth.presentation.auth_register.AuthRegisterVi
 import com.manikandareas.codileap.auth.presentation.auth_signIn.AuthSignInViewModel
 import com.manikandareas.codileap.courses.presentation.CoursesViewModel
 import com.manikandareas.codileap.courses.presentation.module.ModuleViewModel
+import com.manikandareas.codileap.home.presentation.HomeViewModel
+import com.manikandareas.codileap.quiz.presentation.QuizViewModel
 import com.manikandareas.codileap.settings.presentation.SettingsViewModel
 import com.manikandareas.codileap.user.presentation.UserProgressViewModel
 import org.koin.core.module.dsl.viewModelOf
@@ -20,4 +22,6 @@ val viewModelModule = module {
     viewModelOf(::SettingsViewModel).bind<SettingsViewModel>()
     viewModelOf(::UserProgressViewModel).bind<UserProgressViewModel>()
     viewModelOf(::ModuleViewModel).bind<ModuleViewModel>()
+    viewModelOf(::QuizViewModel).bind<QuizViewModel>()
+    viewModelOf(::HomeViewModel).bind<HomeViewModel>()
 }

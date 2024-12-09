@@ -2,6 +2,9 @@ package com.manikandareas.codileap.courses.presentation.model
 
 import com.manikandareas.codileap.core.presentation.util.toUTC
 import com.manikandareas.codileap.courses.domain.LearningPath
+import com.manikandareas.codileap.home.presentation.model.CarouselItemUi
+import com.manikandareas.codileap.home.presentation.model.CarouselUi
+import com.manikandareas.codileap.home.presentation.model.DummyCarouselUi
 import java.time.ZonedDateTime
 
 data class LearningPathUi(
@@ -31,3 +34,12 @@ fun LearningPath.toUiModel(): LearningPathUi {
         updatedAt = ZonedDateTime.parse(updatedAt.toUTC()),
     )
 }
+
+fun LearningPathUi.toCarouselItemUi( onClick: ()->Unit, index: Int=0) = CarouselItemUi(
+    title = name,
+    subtitle = description,
+    moduleCount = totalModules,
+    userCount = courses.first().totalEnrollments,
+    imageUrl = DummyCarouselUi.items[index].imageUrl,
+    onClick = onClick
+)

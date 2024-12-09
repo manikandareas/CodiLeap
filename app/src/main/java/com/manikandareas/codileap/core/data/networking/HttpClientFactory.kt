@@ -1,7 +1,7 @@
 package com.manikandareas.codileap.core.data.networking
 
 import com.manikandareas.codileap.auth.data.networking.dto.RefreshTokenResponseDto
-import com.manikandareas.codileap.auth.data.preference.PreferenceDataSource
+import com.manikandareas.codileap.core.data.preference.PreferenceDataSource
 import com.manikandareas.codileap.auth.domain.Token
 import com.manikandareas.codileap.core.domain.networking.ApiResponse
 import io.ktor.client.HttpClient
@@ -16,12 +16,9 @@ import io.ktor.client.plugins.logging.ANDROID
 import io.ktor.client.plugins.logging.LogLevel
 import io.ktor.client.plugins.logging.Logger
 import io.ktor.client.plugins.logging.Logging
-import io.ktor.client.request.forms.submitForm
-import io.ktor.client.request.parameter
 import io.ktor.client.request.post
 import io.ktor.http.ContentType
 import io.ktor.http.HttpHeaders
-import io.ktor.http.Parameters
 import io.ktor.http.contentType
 import io.ktor.http.encodedPath
 import io.ktor.http.headers

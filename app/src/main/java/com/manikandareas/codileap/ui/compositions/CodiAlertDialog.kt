@@ -67,7 +67,8 @@ fun CodiDialog(
     onConfirmRequest: () -> Unit,
     dismissTitle: String = "Cancel",
     confirmTitle: String = "Continue",
-    onDismiss: (() -> Unit)? = null
+    onDismiss: (() -> Unit)? = null,
+    isHideDismissButton: Boolean = false
 ) {
     Dialog(
         onDismissRequest = onDismissRequest,
@@ -153,23 +154,7 @@ fun CodiDialog(
                             textAlign = TextAlign.Center
                         )
                         Spacer(modifier = Modifier.height(16.dp))
-                        Row {
-                            CodiButton(
-                                onClick = onDismissRequest,
-                                modifier = Modifier.weight(1f),
-                                colors = ButtonColors(
-                                    contentColor = MaterialTheme.colorScheme.onBackground,
-                                    containerColor = MaterialTheme.colorScheme.surfaceDim,
-                                    disabledContentColor = style.iconContentColor.copy(alpha = .6f),
-                                    disabledContainerColor = style.containerColor.copy(alpha = .6f)
-                                )
-                            ) {
-                                Text(
-                                    text = dismissTitle,
-                                    color = MaterialTheme.colorScheme.onSurface
-                                )
-                            }
-                            Spacer(modifier = Modifier.width(8.dp))
+                        Column(modifier = Modifier.fillMaxWidth()) {
                             CodiButton(
                                 onClick = onConfirmRequest,
                                 colors = ButtonDefaults.buttonColors(
@@ -178,10 +163,31 @@ fun CodiDialog(
                                     disabledContentColor = style.textContentColor.copy(alpha = .6f),
                                     disabledContainerColor = style.containerColor.copy(alpha = .6f)
                                 ),
-                                modifier = Modifier.weight(1f)
+                                modifier = Modifier.fillMaxWidth()
                             ) {
                                 Text(text = confirmTitle, color = style.titleContentColor)
                             }
+                            Spacer(modifier = Modifier.height(8.dp))
+
+                            if (!isHideDismissButton) {
+                                CodiButton(
+                                    onClick = onDismissRequest,
+                                    modifier = Modifier.fillMaxWidth(),
+                                    colors = ButtonColors(
+                                        contentColor = MaterialTheme.colorScheme.onBackground,
+                                        containerColor = MaterialTheme.colorScheme.surfaceDim,
+                                        disabledContentColor = style.iconContentColor.copy(alpha = .6f),
+                                        disabledContainerColor = style.containerColor.copy(alpha = .6f)
+                                    )
+                                ) {
+                                    Text(
+                                        text = dismissTitle,
+                                        color = MaterialTheme.colorScheme.onSurface
+                                    )
+                                }
+                            }
+
+
                         }
                     }
                 }

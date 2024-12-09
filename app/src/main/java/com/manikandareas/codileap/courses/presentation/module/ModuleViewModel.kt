@@ -39,7 +39,7 @@ class ModuleViewModel(
     fun onAction(action: ModuleAction) {
         when (action) {
             ModuleAction.NavigateBack -> viewModelScope.launch {
-                navigator.navigate(Destination.CoursesScreen) {
+                navigator.navigate(Destination.CoursesScreen()) {
                     popUpTo(CoursesScreen) {
                         inclusive = true
                     }

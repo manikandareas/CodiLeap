@@ -11,13 +11,12 @@ import androidx.compose.ui.unit.dp
 
 val LocalButtonPadding = staticCompositionLocalOf { PaddingValues(16.dp) }
 
-
 @Composable
 fun rememberButtonColors(
     contentColor: Color = MaterialTheme.colorScheme.onPrimaryContainer,
     containerColor: Color = MaterialTheme.colorScheme.primaryContainer,
-    disabledContentColor: Color = MaterialTheme.colorScheme.onPrimary.copy(alpha = 0.6f),
-    disabledContainerColor: Color = MaterialTheme.colorScheme.onPrimaryContainer.copy(alpha = 0.6f)
+    disabledContentColor: Color = MaterialTheme.colorScheme.onPrimary.withLightness(0.7f),
+    disabledContainerColor: Color = MaterialTheme.colorScheme.onPrimaryContainer.withLightness(0.9f)
 ): ButtonColors = remember {
     ButtonColors(
         contentColor = contentColor,
@@ -31,8 +30,8 @@ fun rememberButtonColors(
 fun ButtonPrimaryColor(
     contentColor: Color = MaterialTheme.colorScheme.onPrimaryContainer,
     containerColor: Color = MaterialTheme.colorScheme.primaryContainer,
-    disabledContentColor: Color = MaterialTheme.colorScheme.onPrimary.copy(alpha = 0.6f),
-    disabledContainerColor: Color = MaterialTheme.colorScheme.onPrimaryContainer.copy(alpha = 0.6f)
+    disabledContentColor: Color = MaterialTheme.colorScheme.onPrimary.withLightness(0.7f),
+    disabledContainerColor: Color = MaterialTheme.colorScheme.onPrimaryContainer.withLightness(0.9f)
 ) = rememberButtonColors(
     contentColor = contentColor,
     containerColor = containerColor,
@@ -44,8 +43,8 @@ fun ButtonPrimaryColor(
 fun ButtonSecondaryColor(
     contentColor: Color = MaterialTheme.colorScheme.onSecondaryContainer,
     containerColor: Color = MaterialTheme.colorScheme.secondaryContainer,
-    disabledContentColor: Color = MaterialTheme.colorScheme.onSecondaryContainer.copy(alpha = 0.6f),
-    disabledContainerColor: Color = MaterialTheme.colorScheme.secondaryContainer.copy(alpha = 0.6f)
+    disabledContentColor: Color = MaterialTheme.colorScheme.onSecondaryContainer.withLightness(0.7f),
+    disabledContainerColor: Color = MaterialTheme.colorScheme.secondaryContainer.withLightness(0.9f)
 ) = rememberButtonColors(
     contentColor = contentColor,
     containerColor = containerColor,
@@ -57,8 +56,8 @@ fun ButtonSecondaryColor(
 fun ButtonTertiaryColor(
     contentColor: Color = MaterialTheme.colorScheme.onTertiaryContainer,
     containerColor: Color = MaterialTheme.colorScheme.tertiaryContainer,
-    disabledContentColor: Color = MaterialTheme.colorScheme.onTertiaryContainer.copy(alpha = 0.6f),
-    disabledContainerColor: Color = MaterialTheme.colorScheme.tertiaryContainer.copy(alpha = 0.6f)
+    disabledContentColor: Color = MaterialTheme.colorScheme.onTertiaryContainer.withLightness(0.7f),
+    disabledContainerColor: Color = MaterialTheme.colorScheme.tertiaryContainer.withLightness(0.9f)
 ) = rememberButtonColors(
     contentColor = contentColor,
     containerColor = containerColor,
@@ -70,12 +69,8 @@ fun ButtonTertiaryColor(
 fun ButtonSuccessColor(
     contentColor: Color = MaterialTheme.extendedColorScheme.success.onColorContainer,
     containerColor: Color = MaterialTheme.extendedColorScheme.success.colorContainer,
-    disabledContentColor: Color = MaterialTheme.extendedColorScheme.success.onColorContainer.copy(
-        alpha = 0.6f
-    ),
-    disabledContainerColor: Color = MaterialTheme.extendedColorScheme.success.colorContainer.copy(
-        alpha = 0.6f
-    )
+    disabledContentColor: Color = MaterialTheme.extendedColorScheme.success.onColorContainer.withLightness(0.7f),
+    disabledContainerColor: Color = MaterialTheme.extendedColorScheme.success.colorContainer.withLightness(0.9f)
 ) = rememberButtonColors(
     contentColor = contentColor,
     containerColor = containerColor,
@@ -87,12 +82,8 @@ fun ButtonSuccessColor(
 fun ButtonWarningColor(
     contentColor: Color = MaterialTheme.extendedColorScheme.warning.onColorContainer,
     containerColor: Color = MaterialTheme.extendedColorScheme.warning.colorContainer,
-    disabledContentColor: Color = MaterialTheme.extendedColorScheme.warning.onColorContainer.copy(
-        alpha = 0.6f
-    ),
-    disabledContainerColor: Color = MaterialTheme.extendedColorScheme.warning.colorContainer.copy(
-        alpha = 0.6f
-    )
+    disabledContentColor: Color = MaterialTheme.extendedColorScheme.warning.onColorContainer.withLightness(0.7f),
+    disabledContainerColor: Color = MaterialTheme.extendedColorScheme.warning.colorContainer.withLightness(0.9f)
 ) = rememberButtonColors(
     contentColor = contentColor,
     containerColor = containerColor,

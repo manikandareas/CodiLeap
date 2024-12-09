@@ -88,7 +88,6 @@ fun ModuleSession(
     }
 
     var isAlertDialogOpen by rememberSaveable { mutableStateOf(false) }
-//    var alertDialogEvent by rememberSaveable { mutableStateOf(ModuleEventTypes.Exit) }
 
     var showBottomSheet by remember { mutableStateOf(false) }
 
@@ -295,11 +294,7 @@ fun ModuleSession(
             )
         }
 
-        if (state.isLoading) {
-            Box(modifier = Modifier.fillMaxSize(), contentAlignment = Alignment.Center) {
-                CircularProgressIndicator(color = MaterialTheme.colorScheme.primary)
-            }
-        } else {
+        Box(modifier = Modifier.fillMaxSize()) {
             AnimatedContent(
                 modifier = Modifier
                     .fillMaxSize()
@@ -341,7 +336,18 @@ fun ModuleSession(
                     )
                 }
             }
+
+            if (state.isLoading) {
+                Box(
+                    modifier = Modifier.fillMaxSize(),
+                    contentAlignment = Alignment.Center
+                ) {
+                    CircularProgressIndicator()
+                }
+            }
         }
+
+
     }
 }
 

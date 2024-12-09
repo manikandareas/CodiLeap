@@ -24,7 +24,7 @@ import com.manikandareas.codileap.ui.compositions.CodiButton
 import com.manikandareas.codileap.ui.theme.CodiLeapTheme
 
 @Composable
-fun QuizBottomAppBar(onClick: ()-> Unit,title: String, modifier: Modifier = Modifier) {
+fun QuizBottomAppBar(onClick: ()-> Unit,timerTitle: String,title:String= "Next", modifier: Modifier = Modifier, enabled:Boolean =true) {
     Row(modifier = modifier.padding(16.dp), horizontalArrangement = Arrangement.spacedBy(8.dp)) {
         Button(
             onClick = {},
@@ -39,7 +39,7 @@ fun QuizBottomAppBar(onClick: ()-> Unit,title: String, modifier: Modifier = Modi
             shape = MaterialTheme.shapes.medium
         ) {
             Text(
-                title,
+                timerTitle,
                 style = MaterialTheme.typography.bodyMedium,
                 color = MaterialTheme.colorScheme.onSurface
             )
@@ -54,9 +54,10 @@ fun QuizBottomAppBar(onClick: ()-> Unit,title: String, modifier: Modifier = Modi
         CodiButton(
             onClick = {onClick()},
             modifier = Modifier.weight(.8f),
+            enabled = enabled
         ) {
             Row(verticalAlignment = Alignment.CenterVertically) {
-                Text("Next")
+                Text(title)
                 Icon(
                     imageVector = Icons.AutoMirrored.Default.NavigateNext,
                     contentDescription = "Next"
@@ -70,6 +71,6 @@ fun QuizBottomAppBar(onClick: ()-> Unit,title: String, modifier: Modifier = Modi
 @Composable
 private fun PreviewQuizBottomAppBar() {
     CodiLeapTheme {
-        QuizBottomAppBar(onClick = {}, title = "10:00")
+        QuizBottomAppBar(onClick = {}, timerTitle = "10:00")
     }
 }

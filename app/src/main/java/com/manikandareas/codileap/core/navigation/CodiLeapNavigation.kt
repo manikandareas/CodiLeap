@@ -4,11 +4,11 @@ package com.manikandareas.codileap.core.navigation
 
 import androidx.compose.animation.ExperimentalSharedTransitionApi
 import androidx.compose.animation.SharedTransitionLayout
+import androidx.compose.material3.SnackbarHostState
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.ui.Modifier
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
-import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
@@ -25,24 +25,19 @@ import com.manikandareas.codileap.auth.presentation.auth_signIn.AuthSignInViewMo
 import com.manikandareas.codileap.chatbot.presentation.ChatBotScreen
 import com.manikandareas.codileap.core.presentation.util.ObserveAsEvents
 import com.manikandareas.codileap.core.presentation.util.parcelableType
-import com.manikandareas.codileap.courses.presentation.CoursesAction
+import com.manikandareas.codileap.core.worker.StudyScheduleSetup
 import com.manikandareas.codileap.courses.presentation.CoursesScreen
 import com.manikandareas.codileap.courses.presentation.CoursesViewModel
 import com.manikandareas.codileap.courses.presentation.model.ModuleUi
-import com.manikandareas.codileap.courses.presentation.module.ModuleAction
 import com.manikandareas.codileap.courses.presentation.module.ModuleSession
-import com.manikandareas.codileap.courses.presentation.module.ModuleState
 import com.manikandareas.codileap.courses.presentation.module.ModuleViewModel
 import com.manikandareas.codileap.home.presentation.HomeAction
 import com.manikandareas.codileap.home.presentation.HomeScreen
-import com.manikandareas.codileap.home.presentation.HomeState
+import com.manikandareas.codileap.home.presentation.HomeViewModel
 import com.manikandareas.codileap.home.presentation.model.toUiModel
 import com.manikandareas.codileap.intro.presentation.IntroScreen
-import com.manikandareas.codileap.quiz.presentation.QuizAction
 import com.manikandareas.codileap.quiz.presentation.QuizSession
-import com.manikandareas.codileap.quiz.presentation.QuizState
-import com.manikandareas.codileap.quiz.presentation.model.toUiModel
-import com.manikandareas.codileap.screening.data.dummy.interestQuestionsQuiz
+import com.manikandareas.codileap.quiz.presentation.QuizViewModel
 import com.manikandareas.codileap.screening.presentation.ScreeningAction
 import com.manikandareas.codileap.screening.presentation.ScreeningScreen
 import com.manikandareas.codileap.settings.presentation.FAQsScreen
@@ -61,7 +56,8 @@ fun CodiLeapNavigation(
     navController: NavHostController,
     startDestination: Destination,
     navigator: Navigator,
-    currentUser: User? = null
+    currentUser: User? = null,
+    snackbarHostState: SnackbarHostState
 ) {
 
     ObserveAsEvents(events = navigator.navigationActions) { action ->
@@ -136,10 +132,15 @@ fun CodiLeapNavigation(
                 startDestination = Destination.HomeScreen
             ) {
                 composable<Destination.HomeScreen> {
-                    val state = HomeState(user = currentUser?.toUiModel())
+//                    val state = HomeState(user = currentUser?.toUiModel())
+
+                    val viewModel = koinViewModel<HomeViewModel>()
+                    val state = viewModel.state.collectAsStateWithLifecycle().value
 
                     HomeScreen(
-                        state = state, onAction = {
+                        state = state.copy(
+                            user = currentUser?.toUiModel()
+                        ), onAction = {
                             when (it) {
                                 is HomeAction.NavigateTo -> navController.navigate(it.des) {
                                     popUpTo(it.des) { inclusive = true }
@@ -149,11 +150,25 @@ fun CodiLeapNavigation(
                 }
 
                 composable<Destination.CoursesScreen> {
+                    val arg = it.toRoute<Destination.CoursesScreen>()
+
                     val viewModel = koinViewModel<CoursesViewModel>()
 
                     val state by viewModel.state.collectAsStateWithLifecycle()
 
-                    CoursesScreen(state = state, onAction = viewModel::onAction)
+                    CoursesScreen(state = if (arg.selectedLearningPathId != null) {
+                        val selectedLearningPath =
+                            state.learningPaths.find { it.id == arg.selectedLearningPathId } ?: state.selectedLearningPath
+
+                        val courses = selectedLearningPath?.courses ?: emptyList()
+                        state.copy(
+                            selectedLearningPath = selectedLearningPath,
+                            selectedCourse = selectedLearningPath?.courses?.first(),
+                            courses = courses
+                        )
+                    } else {
+                        state
+                    }, onAction = viewModel::onAction)
                 }
 
                 composable<Destination.ModuleScreen>(
@@ -166,7 +181,11 @@ fun CodiLeapNavigation(
 
                     val state by viewModel.state.collectAsStateWithLifecycle()
 
-                    ModuleSession(state = state, onAction = viewModel::onAction, events = viewModel.events)
+                    ModuleSession(
+                        state = state,
+                        onAction = viewModel::onAction,
+                        events = viewModel.events
+                    )
                 }
 
 
@@ -191,23 +210,15 @@ fun CodiLeapNavigation(
                 startDestination = Destination.QuizScreen
             ) {
                 composable<Destination.QuizScreen> {
+                    val viewModel: QuizViewModel = koinViewModel { parametersOf(snackbarHostState) }
+
+                    val state by viewModel.state.collectAsStateWithLifecycle()
+
                     QuizSession(
-                        state = QuizState(
-                            quiz = interestQuestionsQuiz.toUiModel(),
-                            isLoading = false
-                        ),
-                        onAction = {
-                            when (it) {
-
-                                QuizAction.NavigateBack -> {
-                                    navController.navigateUp()
-                                }
-
-                                QuizAction.OnSubmitClick -> {
-                                    navController.navigateUp()
-                                }
-                            }
-                        }
+                        state = state,
+                        onAction = viewModel::onAction,
+                        snackbarHostState = snackbarHostState,
+                        events = viewModel.events
                     )
                 }
             }
