@@ -18,7 +18,7 @@ fun StudyScheduleSetup(
     LaunchedEffect(timeInput) {
         if (timeInput.isNotBlank()) {
             // Simpan ke DataStore
-            dataSource.saveStudyTime(timeInput)
+            dataSource.saveReminderTime(timeInput)
             println("Study time saved: $timeInput")
 
             // Setup reminder

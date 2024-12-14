@@ -88,20 +88,11 @@ class AuthSignInViewModel(
             if (currUser == null) {
                 preferenceDataSource.saveUser(response.data!!.user.toUser())
                 preferenceDataSource.saveToken(response.data.toToken())
-                preferenceDataSource.saveStudyTime(
+                preferenceDataSource.saveReminderTime(
                     response.data.user.toUser().studyHours ?: "09:00"
                 )
             }
 
-//            if (currUser == null) {
-//                preferenceDataSource.saveUser(response.data!!.user.toUser())
-//                preferenceDataSource.saveToken(response.data.toToken())
-//            }
-//
-//            if (response.data?.user?.isAlreadyScreened == true && currUser?.isAlreadyScreened == false) {
-//                preferenceDataSource.saveUser(response.data.user.toUser())
-//                navigator.navigate(Destination.HomeGraph)
-//            }
             _events.send(AuthSignInEvent.Success)
 
             if (currUser?.isAlreadyScreened == false) {

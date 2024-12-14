@@ -9,6 +9,7 @@ import com.manikandareas.codileap.home.presentation.HomeViewModel
 import com.manikandareas.codileap.quiz.presentation.QuizViewModel
 import com.manikandareas.codileap.screening.presentation.ScreeningViewModel
 import com.manikandareas.codileap.screening.presentation.screening_result.ScreeningResultViewModel
+import com.manikandareas.codileap.settings.presentation.AppearanceViewModel
 import com.manikandareas.codileap.settings.presentation.SettingsViewModel
 import com.manikandareas.codileap.user.presentation.UserProgressViewModel
 import org.koin.core.module.dsl.viewModel
@@ -37,4 +38,5 @@ val viewModelModule = module {
     viewModelOf(::HomeViewModel).bind<HomeViewModel>()
     viewModelOf(::ScreeningViewModel).bind<ScreeningViewModel>()
     viewModelOf(::ScreeningResultViewModel).bind<ScreeningResultViewModel>()
+    viewModelOf(::AppearanceViewModel).bind<AppearanceViewModel>()
 }

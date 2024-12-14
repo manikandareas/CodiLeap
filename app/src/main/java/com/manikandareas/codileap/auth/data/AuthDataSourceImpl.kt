@@ -25,9 +25,7 @@ class AuthDataSourceImpl(
         return remoteAuthDataSource.login(request).onSuccess { res ->
             res.data.let { data ->
                 // Clear all existing user-related data first
-                preferenceDataSource.clearToken()
-                preferenceDataSource.clearStudyTime()
-                preferenceDataSource.clearUser()
+                preferenceDataSource.clearAllPreferences()
 
                 // Then save new data
                 println("TOKEN: ${data!!.toToken()}")
@@ -36,15 +34,13 @@ class AuthDataSourceImpl(
                 println("USER: ${data!!.user.toUser()}")
                 preferenceDataSource.saveUser(data!!.user.toUser())
 
-                preferenceDataSource.saveStudyTime(data!!.user.toUser().studyHours ?: "09:00")
+                preferenceDataSource.saveReminderTime(data!!.user.toUser().studyHours ?: "09:00")
             }
         }
     }
 
     override suspend fun logout() {
-        preferenceDataSource.clearToken()
-        preferenceDataSource.clearStudyTime()
-        preferenceDataSource.clearUser()
+        preferenceDataSource.clearAllPreferences()
     }
 
 }

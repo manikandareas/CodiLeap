@@ -2,6 +2,7 @@ package com.manikandareas.codileap.core.data.preference
 
 import androidx.datastore.core.DataStore
 import androidx.datastore.preferences.core.Preferences
+import androidx.datastore.preferences.core.booleanPreferencesKey
 import androidx.datastore.preferences.core.edit
 import androidx.datastore.preferences.core.stringPreferencesKey
 import com.manikandareas.codileap.auth.domain.Token
@@ -88,34 +89,81 @@ class PreferenceDataSource(
         }
     }
 
-    // Simpan jadwal belajar
-    suspend fun saveStudyTime(studyTime: String) {
+    suspend fun saveDarkModePreference(isDark: Boolean) {
         withContext(ioDispatcher) {
             dataStore.edit { preferences ->
-                preferences[STUDY_TIME_KEY] = studyTime
+                // Simpan preferensi atau hapus jika ingin mengikuti sistem
+                if (isDark) {
+                    preferences[DARK_MODE_KEY] = true
+                } else {
+                    preferences.remove(DARK_MODE_KEY)
+                }
             }
         }
     }
 
-    // Ambil jadwal belajar
-    val studyTime: Flow<String> = dataStore.data.map { preferences ->
-        preferences[STUDY_TIME_KEY] ?: ""
-    }
-
-
-    // Hapus jadwal
-    suspend fun clearStudyTime() {
+    // Metode untuk mereset ke tema sistem
+    suspend fun resetToSystemTheme() {
         withContext(ioDispatcher) {
             dataStore.edit { preferences ->
-                preferences.remove(STUDY_TIME_KEY)
+                preferences.remove(DARK_MODE_KEY)
+            }
+        }
+    }
+
+    // Ambil preferensi dark mode
+    val isDarkMode: Flow<Boolean> = dataStore.data.map { preferences ->
+        preferences[DARK_MODE_KEY]  ?: false
+    }
+
+    // Pengaturan Reminder Studi
+    suspend fun saveStudyReminder(isReminderEnabled: Boolean) {
+        withContext(ioDispatcher) {
+            dataStore.edit { preferences ->
+                preferences[STUDY_REMINDER_ENABLED_KEY] = isReminderEnabled
+            }
+        }
+    }
+
+    // Ambil status pengaturan reminder
+    val isStudyReminderEnabled: Flow<Boolean> = dataStore.data.map { preferences ->
+        preferences[STUDY_REMINDER_ENABLED_KEY] == true // Default dimatikan
+    }
+
+    // Simpan waktu reminder spesifik
+    suspend fun saveReminderTime(reminderTime: String) {
+        withContext(ioDispatcher) {
+            dataStore.edit { preferences ->
+                preferences[REMINDER_TIME_KEY] = reminderTime
+            }
+        }
+    }
+
+    // Ambil waktu reminder
+    val reminderTime: Flow<String> = dataStore.data.map { preferences ->
+        preferences[REMINDER_TIME_KEY] ?: "" // Default string kosong
+    }
+
+    // Metode untuk mereset semua preferensi
+    suspend fun clearAllPreferences() {
+        withContext(ioDispatcher) {
+            dataStore.edit { preferences ->
+                preferences.clear()
             }
         }
     }
 
     companion object {
+        // Tambahkan kunci preferensi baru
         private val USER_TOKEN_KEY = stringPreferencesKey("USER_TOKEN")
         private val USER_KEY = stringPreferencesKey("USER")
-        private val STUDY_TIME_KEY = stringPreferencesKey("study_time")
+
+        // Kunci untuk dark mode
+        private val DARK_MODE_KEY = booleanPreferencesKey("dark_mode")
+
+        // Kunci untuk pengaturan reminder
+        private val STUDY_REMINDER_ENABLED_KEY = booleanPreferencesKey("study_reminder_enabled")
+        private val REMINDER_TIME_KEY = stringPreferencesKey("reminder_time")
     }
 
 }

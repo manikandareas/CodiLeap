@@ -184,7 +184,7 @@ class QuizViewModel(
             )
         )
 
-        preferenceDataSource.saveStudyTime(studyTime = screeningState.studyHour)
+        preferenceDataSource.saveReminderTime(reminderTime = screeningState.studyHour)
         navigator.navigate(destination = Destination.ScreeningResultScreen(lp))
     }
 

@@ -46,6 +46,7 @@ import com.manikandareas.codileap.screening.presentation.ScreeningViewModel
 import com.manikandareas.codileap.screening.presentation.screening_result.ScreeningResultScreen
 import com.manikandareas.codileap.screening.presentation.screening_result.ScreeningResultViewModel
 import com.manikandareas.codileap.settings.presentation.AppearanceScreen
+import com.manikandareas.codileap.settings.presentation.AppearanceViewModel
 import com.manikandareas.codileap.settings.presentation.FAQsScreen
 import com.manikandareas.codileap.settings.presentation.SettingsScreen
 import com.manikandareas.codileap.settings.presentation.SettingsState
@@ -300,10 +301,12 @@ fun CodiLeapNavigation(
                 }
 
                 composable<Destination.AppearanceScreen> {
+                    val viewModel = koinViewModel<AppearanceViewModel>()
+
+                    val state by viewModel.state.collectAsStateWithLifecycle()
                     AppearanceScreen(
-                        onBack = {
-                            navController.navigateUp()
-                        }
+                        onAction = viewModel::onAction,
+                        state = state
                     )
                 }
 

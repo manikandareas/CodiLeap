@@ -22,12 +22,13 @@ import com.manikandareas.codileap.ui.theme.CodiLeapTheme
 @Composable
 fun AppearanceScreen(
     modifier: Modifier = Modifier,
-    onBack: () -> Unit = {}
+    state: AppearanceState,
+    onAction: (AppearanceAction) -> Unit = {},
 ) {
 
     Scaffold(
         topBar = {
-            AppearanceAppBar(onBack = onBack)
+            AppearanceAppBar(onBack = { onAction(AppearanceAction.NavigateBack) })
         },
     ) { innerPadding ->
         Column(
@@ -44,8 +45,8 @@ fun AppearanceScreen(
             ) {
                 Text("Dark Mode", style = MaterialTheme.typography.titleMedium)
                 Switch(
-                    checked = true,
-                    onCheckedChange = { /*TODO*/ }
+                    checked = state.isDarkMode,
+                    onCheckedChange = { onAction(AppearanceAction.OnToggleThemeClick) }
                 )
             }
         }
@@ -56,6 +57,8 @@ fun AppearanceScreen(
 @Composable
 private fun PreviewAppearanceScreen() {
     CodiLeapTheme {
-        AppearanceScreen()
+        AppearanceScreen(
+            state = AppearanceState()
+        )
     }
 }
