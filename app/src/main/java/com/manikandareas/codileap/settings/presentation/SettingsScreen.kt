@@ -34,6 +34,7 @@ import androidx.compose.ui.draw.clip
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.tooling.preview.PreviewLightDark
 import androidx.compose.ui.unit.dp
+import coil.compose.AsyncImage
 import coil.compose.SubcomposeAsyncImage
 import com.manikandareas.codileap.R
 import com.manikandareas.codileap.core.navigation.Destination
@@ -46,7 +47,7 @@ import com.manikandareas.codileap.ui.theme.CodiLeapTheme
 import com.manikandareas.codileap.ui.theme.ErrorAlertDialogStyle
 
 @Composable
-fun SettingsScreen(onAction: (SettingsAction) -> Unit, modifier: Modifier = Modifier) {
+fun SettingsScreen(onAction: (SettingsAction) -> Unit, modifier: Modifier = Modifier, state: SettingsState) {
     val isDialogOpen = remember { mutableStateOf(false) }
     Scaffold(
         modifier = modifier
@@ -100,30 +101,32 @@ fun SettingsScreen(onAction: (SettingsAction) -> Unit, modifier: Modifier = Modi
                 ) {
                     IconButton(onClick = {}, modifier = Modifier.padding(end = 8.dp)) {
                         SubcomposeAsyncImage(
-                            model = "null",
+                            model = state.currentUser?.avatarUrl ?: "",
                             contentDescription = null,
                             modifier = Modifier
                                 .size(52.dp)
                                 .clip(MaterialTheme.shapes.extraLarge),
                             error = {
-                                Image(
-                                    painter = painterResource(id = R.drawable.me),
-                                    contentDescription = null,
-                                    modifier = Modifier
-                                        .size(52.dp)
-                                        .clip(MaterialTheme.shapes.extraLarge),
-                                )
+//                                Image(
+//                                    painter = painterResource(id = R.drawable.me),
+//                                    contentDescription = null,
+//                                    modifier = Modifier
+//                                        .size(52.dp)
+//                                        .clip(MaterialTheme.shapes.extraLarge),
+//                                )
+
+
                             }
                         )
                     }
                     Spacer(modifier = Modifier.width(8.dp))
                     Column(modifier = Modifier.weight(1f)) {
                         Text(
-                            text = "Vito Andareas Manik",
+                            text = state.currentUser?.fullName ?: "",
                             style = MaterialTheme.typography.titleMedium
                         )
                         Text(
-                            text = "vitoandareas@mail.com",
+                            text = state.currentUser?.email ?:"",
                             style = MaterialTheme.typography.labelMedium,
                         )
                     }
@@ -180,6 +183,6 @@ fun SettingsScreen(onAction: (SettingsAction) -> Unit, modifier: Modifier = Modi
 @Composable
 fun PreviewSettingsScreen(modifier: Modifier = Modifier) {
     CodiLeapTheme {
-        SettingsScreen(onAction = {}, modifier = modifier)
+        SettingsScreen(onAction = {}, modifier = modifier, state = SettingsState())
     }
 }

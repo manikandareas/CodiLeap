@@ -65,61 +65,57 @@ class AuthRegisterViewModel(
                     state.copy(repeatedPasswordError = result.errorMessage)
             }
 
-            AuthRegisterAction.OnSubmitClicked ->  {
+            AuthRegisterAction.OnSubmitClicked -> {
                 onSubmit()
             }
         }
     }
 
     fun onSubmit() = viewModelScope.launch {
-        try {
-            val emailResult = registerValidation.validateEmail.execute(state.email)
-            val passwordResult = registerValidation.validatePassword.execute(state.password)
-            val repeatedPasswordResult = registerValidation.validateRepeatedPassword.execute(
-                state.password,
-                state.repeatedPassword
+
+        val emailResult = registerValidation.validateEmail.execute(state.email)
+        val passwordResult = registerValidation.validatePassword.execute(state.password)
+        val repeatedPasswordResult = registerValidation.validateRepeatedPassword.execute(
+            state.password,
+            state.repeatedPassword
+        )
+
+        val hasError = listOf(
+            emailResult,
+            passwordResult,
+            repeatedPasswordResult
+        ).any { !it.successful }
+
+        if (hasError) {
+            state = state.copy(
+                emailError = emailResult.errorMessage,
+                passwordError = passwordResult.errorMessage,
+                repeatedPasswordError = repeatedPasswordResult.errorMessage
             )
-
-            val hasError = listOf(
-                emailResult,
-                passwordResult,
-                repeatedPasswordResult
-            ).any { !it.successful }
-
-            if (hasError) {
-                state = state.copy(
-                    emailError = emailResult.errorMessage,
-                    passwordError = passwordResult.errorMessage,
-                    repeatedPasswordError = repeatedPasswordResult.errorMessage
-                )
-                return@launch
-            }
-
-            state = state.copy(isLoading = true)
-
-            authDataSource.register(
-                RegisterRequestDto(
-                    email = state.email,
-                    password = state.password
-                )
-            ).onSuccess {
-                println("Successfully register yeay ${state.email}")
-                state = state.copy(
-                    isLoading = false,
-                    email = "",
-                    password = "",
-                    repeatedPassword = ""
-                )
-                _events.send(AuthRegisterEvent.RegisterSuccess)
-            }.onError { error ->
-                state = state.copy(isLoading = false)
-                println("Error: ${error}")
-                _events.send(AuthRegisterEvent.Error(error))
-            }
-        } catch (e: Exception) {
-            state = state.copy(isLoading = false)
-            println("Error: ${e.message}")
-            _events.send(AuthRegisterEvent.Error(NetworkError.UNKNOWN))
+            return@launch
         }
+
+        state = state.copy(isLoading = true)
+
+        authDataSource.register(
+            RegisterRequestDto(
+                email = state.email,
+                password = state.password
+            )
+        ).onSuccess {
+            println("Successfully register yeay ${state.email}")
+            state = state.copy(
+                isLoading = false,
+                email = "",
+                password = "",
+                repeatedPassword = ""
+            )
+            _events.send(AuthRegisterEvent.RegisterSuccess)
+        }.onError { error ->
+            state = state.copy(isLoading = false)
+            println("Error: ${error}")
+            _events.send(AuthRegisterEvent.Error(error))
+        }
+
     }
 }

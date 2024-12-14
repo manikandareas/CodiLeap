@@ -24,5 +24,5 @@ data class OverallProgressDto(
 data class LearningPathProgressDto(
     val pathId: Int,
     val pathName: String,
-    val progress: Int
+    val progress: Float
 )

@@ -2,7 +2,6 @@
 
 package com.manikandareas.codileap.courses.presentation.module
 
-import android.util.Log
 import androidx.activity.compose.BackHandler
 import androidx.compose.animation.*
 import androidx.compose.animation.core.tween
@@ -14,7 +13,7 @@ import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
-import com.manikandareas.codileap.chatbot.presentation.ChatBotSheet
+import com.manikandareas.codileap.chatbot.presentation.VirtualAssistantSheet
 import com.manikandareas.codileap.core.presentation.util.HtmlParser
 import com.manikandareas.codileap.core.presentation.util.HtmlRenderer
 import com.manikandareas.codileap.core.presentation.util.ObserveAsEvents
@@ -92,7 +91,7 @@ fun ModuleSession(
     var showBottomSheet by remember { mutableStateOf(false) }
 
     val chatBotSheetState = rememberModalBottomSheetState(
-        skipPartiallyExpanded = false
+        skipPartiallyExpanded = true
     )
 
     LaunchedEffect(currentUnit.id) {
@@ -287,67 +286,59 @@ fun ModuleSession(
         }
 
         if (showBottomSheet) {
-            ChatBotSheet(
+            VirtualAssistantSheet(
                 onDismiss = { showBottomSheet = false },
-                onClick = { },
-                sheetState = chatBotSheetState
+                onClick = { onAction(ModuleAction.OnAskVirtualAssistant(it, currentUnit.id)) },
+                sheetState = chatBotSheetState,
+                chats = state.chat,
+                isLoading = state.isLoading
             )
         }
 
-        Box(modifier = Modifier.fillMaxSize()) {
-            AnimatedContent(
-                modifier = Modifier
-                    .fillMaxSize()
-                    .padding(innerPadding),
-                targetState = currentUnit,
-                transitionSpec = {
-                    val targetIndex = targetState.id
-                    val initialIndex = initialState.id
+//        Box(modifier = Modifier.fillMaxSize()) {
+        AnimatedContent(
+            modifier = Modifier
+                .fillMaxSize()
+                .padding(innerPadding),
+            targetState = currentUnit,
+            transitionSpec = {
+                val targetIndex = targetState.id
+                val initialIndex = initialState.id
 
-                    if (targetIndex > initialIndex) {
-                        slideInHorizontally(
-                            initialOffsetX = { it },
-                            animationSpec = tween(300)
-                        ) togetherWith slideOutHorizontally(
-                            targetOffsetX = { -it },
-                            animationSpec = tween(300)
-                        )
-                    } else {
-                        slideInHorizontally(
-                            initialOffsetX = { -it },
-                            animationSpec = tween(300)
-                        ) togetherWith slideOutHorizontally(
-                            targetOffsetX = { it },
-                            animationSpec = tween(300)
-                        )
-                    }
-                },
-                label = "AnimatedContent"
-            ) { unit ->
-                val elements = parser.parseHtml(unit.content)
-                Box(
-                    modifier = Modifier
-                        .fillMaxSize()
-                        .padding(horizontal = 16.dp)
-                ) {
-                    HtmlRenderer(
-                        lazyState = listState,
-                        elements = elements,
+                if (targetIndex > initialIndex) {
+                    slideInHorizontally(
+                        initialOffsetX = { it },
+                        animationSpec = tween(300)
+                    ) togetherWith slideOutHorizontally(
+                        targetOffsetX = { -it },
+                        animationSpec = tween(300)
+                    )
+                } else {
+                    slideInHorizontally(
+                        initialOffsetX = { -it },
+                        animationSpec = tween(300)
+                    ) togetherWith slideOutHorizontally(
+                        targetOffsetX = { it },
+                        animationSpec = tween(300)
                     )
                 }
-            }
-
-            if (state.isLoading) {
-                Box(
-                    modifier = Modifier.fillMaxSize(),
-                    contentAlignment = Alignment.Center
-                ) {
-                    CircularProgressIndicator()
-                }
+            },
+            label = "AnimatedContent"
+        ) { unit ->
+            val elements = parser.parseHtml(unit.content)
+            HtmlRenderer(
+                lazyState = listState,
+                elements = elements,
+            )
+        }
+        if (state.isLoading) {
+            Box(
+                modifier = Modifier.fillMaxSize(),
+                contentAlignment = Alignment.Center
+            ) {
+                CircularProgressIndicator()
             }
         }
-
-
     }
 }
 

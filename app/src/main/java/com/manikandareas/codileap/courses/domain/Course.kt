@@ -1,11 +1,18 @@
 package com.manikandareas.codileap.courses.domain
 
+import android.os.Parcelable
+import kotlinx.parcelize.Parcelize
+import kotlinx.serialization.Serializable
+
+@Serializable
 enum class CourseLevel(val level: String) {
     BEGINNER("beginner"),
     INTERMEDIATE("intermediate"),
     ADVANCED("advanced")
 }
 
+@Serializable
+@Parcelize
 data class Course(
     val id: Int,
     val name: String,
@@ -25,4 +32,4 @@ data class Course(
     val updatedAt: String,
 
     val modules: List<Module>
-)
+): Parcelable

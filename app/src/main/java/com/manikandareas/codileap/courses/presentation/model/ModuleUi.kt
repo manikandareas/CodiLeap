@@ -6,8 +6,8 @@ import com.manikandareas.codileap.courses.domain.Unit
 import kotlinx.parcelize.Parcelize
 import kotlinx.serialization.Serializable
 
-@Serializable
 @Parcelize
+@Serializable
 data class ModuleUi(
     val id: Int,
     val courseId: Int,
@@ -19,8 +19,8 @@ data class ModuleUi(
     val units: List<UnitUi>
 ) : Parcelable
 
-@Serializable
 @Parcelize
+@Serializable
 data class UnitUi(
     val id: Int,
     val moduleId: Int,

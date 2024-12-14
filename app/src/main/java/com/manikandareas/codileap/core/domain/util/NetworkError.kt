@@ -8,5 +8,7 @@ enum class NetworkError : Error {
     SERIALIZATION,
     UNAUTHORIZED,
     CONFLICT,
-    UNKNOWN
+    UNKNOWN,
+    FORBIDDEN,
+    NOT_FOUND
 }

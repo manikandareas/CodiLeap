@@ -65,6 +65,7 @@ fun QuizSession(
     events: Flow<QuizEvent>
 ) {
 
+
     val questions = state.quiz?.questions ?: return
 
 
@@ -72,7 +73,6 @@ fun QuizSession(
     var moduleActionType by remember { mutableStateOf(AlertDialogType.ERROR) }
 
     var resultQuiz by remember { mutableStateOf<SubmitQuizResponseDto?>(null) }
-
 
     var currentQuestionIndex by rememberSaveable {
         mutableIntStateOf(0.coerceIn(0, questions.size - 1))
@@ -253,6 +253,7 @@ fun QuizSession(
                         description = "Check your answers carefully before submitting",
                         style = WarningAlertDialogStyle(),
                         confirmTitle = "Continue",
+                        enabled = !state.isLoading
                     )
                 }
             }

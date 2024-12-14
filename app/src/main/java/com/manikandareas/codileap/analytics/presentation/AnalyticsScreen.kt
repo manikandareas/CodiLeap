@@ -115,7 +115,9 @@ fun AnalyticsScreen(onAction: (AnalyticsAction) -> Unit, modifier: Modifier = Mo
 
             Spacer(modifier = Modifier.height(16.dp))
 
-            HomeCourseProgress()
+            HomeCourseProgress(
+                courseProgress = null,
+            ){}
         }
     }
 }

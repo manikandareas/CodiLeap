@@ -20,10 +20,10 @@ import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.window.DialogProperties
 
- enum class AlertDialogType {
+enum class AlertDialogType {
     ERROR,
     SUCCESS,
-    WARNING
+    WARNING,
 }
 
 
@@ -77,7 +77,7 @@ fun SuccessAlertDialogStyle(): AlertDialogStyle = rememberAlertDialogStyle(
 )
 
 @Composable
-fun  WarningAlertDialogStyle(): AlertDialogStyle = rememberAlertDialogStyle(
+fun WarningAlertDialogStyle(): AlertDialogStyle = rememberAlertDialogStyle(
     containerColor = MaterialTheme.extendedColorScheme.warning.colorContainer,
     iconContentColor = MaterialTheme.extendedColorScheme.warning.color,
     titleContentColor = MaterialTheme.extendedColorScheme.warning.onColorContainer,

@@ -1,6 +1,12 @@
 package com.manikandareas.codileap.courses.domain
 
+import android.os.Parcelable
+import kotlinx.parcelize.Parcelize
+import kotlinx.serialization.Serializable
 
+
+@Parcelize
+@Serializable
 data class LearningPath(
     val id: Int,
     val name: String,
@@ -8,5 +14,5 @@ data class LearningPath(
     val createdAt: String,
     val updatedAt: String,
 
-    val courses: List<Course>
-)
+    val courses: List<Course> = emptyList()
+) : Parcelable

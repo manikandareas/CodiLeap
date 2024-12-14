@@ -1,4 +1,4 @@
- package com.manikandareas.codileap.ui.compositions
+package com.manikandareas.codileap.ui.compositions
 
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
@@ -23,7 +23,7 @@ import androidx.compose.ui.unit.dp
 import com.manikandareas.codileap.ui.theme.CodiLeapTheme
 
 
- @Composable
+@Composable
 fun CodiOutlinedTextField(
     value: String,
     onValueChange: (String) -> Unit,
@@ -40,12 +40,13 @@ fun CodiOutlinedTextField(
     unfocusedBorderColor: Color = MaterialTheme.colorScheme.outlineVariant,
     errorBorderColor: Color = MaterialTheme.colorScheme.error,
     errorLabelColor: Color = MaterialTheme.colorScheme.error,
+    maxLines: Int = Int.MAX_VALUE
 ) {
 
     Column(modifier = Modifier, verticalArrangement = Arrangement.spacedBy(8.dp)) {
         OutlinedTextField(
             value = value,
-            onValueChange = {onValueChange(it)},
+            onValueChange = { onValueChange(it) },
             isError = isError,
             placeholder = {
                 Text(
@@ -54,7 +55,7 @@ fun CodiOutlinedTextField(
                     color = placeholderColor
                 )
             },
-            modifier = modifier.fillMaxWidth(),
+            modifier = modifier,
             singleLine = singleLine,
             keyboardOptions = keyboardOptions,
             shape = shape,
@@ -63,10 +64,15 @@ fun CodiOutlinedTextField(
                 unfocusedBorderColor = unfocusedBorderColor,
                 errorBorderColor = errorBorderColor,
                 errorLabelColor = errorLabelColor
-            )
+            ),
+            maxLines = maxLines
         )
         if (errorText.isNotBlank()) {
-            Text(text = errorText, color = MaterialTheme.colorScheme.error, style = MaterialTheme.typography.bodySmall)
+            Text(
+                text = errorText,
+                color = MaterialTheme.colorScheme.error,
+                style = MaterialTheme.typography.bodySmall
+            )
         }
     }
 }
@@ -75,9 +81,11 @@ fun CodiOutlinedTextField(
 @Composable
 fun PreviewStoriesOutlinedTextField(modifier: Modifier = Modifier) {
     CodiLeapTheme() {
-        Box(modifier = Modifier
-            .background(MaterialTheme.colorScheme.background)
-            .fillMaxSize(), contentAlignment = Alignment.Center) {
+        Box(
+            modifier = Modifier
+                .background(MaterialTheme.colorScheme.background)
+                .fillMaxSize(), contentAlignment = Alignment.Center
+        ) {
             CodiOutlinedTextField(
                 value = "",
                 onValueChange = {},

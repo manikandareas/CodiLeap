@@ -23,11 +23,13 @@ import kotlinx.coroutines.launch
 import com.manikandareas.codileap.core.domain.util.Result
 import com.manikandareas.codileap.core.navigation.Destination
 import com.manikandareas.codileap.core.navigation.Destination.*
+import com.manikandareas.codileap.screening.presentation.screening_result.learningPaths
 
 class CoursesViewModel(
     private val learningPathDataSource: LearningPathDataSource,
     private val progressDataSource: ProgressDataSource,
-    private val navigator: Navigator
+    private val navigator: Navigator,
+    private val selectedLearningPathId: Int? = null,
 ) : ViewModel() {
     private val _state = MutableStateFlow(CoursesState())
     val state = _state
@@ -60,11 +62,13 @@ class CoursesViewModel(
     }
 
     private fun changeSelectedCourse(courseId: Int) {
+        println("CHANGED COURSES FROM ${state.value.selectedCourse?.id} to ${courseId} ")
         val selectedCourse = _state.value.courses.find { it.id == courseId }
         _state.update { it.copy(selectedCourse = selectedCourse) }
     }
 
     private fun changeSelectedLearningPath(learningPathId: Int) {
+        println("CHANGED LEARNING PATH FROM ${state.value.selectedLearningPath?.id} to ${learningPathId} ")
         val selectedLearningPath = _state.value.learningPaths.find { it.id == learningPathId }
         val selectedCourse = selectedLearningPath?.courses?.first()
         _state.update {
@@ -101,10 +105,36 @@ class CoursesViewModel(
 
     private suspend fun handleProgressResult(result: Result<CurrentProgress, NetworkError>) {
         result.onSuccess { res ->
-            val selectedLearningPath =
-                _state.value.learningPaths.find { it.id == res.learningPathId }
-            val selectedCourse = selectedLearningPath?.courses?.find { it.id == res.courseId }
 
+            //                    val arg = it.toRoute<Destination.CoursesScreen>()
+//
+//                    val viewModel = koinViewModel<CoursesViewModel>()
+//
+//                    val state by viewModel.state.collectAsStateWithLifecycle()
+//
+//                    CoursesScreen(state = if (arg.selectedLearningPathId != null) {
+//                        val selectedLearningPath =
+//                            state.learningPaths.find { it.id == arg.selectedLearningPathId }
+//                                ?: state.selectedLearningPath
+//
+//                        val courses = selectedLearningPath?.courses ?: emptyList()
+//                        state.copy(
+//                            selectedLearningPath = selectedLearningPath,
+//                            selectedCourse = selectedLearningPath?.courses?.first(),
+//                            courses = courses,
+//                            learningPaths = state.learningPaths,
+//                        )
+//                    } else {
+//                        state
+//                    }, onAction = viewModel::onAction)
+
+            val selectedLearningPath =
+                if (selectedLearningPathId == null) _state.value.learningPaths.find { it.id == res.learningPathId } else _state.value.learningPaths.find { it.id == selectedLearningPathId }
+            val selectedCourse =
+                if (selectedLearningPathId == null) selectedLearningPath?.courses?.find { it.id == res.courseId } else selectedLearningPath?.courses?.firstOrNull()
+
+
+            println("IS ERROR IN THIS LINE")
             _state.update { st ->
                 st.copy(
                     selectedCourse = selectedCourse,

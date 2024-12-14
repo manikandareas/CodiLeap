@@ -3,11 +3,7 @@ package com.manikandareas.codileap.courses.presentation.model
 import com.manikandareas.codileap.core.presentation.util.toUTC
 import com.manikandareas.codileap.courses.domain.Course
 import com.manikandareas.codileap.courses.domain.CourseLevel
-import com.manikandareas.codileap.courses.domain.Module
-import java.time.Instant
-import java.time.ZoneOffset
 import java.time.ZonedDateTime
-import java.time.format.DateTimeFormatter
 
 
 data class CourseUi(
@@ -25,10 +21,10 @@ data class CourseUi(
     val rating: Float,
     val estimatedDuration: Int,
 
+    val modules: List<ModuleUi>,
 
     val createdAt: ZonedDateTime,
     val updatedAt: ZonedDateTime,
-    val modules: List<ModuleUi>
 ) : HasBasicCourse
 
 

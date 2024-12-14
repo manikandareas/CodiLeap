@@ -1,8 +1,11 @@
 package com.manikandareas.codileap.courses.data.networking.dto
 
+import android.os.Parcelable
+import kotlinx.parcelize.Parcelize
 import kotlinx.serialization.Serializable
 
 @Serializable
+@Parcelize
 data class CourseDto(
     val id: Int,
     val name: String,
@@ -17,4 +20,4 @@ data class CourseDto(
     val rating: Float,
     val totalEnrollments: Int,
     val modules: List<ModuleDto>? = emptyList()
-)
+): Parcelable

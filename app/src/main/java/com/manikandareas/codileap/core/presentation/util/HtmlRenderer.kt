@@ -44,8 +44,8 @@ import coil.compose.AsyncImage
 fun HtmlRenderer(lazyState: LazyListState = rememberLazyListState(), elements: List<HtmlElement>) {
     LazyColumn(
         state = lazyState,
-        modifier = Modifier.fillMaxWidth(),
-        verticalArrangement = Arrangement.spacedBy(8.dp)
+        modifier = Modifier.padding(16.dp),
+        verticalArrangement = Arrangement.spacedBy(8.dp),
     ) {
         items(elements) { element ->
             when (element) {

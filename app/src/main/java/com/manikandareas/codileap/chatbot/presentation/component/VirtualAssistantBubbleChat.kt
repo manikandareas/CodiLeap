@@ -18,14 +18,15 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Send
-import com.manikandareas.codileap.chatbot.domain.VirtualAssistantChat
+import com.manikandareas.codileap.chatbot.presentation.model.VirtualAssistantChatUi
+import com.manikandareas.codileap.ui.compositions.CodiTypeWriterEffect
 import com.manikandareas.codileap.ui.theme.CodiLeapTheme
 
 
 @Composable
-fun ChatBotChat(
+fun VirtualAssistantChat(
     modifier: Modifier = Modifier,
-    messages: List<VirtualAssistantChat> = emptyList(),
+    messages: List<VirtualAssistantChatUi> = emptyList(),
 ) {
 
     Column(
@@ -39,15 +40,15 @@ fun ChatBotChat(
 //            reverseLayout = true
         ) {
             items(messages.asReversed()) { message ->
-                ChatBubble(
-                    state = BubbleChatUi(
+                VirtualAssistantBubble(
+                    state = VirtualAssistantBubbleUi(
                         message = message.question,
                         position = Alignment.End
                     )
                 )
                 Spacer(modifier = Modifier.height(8.dp))
-                ChatBubble(
-                    state = BubbleChatUi(
+                VirtualAssistantBubble(
+                    state = VirtualAssistantBubbleUi(
                         message = message.answer,
                         position = Alignment.Start
                     )
@@ -60,7 +61,7 @@ fun ChatBotChat(
     }
 }
 
-data class BubbleChatUi(
+data class VirtualAssistantBubbleUi(
     val message: String,
     val position: Alignment.Horizontal = Alignment.End,
     val timestamp: String = "",
@@ -68,9 +69,9 @@ data class BubbleChatUi(
     )
 
 @Composable
-fun ChatBubble(
+fun VirtualAssistantBubble(
     modifier: Modifier = Modifier,
-    state: BubbleChatUi,
+    state: VirtualAssistantBubbleUi,
 ) {
     Column(
         modifier = modifier.fillMaxWidth(),
@@ -94,14 +95,16 @@ fun ChatBubble(
                 )
                 .padding(12.dp)
         ) {
-            Text(
-                text = state.message,
-                color = if (state.position == Alignment.End)
-                    MaterialTheme.colorScheme.onPrimary
-                else
-                    MaterialTheme.colorScheme.onSecondaryContainer,
-                style = TextStyle(fontSize = 16.sp)
-            )
+            CodiTypeWriterEffect(text = state.message) { txt ->
+                Text(
+                    text = txt,
+                    color = if (state.position == Alignment.End)
+                        MaterialTheme.colorScheme.onPrimary
+                    else
+                        MaterialTheme.colorScheme.onSecondaryContainer,
+                    style = TextStyle(fontSize = 16.sp)
+                )
+            }
         }
 
         if (state.timestamp.isNotEmpty()) {
@@ -162,23 +165,23 @@ fun ChatInput(
     }
 }
 
-@PreviewLightDark
-@Composable
-fun PreviewChatBotChat() {
-    CodiLeapTheme {
-        ChatBotChat(
-            messages = listOf(
-                VirtualAssistantChat(
-                    question = "Hi can i get some help?",
-                    answer = "Sure, how can I help you?",
-                    timestamp = "12:00 AM",
-                    id = 1,
-                    userId = 1
-                ),
-            )
-        )
-    }
-}
+//@PreviewLightDark
+//@Composable
+//fun PreviewChatBotChat() {
+//    CodiLeapTheme {
+//        ChatBotChat(
+//            messages = listOf(
+//                VirtualAssistantChat(
+//                    question = "Hi can i get some help?",
+//                    answer = "Sure, how can I help you?",
+//                    timestamp = "12:00 AM",
+//                    id = 1,
+//                    userId = 1
+//                ),
+//            )
+//        )
+//    }
+//}
 //
 //@PreviewLightDark
 //@Composable

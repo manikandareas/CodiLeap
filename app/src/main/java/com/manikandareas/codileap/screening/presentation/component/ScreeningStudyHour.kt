@@ -28,12 +28,14 @@ import androidx.compose.ui.unit.dp
 import com.manikandareas.codileap.R
 import com.manikandareas.codileap.core.data.preference.PreferenceDataSource
 import com.manikandareas.codileap.core.worker.StudyScheduleSetup
+import com.manikandareas.codileap.screening.presentation.ScreeningState
+import com.manikandareas.codileap.screening.presentation.model.ScreeningUi
 import org.koin.compose.getKoin
 import java.util.Calendar
 
 @SuppressLint("DefaultLocale")
 @Composable
-fun ScreeningStudyHour(modifier: Modifier = Modifier) {
+fun ScreeningStudyHour(modifier: Modifier = Modifier, state: ScreeningState, onAction: (String) -> Unit) {
     val currentTime = Calendar.getInstance()
     val dataSource = getKoin().get<PreferenceDataSource>()
 
@@ -44,12 +46,15 @@ fun ScreeningStudyHour(modifier: Modifier = Modifier) {
     )
 
     val formattedTime = remember(timePickerState) {
-        String.format("%02d:%02d",
+       val time =  String.format("%02d:%02d",
             timePickerState.hour,
             timePickerState.minute
         )
+
+        onAction(time)
+        time
     }
-//    val myService = get<MyService>()
+
 
     StudyScheduleSetup(
         timeInput = formattedTime,

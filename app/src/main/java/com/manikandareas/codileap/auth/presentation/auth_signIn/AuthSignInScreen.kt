@@ -73,7 +73,7 @@ fun AuthSignInScreen(
             AuthSignInEvent.Success -> {
                 Toast.makeText(
                     context,
-                    "Login successful",
+                    "Welcome to Codileap",
                     Toast.LENGTH_SHORT
                 ).show()
             }

@@ -2,6 +2,11 @@ package com.manikandareas.codileap.courses.presentation.module
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import com.manikandareas.codileap.chatbot.data.netowrking.dto.VirtualAssistantAskRequestDto
+import com.manikandareas.codileap.chatbot.domain.VirtualAssistantChat
+import com.manikandareas.codileap.chatbot.domain.VirtualAssistantDataSource
+import com.manikandareas.codileap.chatbot.presentation.model.toModelUi
+import com.manikandareas.codileap.core.data.preference.PreferenceDataSource
 import com.manikandareas.codileap.core.domain.util.NetworkError
 import com.manikandareas.codileap.core.domain.util.onError
 import com.manikandareas.codileap.core.domain.util.onSuccess
@@ -16,6 +21,7 @@ import com.manikandareas.codileap.user.domain.ProgressDataSource
 import kotlinx.coroutines.channels.Channel
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.SharingStarted
+import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.flow.onStart
 import kotlinx.coroutines.flow.receiveAsFlow
 import kotlinx.coroutines.flow.stateIn
@@ -25,6 +31,8 @@ import kotlinx.coroutines.launch
 class ModuleViewModel(
     private val coursesDataSource: CoursesDataSource,
     private val progressDataSource: ProgressDataSource,
+    private val virtualAssistantDataSource: VirtualAssistantDataSource,
+    private val preferenceDataSource: PreferenceDataSource,
     private val navigator: Navigator,
     private val moduleUi: ModuleUi
 ) : ViewModel() {
@@ -39,8 +47,8 @@ class ModuleViewModel(
     fun onAction(action: ModuleAction) {
         when (action) {
             ModuleAction.NavigateBack -> viewModelScope.launch {
-                navigator.navigate(Destination.CoursesScreen()) {
-                    popUpTo(CoursesScreen) {
+                navigator.navigate(CoursesScreen()) {
+                    popUpTo(CoursesScreen()) {
                         inclusive = true
                     }
                 }
@@ -61,6 +69,67 @@ class ModuleViewModel(
 
             ModuleAction.Exit -> viewModelScope.launch {
                 _events.send(ModuleEvent.Exit)
+            }
+
+            is ModuleAction.OnAskVirtualAssistant -> viewModelScope.launch {
+                onAsk(action.question, action.unitId)
+            }
+        }
+    }
+
+    private fun onAsk(question: String, unitId: Int) = viewModelScope.launch {
+        val currentUser = preferenceDataSource.getUser().first()!!
+
+        val currentChatId = state.value.chat.sortedBy { it.id }.lastOrNull()?.id ?: 0
+
+        val context = state.value.moduleUi?.units?.find { it.id == unitId }?.content
+        if (context == null) {
+            // Tangani error, misalnya dengan logging atau menampilkan pesan ke pengguna
+            return@launch
+        }
+
+        // Tambahkan chat baru dengan jawaban placeholder "..." dan timestamp
+        val timestampNow = java.time.ZonedDateTime.now().toString()
+        val newChat = VirtualAssistantChat(
+            id = currentChatId + 1,
+            userId = currentUser.id,
+            question = question,
+            answer = "...",
+            timestamp = timestampNow
+        )
+
+        _state.update {
+            it.copy(
+                isLoading = true,
+                chat = it.chat + newChat.toModelUi() // Tambahkan chat baru ke daftar chat
+            )
+        }
+
+        // Lakukan permintaan ke data source
+        virtualAssistantDataSource.ask(
+            id = newChat.id,
+            userId = currentUser.id,
+            request = VirtualAssistantAskRequestDto(
+                context = context,
+                question = question
+            )
+        ).onSuccess { res ->
+            // Perbarui chat dengan jawaban dari data source
+            _state.update {
+                it.copy(
+                    isLoading = false,
+                    chat = it.chat.map { chat ->
+                        if (chat.id == newChat.id) chat.copy(answer = res.answer) else chat
+                    }
+                )
+            }
+        }.onError { error ->
+            // Tangani error, misalnya dengan logging atau menampilkan pesan ke pengguna
+            _state.update {
+                it.copy(
+                    isLoading = false,
+                    chat = it.chat.filter { it.id != newChat.id } // Hapus chat yang gagal dari daftar chat
+                )
             }
         }
     }

@@ -17,10 +17,12 @@ import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import com.manikandareas.codileap.R
+import com.manikandareas.codileap.screening.presentation.ScreeningState
+import com.manikandareas.codileap.screening.presentation.model.ScreeningUi
 
 
 @Composable
-fun ScreeningName(modifier: Modifier = Modifier) {
+fun ScreeningName(modifier: Modifier = Modifier, state: ScreeningState, onAction: (String) -> Unit) {
     Column(modifier = modifier, horizontalAlignment = Alignment.CenterHorizontally) {
         Text(
             "Hai there!\nWhat's your name?",
@@ -33,13 +35,13 @@ fun ScreeningName(modifier: Modifier = Modifier) {
         Image(
             painter = painterResource(id = R.drawable.ai_robot),
             contentDescription = "Cat Desk",
-            modifier = Modifier.size(264.dp)
+            modifier = Modifier.size(164.dp)
         )
         Spacer(modifier = Modifier.height(20.dp))
 
         OutlinedTextField(
-            value = "",
-            onValueChange = {},
+            value = state.fullName,
+            onValueChange = { str -> onAction(str) },
             label = { Text("Name") },
             modifier = Modifier.fillMaxWidth()
         )
@@ -49,5 +51,8 @@ fun ScreeningName(modifier: Modifier = Modifier) {
 @Preview
 @Composable
 fun PreviewScreeningName() {
-    ScreeningName()
+    ScreeningName(
+        state = ScreeningState(),
+        onAction = {}
+    )
 }

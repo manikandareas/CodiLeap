@@ -22,5 +22,5 @@ data class UserResponseDto(
     val phoneNumber: String? = null,
     val address: String? = null,
     val dob: String? = null,
-    val studyHours: Int? = null,
+    val studyHours: String? = null,
 )

@@ -24,7 +24,7 @@ data class OverallProgress(
 data class LearningPathProgress(
     val pathId: Int,
     val pathName: String,
-    val progress: Int
+    val progress: Float
 )
 
 fun GetUserProgressResponseDto.toDomain() = UserProgress(

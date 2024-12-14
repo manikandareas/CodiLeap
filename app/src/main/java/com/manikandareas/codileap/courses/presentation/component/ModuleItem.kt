@@ -24,6 +24,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.painterResource
+import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.tooling.preview.PreviewLightDark
 import androidx.compose.ui.unit.dp
 import com.manikandareas.codileap.R
@@ -68,7 +69,7 @@ fun ModuleItem(
                 modifier = Modifier.weight(1F)
             ) {
                 Text(
-                    text = module.name ?: "No Title",
+                    text = module.name,
                     style = MaterialTheme.typography.titleMedium
                 )
                 Row(
@@ -84,10 +85,12 @@ fun ModuleItem(
                             modifier = Modifier.size(16.dp)
                         )
                         Text(
-                            text = "${module.units.size} Units" ?: "No Units",
+                            text = module.description,
                             style = MaterialTheme.typography.labelSmall,
                             modifier = Modifier.padding(start = 4.dp),
-                            color = MaterialTheme.colorScheme.onSurface.copy(alpha = 0.6f)
+                            color = MaterialTheme.colorScheme.onSurface.copy(alpha = 0.6f),
+                            maxLines = 1,
+                            overflow = TextOverflow.Ellipsis
                         )
                     }
 

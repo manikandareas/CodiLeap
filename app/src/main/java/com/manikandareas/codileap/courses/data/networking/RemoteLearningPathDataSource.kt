@@ -13,9 +13,12 @@ import com.manikandareas.codileap.courses.data.networking.dto.ScreeningLearningP
 import com.manikandareas.codileap.courses.data.networking.mappers.toDomain
 import com.manikandareas.codileap.courses.domain.LearningPath
 import com.manikandareas.codileap.courses.domain.LearningPathDataSource
+import com.manikandareas.codileap.quiz.data.networking.dto.SubmitQuizRequestDto
 import io.ktor.client.HttpClient
 import io.ktor.client.request.get
 import io.ktor.client.request.post
+import io.ktor.client.request.setBody
+import kotlinx.serialization.Serializable
 
 class RemoteLearningPathDataSource(private val httpClient: HttpClient) : LearningPathDataSource {
     override suspend fun getAllLearningPathsWithCourses(): Result<List<LearningPath>, NetworkError> {
@@ -34,7 +37,30 @@ class RemoteLearningPathDataSource(private val httpClient: HttpClient) : Learnin
         }.map { it.data!! }
     }
 
-    override suspend fun screeningLearningPath(request: ScreeningLearningPathRequestDto): Result<ScreeningLearningPathResponseDto, NetworkError> {
-        TODO("Not yet implemented")
+    @Serializable
+    data class ScreeningDto(
+        val Q1: Int,
+        val Q2: Int,
+        val Q3: Int,
+        val Q4: Int,
+        val Q5: Int,
+    )
+
+    override suspend fun screeningLearningPath(request: SubmitQuizRequestDto): Result<ScreeningLearningPathResponseDto, NetworkError> {
+        return safeCall<ApiResponse<ScreeningLearningPathResponseDto>> {
+            httpClient.post(
+                urlString = constructUrl("/api/learning-paths/screening"),
+            ) {
+                setBody(
+                    ScreeningDto(
+                        request.answers[0].answerOptionId.toInt(),
+                        request.answers[1].answerOptionId.toInt(),
+                        request.answers[2].answerOptionId.toInt(),
+                        request.answers[3].answerOptionId.toInt(),
+                        request.answers[4].answerOptionId.toInt(),
+                    )
+                )
+            }
+        }.map { it.data!! }
     }
 }

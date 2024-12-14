@@ -1,7 +1,20 @@
 package com.manikandareas.codileap.core.navigation
 
+import android.os.Parcelable
+import com.manikandareas.codileap.courses.data.networking.dto.ScreeningLearningPathResponseDto
+import com.manikandareas.codileap.courses.domain.LearningPath
 import com.manikandareas.codileap.courses.presentation.model.ModuleUi
+import com.manikandareas.codileap.screening.presentation.ScreeningState
+import kotlinx.parcelize.Parcelize
 import kotlinx.serialization.Serializable
+
+@Parcelize
+@Serializable
+data class ScreeningResultScreenParams(
+    val result: ScreeningLearningPathResponseDto,
+    val screeningState: ScreeningState
+) : Parcelable
+
 
 sealed interface Destination {
     @Serializable
@@ -29,6 +42,9 @@ sealed interface Destination {
     data object ScreeningScreen : Destination
 
     @Serializable
+    data class ScreeningResultScreen(val data: LearningPath) : Destination
+
+    @Serializable
     data object HomeGraph : Destination
 
     @Serializable
@@ -46,11 +62,14 @@ sealed interface Destination {
     @Serializable
     data class ModuleScreen(val moduleUi: ModuleUi) : Destination
 
-    @Serializable
-    data object QuizGraph : Destination
+//    @Serializable
+//    data object QuizGraph : Destination
 
     @Serializable
-    data object QuizScreen : Destination
+    data class QuizScreen(
+        val isScreening: Boolean = false,
+        val screeningState: ScreeningState? = null
+    ) : Destination
 
     @Serializable
     data object AnalyticsScreen : Destination
@@ -66,6 +85,9 @@ sealed interface Destination {
 
     @Serializable
     data object FAQsScreen : Destination
+
+    @Serializable
+    data object AppearanceScreen : Destination
 
     @Serializable
     data object ChatBotScreen : Destination

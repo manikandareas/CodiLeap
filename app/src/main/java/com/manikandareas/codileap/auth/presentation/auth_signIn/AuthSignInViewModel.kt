@@ -6,19 +6,25 @@ import androidx.compose.runtime.setValue
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.manikandareas.codileap.auth.data.networking.dto.LoginRequestDto
+import com.manikandareas.codileap.auth.data.networking.mappers.toToken
 import com.manikandareas.codileap.auth.domain.AuthDataSource
+import com.manikandareas.codileap.core.data.preference.PreferenceDataSource
 import com.manikandareas.codileap.core.domain.util.onError
 import com.manikandareas.codileap.core.domain.util.onSuccess
 import com.manikandareas.codileap.core.navigation.Destination
 import com.manikandareas.codileap.core.navigation.Navigator
+import com.manikandareas.codileap.user.domain.toUser
 import kotlinx.coroutines.channels.Channel
+import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.flow.receiveAsFlow
 import kotlinx.coroutines.launch
 
 class AuthSignInViewModel(
     private val authDataSource: AuthDataSource,
     private val loginValidation: AuthSignInValidation,
-    private val navigator: Navigator) : ViewModel() {
+    private val preferenceDataSource: PreferenceDataSource,
+    private val navigator: Navigator
+) : ViewModel() {
 
     var state by mutableStateOf(AuthSignInState())
         private set
@@ -52,7 +58,7 @@ class AuthSignInViewModel(
                 navigator.navigateUp()
             }
 
-            AuthSignInAction.OnSignInClicked -> viewModelScope.launch{
+            AuthSignInAction.OnSignInClicked -> viewModelScope.launch {
                 onSubmit()
             }
         }
@@ -60,7 +66,6 @@ class AuthSignInViewModel(
 
 
     private fun onSubmit() = viewModelScope.launch {
-
         if (state.email.isEmpty() || state.password.isEmpty()) {
             state = state.copy(
                 emailError = if (state.email.isEmpty()) "The email can't be blank" else null,
@@ -77,13 +82,34 @@ class AuthSignInViewModel(
             )
         ).onSuccess { response ->
             state = state.copy(isLoading = false)
+
+            val currUser = preferenceDataSource.getUser().first()
+
+            if (currUser == null) {
+                preferenceDataSource.saveUser(response.data!!.user.toUser())
+                preferenceDataSource.saveToken(response.data.toToken())
+                preferenceDataSource.saveStudyTime(
+                    response.data.user.toUser().studyHours ?: "09:00"
+                )
+            }
+
+//            if (currUser == null) {
+//                preferenceDataSource.saveUser(response.data!!.user.toUser())
+//                preferenceDataSource.saveToken(response.data.toToken())
+//            }
+//
+//            if (response.data?.user?.isAlreadyScreened == true && currUser?.isAlreadyScreened == false) {
+//                preferenceDataSource.saveUser(response.data.user.toUser())
+//                navigator.navigate(Destination.HomeGraph)
+//            }
             _events.send(AuthSignInEvent.Success)
 
-            if (response.data?.user?.isAlreadyScreened == false ) {
-                navigator.navigate(Destination.ScreeningGraph)
-            }else {
+            if (currUser?.isAlreadyScreened == false) {
+                navigator.navigate(Destination.ScreeningScreen)
+            } else {
                 navigator.navigate(Destination.HomeGraph)
             }
+
         }.onError {
             state = state.copy(isLoading = false)
             _events.send(AuthSignInEvent.Error(it))

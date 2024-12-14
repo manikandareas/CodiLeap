@@ -8,24 +8,24 @@ import androidx.compose.runtime.*
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.tooling.preview.PreviewLightDark
 import com.manikandareas.codileap.auth.presentation.AuthAction
-import com.manikandareas.codileap.chatbot.presentation.component.ChatBotAppBar
-import com.manikandareas.codileap.chatbot.presentation.component.ChatBotChat
+import com.manikandareas.codileap.chatbot.presentation.component.VirtualAssistantAppBar
+import com.manikandareas.codileap.chatbot.presentation.component.VirtualAssistantChat
 import com.manikandareas.codileap.ui.theme.CodiLeapTheme
 
 @Composable
-fun ChatBotScreen(
+fun VirtualAssistantScreen(
     modifier: Modifier = Modifier,
     onBackClicked: (AuthAction) -> Unit = {}
 ) {
     Column(modifier = modifier.fillMaxSize()) {
-        ChatBotAppBar(onBackClicked = onBackClicked)
-        ChatBotChat()
+        VirtualAssistantAppBar(onBackClicked = onBackClicked)
+        VirtualAssistantChat()
     }
 }
 @PreviewLightDark
 @Composable
 fun PreviewChatBotScreen() {
     CodiLeapTheme {
-        ChatBotScreen(modifier = Modifier)
+        VirtualAssistantScreen(modifier = Modifier)
     }
 }

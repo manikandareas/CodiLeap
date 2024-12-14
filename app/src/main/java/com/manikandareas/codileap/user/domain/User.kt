@@ -1,9 +1,11 @@
 package com.manikandareas.codileap.user.domain
 
 import com.manikandareas.codileap.auth.data.networking.dto.UserResponseDto
+import com.manikandareas.codileap.user.data.networking.dto.UpdateUserRequestDto
 import kotlinx.serialization.Serializable
 import kotlinx.serialization.encodeToString
 import kotlinx.serialization.json.Json
+import java.util.Date
 
 @Serializable
 data class User(
@@ -11,12 +13,13 @@ data class User(
     val email: String,
     val avatarUrl: String,
     val isAlreadyScreened: Boolean,
-    val fullName: String? = null,
-    val phoneNumber: String? = null,
-    val address: String? = null,
-    val dob: String? = null,
-    val studyHours: Int? = null,
+    val fullName: String? = "",
+    val phoneNumber: String? = "",
+    val address: String? = "",
+    val dob: String? = "",
+    val studyHours: String? = "",
 )
+
 
 fun UserResponseDto.toUser(): User {
     return User(
@@ -24,16 +27,16 @@ fun UserResponseDto.toUser(): User {
         email = email,
         avatarUrl = avatarUrl,
         isAlreadyScreened = isAlreadyScreened,
-        fullName = fullName,
-        phoneNumber = phoneNumber,
-        address = address,
-        dob = dob,
-        studyHours = studyHours
-
+        fullName = if (fullName == null) "" else fullName,
+        phoneNumber = if (phoneNumber == null) "" else phoneNumber,
+        address = if (address == null) "" else address,
+        dob = if (dob == null) "" else dob,
+        studyHours = if (studyHours == null) "" else studyHours
     )
 }
 
-object  UserSerializer {
+
+object UserSerializer {
     private val json = Json { prettyPrint = true }
 
     fun serialize(user: User): String {

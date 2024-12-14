@@ -1,22 +1,9 @@
 package com.manikandareas.codileap.screening.presentation.model
 
-import androidx.annotation.DrawableRes
-import androidx.compose.runtime.Composable
-import com.manikandareas.codileap.R
-import com.manikandareas.codileap.intro.model.IntroUi
+import com.manikandareas.codileap.quiz.presentation.model.AnswerUi
 
-sealed class ScreeningUi(
-    val title: String,
-    val description: String? = null,
-    @DrawableRes
-    val image: Int? = null
-) {
-    object FirstScreen : ScreeningUi(
-        title = "Welcome to Codileap",
-        description = "let's get started with knowing more about you",
-    )
-
-    object SecondScreen : ScreeningUi(
-        title = "What's your name?",
-    )
-}
+data class ScreeningUi (
+    val studyHour: String= "",
+    val fullName: String= "",
+    val interestQuizAnswer: List<AnswerUi>? =emptyList(),
+)

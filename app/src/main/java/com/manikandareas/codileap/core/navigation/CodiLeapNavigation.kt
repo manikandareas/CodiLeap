@@ -14,6 +14,7 @@ import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.navigation
 import androidx.navigation.toRoute
+import co.yml.charts.common.extensions.isNotNull
 import com.manikandareas.codileap.analytics.presentation.AnalyticsAction
 import com.manikandareas.codileap.analytics.presentation.AnalyticsScreen
 import com.manikandareas.codileap.auth.presentation.AuthScreen
@@ -22,10 +23,11 @@ import com.manikandareas.codileap.auth.presentation.auth_register.AuthRegisterSc
 import com.manikandareas.codileap.auth.presentation.auth_register.AuthRegisterViewModel
 import com.manikandareas.codileap.auth.presentation.auth_signIn.AuthSignInScreen
 import com.manikandareas.codileap.auth.presentation.auth_signIn.AuthSignInViewModel
-import com.manikandareas.codileap.chatbot.presentation.ChatBotScreen
+import com.manikandareas.codileap.chatbot.presentation.VirtualAssistantScreen
 import com.manikandareas.codileap.core.presentation.util.ObserveAsEvents
+import com.manikandareas.codileap.core.presentation.util.nullableParcelType
 import com.manikandareas.codileap.core.presentation.util.parcelableType
-import com.manikandareas.codileap.core.worker.StudyScheduleSetup
+import com.manikandareas.codileap.courses.domain.LearningPath
 import com.manikandareas.codileap.courses.presentation.CoursesScreen
 import com.manikandareas.codileap.courses.presentation.CoursesViewModel
 import com.manikandareas.codileap.courses.presentation.model.ModuleUi
@@ -38,13 +40,19 @@ import com.manikandareas.codileap.home.presentation.model.toUiModel
 import com.manikandareas.codileap.intro.presentation.IntroScreen
 import com.manikandareas.codileap.quiz.presentation.QuizSession
 import com.manikandareas.codileap.quiz.presentation.QuizViewModel
-import com.manikandareas.codileap.screening.presentation.ScreeningAction
 import com.manikandareas.codileap.screening.presentation.ScreeningScreen
+import com.manikandareas.codileap.screening.presentation.ScreeningState
+import com.manikandareas.codileap.screening.presentation.ScreeningViewModel
+import com.manikandareas.codileap.screening.presentation.screening_result.ScreeningResultScreen
+import com.manikandareas.codileap.screening.presentation.screening_result.ScreeningResultViewModel
+import com.manikandareas.codileap.settings.presentation.AppearanceScreen
 import com.manikandareas.codileap.settings.presentation.FAQsScreen
 import com.manikandareas.codileap.settings.presentation.SettingsScreen
+import com.manikandareas.codileap.settings.presentation.SettingsState
 import com.manikandareas.codileap.settings.presentation.SettingsViewModel
 import com.manikandareas.codileap.user.domain.User
 import com.manikandareas.codileap.user.presentation.UserProfileScreen
+import com.manikandareas.codileap.user.presentation.UserProfileState
 import org.koin.androidx.compose.koinViewModel
 import org.koin.core.parameter.parametersOf
 import kotlin.reflect.typeOf
@@ -117,13 +125,25 @@ fun CodiLeapNavigation(
                 startDestination = Destination.ScreeningScreen
             ) {
                 composable<Destination.ScreeningScreen> {
-                    ScreeningScreen(onAction = {
-                        when (it) {
-                            is ScreeningAction.NavigateTo -> navController.navigate(it.des) {
-                                popUpTo(it.des) { inclusive = true }
-                            }
-                        }
-                    })
+                    val viewModel = koinViewModel<ScreeningViewModel>()
+                    ScreeningScreen(onAction = viewModel::onAction, state = viewModel.state)
+                }
+
+                composable<Destination.ScreeningResultScreen>(
+                    typeMap = mapOf(typeOf<LearningPath>() to parcelableType<LearningPath>())
+                ) {
+                    val arg = it.toRoute<Destination.ScreeningResultScreen>()
+
+                    val viewModel: ScreeningResultViewModel =
+                        koinViewModel { parametersOf(arg.data) }
+                    val state by viewModel.state.collectAsStateWithLifecycle()
+                    ScreeningResultScreen(
+                        onAction = viewModel::onAction,
+                        state = state.copy(
+                            screeningResult = arg.data,
+                        ),
+                        events = viewModel.events
+                    )
                 }
             }
 
@@ -145,30 +165,52 @@ fun CodiLeapNavigation(
                                 is HomeAction.NavigateTo -> navController.navigate(it.des) {
                                     popUpTo(it.des) { inclusive = true }
                                 }
+
+                                is HomeAction.OnCarouselItemClicked -> {
+                                    navController.navigate(Destination.CoursesScreen(it.learningPathId))
+                                }
                             }
                         })
                 }
 
-                composable<Destination.CoursesScreen> {
+                composable<Destination.CoursesScreen>(
+                ) {
+//                    val arg = it.toRoute<Destination.CoursesScreen>()
+//
+//                    val viewModel = koinViewModel<CoursesViewModel>()
+//
+//                    val state by viewModel.state.collectAsStateWithLifecycle()
+//
+//                    CoursesScreen(state = if (arg.selectedLearningPathId != null) {
+//                        val selectedLearningPath =
+//                            state.learningPaths.find { it.id == arg.selectedLearningPathId }
+//                                ?: state.selectedLearningPath
+//
+//                        val courses = selectedLearningPath?.courses ?: emptyList()
+//                        state.copy(
+//                            selectedLearningPath = selectedLearningPath,
+//                            selectedCourse = selectedLearningPath?.courses?.first(),
+//                            courses = courses,
+//                            learningPaths = state.learningPaths,
+//                        )
+//                    } else {
+//                        state
+//                    }, onAction = viewModel::onAction)
+
                     val arg = it.toRoute<Destination.CoursesScreen>()
 
-                    val viewModel = koinViewModel<CoursesViewModel>()
+                    val viewModel: CoursesViewModel = if (arg.isNotNull()) {
+                        koinViewModel {
+                            parametersOf(arg.selectedLearningPathId)
+                        }
+                    } else koinViewModel()
 
                     val state by viewModel.state.collectAsStateWithLifecycle()
 
-                    CoursesScreen(state = if (arg.selectedLearningPathId != null) {
-                        val selectedLearningPath =
-                            state.learningPaths.find { it.id == arg.selectedLearningPathId } ?: state.selectedLearningPath
-
-                        val courses = selectedLearningPath?.courses ?: emptyList()
-                        state.copy(
-                            selectedLearningPath = selectedLearningPath,
-                            selectedCourse = selectedLearningPath?.courses?.first(),
-                            courses = courses
-                        )
-                    } else {
-                        state
-                    }, onAction = viewModel::onAction)
+                    CoursesScreen(
+                        state = state,
+                        onAction = viewModel::onAction,
+                    )
                 }
 
                 composable<Destination.ModuleScreen>(
@@ -201,16 +243,25 @@ fun CodiLeapNavigation(
                 }
 
                 composable<Destination.ChatBotScreen> {
-                    ChatBotScreen()
+                    VirtualAssistantScreen()
                 }
 
-            }
+                composable<Destination.QuizScreen>(
+                    typeMap = mapOf(
+                        typeOf<ScreeningState?>() to nullableParcelType<ScreeningState>()
+                    )
+                ) {
+                    // Gunakan default value jika null
+                    val arg = it.toRoute<Destination.QuizScreen>()
+                    val screeningState = arg.screeningState ?: ScreeningState()
 
-            navigation<Destination.QuizGraph>(
-                startDestination = Destination.QuizScreen
-            ) {
-                composable<Destination.QuizScreen> {
-                    val viewModel: QuizViewModel = koinViewModel { parametersOf(snackbarHostState) }
+                    val viewModel: QuizViewModel = koinViewModel {
+                        parametersOf(
+                            snackbarHostState,
+                            arg.isScreening ?: false,
+                            screeningState
+                        )
+                    }
 
                     val state by viewModel.state.collectAsStateWithLifecycle()
 
@@ -221,19 +272,35 @@ fun CodiLeapNavigation(
                         events = viewModel.events
                     )
                 }
-            }
 
+            }
 
             navigation<Destination.SettingsGraph>(
                 startDestination = Destination.SettingsScreen
             ) {
                 composable<Destination.SettingsScreen> {
                     val viewModel = koinViewModel<SettingsViewModel>()
-                    SettingsScreen(onAction = viewModel::onAction)
+                    SettingsScreen(
+                        onAction = viewModel::onAction, state = SettingsState(
+                            currentUser
+                        )
+                    )
                 }
 
                 composable<Destination.ProfileScreen> {
                     UserProfileScreen(
+                        state = UserProfileState(
+                            user = currentUser?.toUiModel(),
+                            isLoading = false
+                        ),
+                        onBack = {
+                            navController.navigateUp()
+                        }
+                    )
+                }
+
+                composable<Destination.AppearanceScreen> {
+                    AppearanceScreen(
                         onBack = {
                             navController.navigateUp()
                         }

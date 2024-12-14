@@ -1,5 +1,12 @@
 package com.manikandareas.codileap.courses.domain
 
+import android.os.Parcelable
+import kotlinx.parcelize.Parcelize
+
+import kotlinx.serialization.Serializable
+
+@Serializable
+@Parcelize
 data class Module(
     val id: Int,
     val courseId: Int,
@@ -9,8 +16,10 @@ data class Module(
     val createdAt: String,
     val updatedAt: String,
     val units: List<Unit>
-)
+) : Parcelable
 
+@Serializable
+@Parcelize
 data class Unit(
     val id: Int,
     val moduleId: Int,
@@ -19,4 +28,4 @@ data class Unit(
     val content: String,
     val createdAt: String,
     val updatedAt: String
-)
+) : Parcelable

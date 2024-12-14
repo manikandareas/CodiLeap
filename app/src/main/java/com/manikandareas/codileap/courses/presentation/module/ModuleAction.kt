@@ -12,4 +12,6 @@ sealed class ModuleAction {
     data class GotoNextCourse(val courseUi: CourseUi) : ModuleAction()
 
     data object Exit : ModuleAction()
+
+    data class OnAskVirtualAssistant(val question:String, val unitId: Int): ModuleAction()
 }

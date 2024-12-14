@@ -3,9 +3,9 @@ package com.manikandareas.codileap.courses.presentation.model
 import com.manikandareas.codileap.core.presentation.util.toUTC
 import com.manikandareas.codileap.courses.domain.LearningPath
 import com.manikandareas.codileap.home.presentation.model.CarouselItemUi
-import com.manikandareas.codileap.home.presentation.model.CarouselUi
 import com.manikandareas.codileap.home.presentation.model.DummyCarouselUi
 import java.time.ZonedDateTime
+
 
 data class LearningPathUi(
     override val id: Int,
@@ -14,7 +14,8 @@ data class LearningPathUi(
 
     override val totalModules: Int,
 
-    val courses: List<CourseUi>,
+    val courses: List<CourseUi> = emptyList(),
+
     val createdAt: ZonedDateTime,
     val updatedAt: ZonedDateTime
 ) : HasBasicCourse
@@ -35,7 +36,8 @@ fun LearningPath.toUiModel(): LearningPathUi {
     )
 }
 
-fun LearningPathUi.toCarouselItemUi( onClick: ()->Unit, index: Int=0) = CarouselItemUi(
+
+fun LearningPathUi.toCarouselItemUi(onClick: () -> Unit, index: Int = 0) = CarouselItemUi(
     title = name,
     subtitle = description,
     moduleCount = totalModules,

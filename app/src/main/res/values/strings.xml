@@ -11,4 +11,6 @@
     <string name="set_up_your_account">Set up your account</string>
     <string name="email_or_password_is_incorrect">Email or password is incorrect</string>
     <string name="credentials_already_exist_please_use_another_email">Credentials already exist, please use another email</string>
+    <string name="you_are_not_allowed_to_access_this_resource">You are not allowed to access this resource</string>
+    <string name="resource_not_found">Resource not found</string>
 </resources>

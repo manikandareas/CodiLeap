@@ -20,7 +20,7 @@ import com.manikandareas.codileap.auth.presentation.AuthAction
 import com.manikandareas.codileap.ui.theme.CodiLeapTheme
 
 @Composable
-fun ChatBotAppBar(modifier: Modifier = Modifier,onBackClicked: (AuthAction) -> Unit = {}) {
+fun VirtualAssistantAppBar(modifier: Modifier = Modifier, onBackClicked: (AuthAction) -> Unit = {}) {
     TopAppBar(
         title = {
             Text(text = "Chat Bot", style = MaterialTheme.typography.titleLarge)
@@ -44,6 +44,6 @@ fun ChatBotAppBar(modifier: Modifier = Modifier,onBackClicked: (AuthAction) -> U
 @Composable
 fun PreviewChatBotAppBar(modifier: Modifier = Modifier) {
     CodiLeapTheme {
-        ChatBotAppBar(modifier = modifier)
+        VirtualAssistantAppBar(modifier = modifier)
     }
 }

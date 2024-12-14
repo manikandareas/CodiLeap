@@ -20,11 +20,12 @@ import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.icons.filled.CameraAlt
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.ui.tooling.preview.PreviewLightDark
+import coil.compose.AsyncImage
 import com.manikandareas.codileap.R
 import com.manikandareas.codileap.ui.theme.CodiLeapTheme
 
 @Composable
-fun UserProfileImage(modifier: Modifier = Modifier) {
+fun UserProfileImage(modifier: Modifier = Modifier, imageUrl: String? = null) {
     Box(
         contentAlignment = Alignment.Center,
         modifier = modifier
@@ -32,8 +33,8 @@ fun UserProfileImage(modifier: Modifier = Modifier) {
             .size(120.dp)
     ) {
 
-        Image(
-            painter = painterResource(id = R.drawable.me),
+        AsyncImage(
+            model = imageUrl,
             contentDescription = "Profile Picture",
             contentScale = ContentScale.Crop,
             modifier = Modifier

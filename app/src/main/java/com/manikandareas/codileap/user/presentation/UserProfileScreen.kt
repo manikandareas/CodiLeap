@@ -23,10 +23,15 @@ import com.manikandareas.codileap.user.presentation.component.UserProfileImage
 import com.manikandareas.codileap.ui.theme.CodiLeapTheme
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.setValue
+import com.manikandareas.codileap.home.presentation.model.UserUi
 import com.manikandareas.codileap.ui.compositions.CodiButton
 
 @Composable
-fun UserProfileScreen(onBack: () -> Unit = {}, modifier: Modifier = Modifier) {
+fun UserProfileScreen(
+    onBack: () -> Unit = {},
+    modifier: Modifier = Modifier,
+    state: UserProfileState
+) {
     Scaffold(
         modifier = modifier.fillMaxSize(),
         topBar = {
@@ -43,7 +48,8 @@ fun UserProfileScreen(onBack: () -> Unit = {}, modifier: Modifier = Modifier) {
         ) {
 
             UserProfileImage(
-                modifier = Modifier.Companion.align(Alignment.Companion.CenterHorizontally)
+                modifier = Modifier.Companion.align(Alignment.Companion.CenterHorizontally),
+                imageUrl = state.user?.avatarUrl
             )
 
 
@@ -55,11 +61,11 @@ fun UserProfileScreen(onBack: () -> Unit = {}, modifier: Modifier = Modifier) {
             ) {
 
                 OutlinedTextField(
-                    value = "Vito Andareas Manik",
+                    value = state.user?.fullName ?: "",
                     onValueChange = {},
                     label = { Text("Your Name") },
                     modifier = Modifier.Companion.fillMaxWidth(),
-                    shape = MaterialTheme.shapes.medium
+                    shape = MaterialTheme.shapes.medium,
                 )
                 OutlinedTextField(
                     value = "13 July 2024",
@@ -69,16 +75,16 @@ fun UserProfileScreen(onBack: () -> Unit = {}, modifier: Modifier = Modifier) {
                     shape = MaterialTheme.shapes.medium
                 )
                 OutlinedTextField(
-                    value = "Fullstack Developer",
+                    value = state.user?.email ?: "",
                     onValueChange = {},
-                    label = { Text("Your Job") },
+                    label = { Text("Email") },
                     modifier = Modifier.Companion.fillMaxWidth(),
                     shape = MaterialTheme.shapes.medium
                 )
                 OutlinedTextField(
-                    value = "Backend",
+                    value = state.user?.studyHours ?: "09:00",
                     onValueChange = {},
-                    label = { Text("Specialty") },
+                    label = { Text("Study Hour") },
                     modifier = Modifier.Companion.fillMaxWidth(),
                     shape = MaterialTheme.shapes.medium
                 )
@@ -121,7 +127,7 @@ fun UserProfileScreen(onBack: () -> Unit = {}, modifier: Modifier = Modifier) {
                 }
             }
 
-            CodiButton (
+            CodiButton(
                 onClick = { },
                 modifier = Modifier.fillMaxWidth()
             ) {
@@ -135,6 +141,6 @@ fun UserProfileScreen(onBack: () -> Unit = {}, modifier: Modifier = Modifier) {
 @Composable
 fun PreviewProfileScreen() {
     CodiLeapTheme {
-        UserProfileScreen()
+        UserProfileScreen(state = UserProfileState())
     }
 }

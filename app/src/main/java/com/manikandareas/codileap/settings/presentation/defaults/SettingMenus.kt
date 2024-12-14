@@ -17,7 +17,7 @@ val SettingMenus = listOf<SettingItemUi>(
     SettingItemUi(
         title = "Appearance",
         icon = Icons.Default.RoomPreferences,
-        des = Destination.ProfileScreen
+        des = Destination.AppearanceScreen
     ),
 
     SettingItemUi(
